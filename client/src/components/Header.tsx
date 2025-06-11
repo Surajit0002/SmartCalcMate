@@ -145,7 +145,7 @@ export default function Header() {
         />
 
         {/* Slide-out Menu */}
-        <div className={`fixed top-0 right-0 z-50 h-full w-80 max-w-[85vw] bg-white dark:bg-gray-900 shadow-2xl transform transition-transform duration-300 ease-in-out md:hidden ${
+        <div className={`fixed top-0 right-0 z-50 h-full w-96 max-w-[90vw] bg-white dark:bg-gray-900 shadow-2xl transform transition-transform duration-300 ease-in-out md:hidden ${
           mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}>
           <div className="flex flex-col h-full">
@@ -228,17 +228,17 @@ export default function Header() {
             </div>
 
             {/* Footer Stats */}
-            <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-              <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
-                <div className="flex items-center space-x-2">
-                  <Grid3X3 className="w-4 h-4" />
-                  <span className="font-medium">
-                    {categories.reduce((total, cat) => total + cat.calculators.length, 0)} Tools
+            <div className="p-8 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+              <div className="flex items-center justify-between text-lg text-gray-700 dark:text-gray-300">
+                <div className="flex items-center space-x-3">
+                  <Grid3X3 className="w-6 h-6" />
+                  <span className="font-bold">
+                    14 Tools
                   </span>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <BarChart3 className="w-4 h-4" />
-                  <span className="font-medium">Pro Grade</span>
+                <div className="flex items-center space-x-3">
+                  <BarChart3 className="w-6 h-6" />
+                  <span className="font-bold">Pro Grade</span>
                 </div>
               </div>
             </div>
