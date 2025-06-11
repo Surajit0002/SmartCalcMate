@@ -6,6 +6,27 @@ import { Button } from "@/components/ui/button";
 import { Copy, Share2 } from "lucide-react";
 import { calculateBMI } from "@/lib/calculations";
 import { useToast } from "@/hooks/use-toast";
+import { Doughnut, Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+} from 'chart.js';
+
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title
+);
 
 export default function BMICalculator() {
   const [height, setHeight] = useState("170");
@@ -45,6 +66,53 @@ export default function BMICalculator() {
     }
   };
 
+  const bmiCategoryData = {
+    labels: ['Underweight', 'Normal', 'Overweight', 'Obese'],
+    datasets: [
+      {
+        data: [18.5, 6.4, 4.1, 10],
+        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444'],
+        borderColor: ['#2563eb', '#059669', '#d97706', '#dc2626'],
+        borderWidth: 2,
+      },
+    ],
+  };
+
+  const yourBMIData = {
+    labels: ['Your BMI', 'Normal Range Min', 'Normal Range Max'],
+    datasets: [
+      {
+        label: 'BMI Values',
+        data: [result.bmi, 18.5, 24.9],
+        backgroundColor: [
+          result.color === 'blue' ? '#3b82f6' : 
+          result.color === 'green' ? '#10b981' : 
+          result.color === 'yellow' ? '#f59e0b' : '#ef4444',
+          '#10b981',
+          '#10b981'
+        ],
+        borderColor: [
+          result.color === 'blue' ? '#2563eb' : 
+          result.color === 'green' ? '#059669' : 
+          result.color === 'yellow' ? '#d97706' : '#dc2626',
+          '#059669',
+          '#059669'
+        ],
+        borderWidth: 2,
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom' as const,
+      },
+    },
+  };
+
   const getColorClasses = (color: string) => {
     switch (color) {
       case 'blue':
@@ -61,11 +129,12 @@ export default function BMICalculator() {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <Card>
-        <CardHeader>
-          <CardTitle>Your Details</CardTitle>
-        </CardHeader>
+    <div className="space-y-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <Card>
+          <CardHeader>
+            <CardTitle>Your Details</CardTitle>
+          </CardHeader>
         <CardContent className="space-y-6">
           <div>
             <Label htmlFor="height">Height (cm)</Label>
@@ -146,6 +215,32 @@ export default function BMICalculator() {
           </div>
         </CardContent>
       </Card>
+      </div>
+
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <Card>
+          <CardHeader>
+            <CardTitle>BMI Categories</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div style={{ height: '300px' }}>
+              <Doughnut data={bmiCategoryData} options={chartOptions} />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Your BMI vs Normal Range</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div style={{ height: '300px' }}>
+              <Bar data={yourBMIData} options={chartOptions} />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

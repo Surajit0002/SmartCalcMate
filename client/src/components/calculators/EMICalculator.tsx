@@ -121,42 +121,42 @@ export default function EMICalculator() {
           <CardHeader>
             <CardTitle>Loan Details</CardTitle>
           </CardHeader>
-        <CardContent className="space-y-6">
-          <div>
-            <Label htmlFor="loan-amount">Loan Amount (₹)</Label>
-            <Input
-              id="loan-amount"
-              type="number"
-              value={loanAmount}
-              onChange={(e) => setLoanAmount(e.target.value)}
-              placeholder="1000000"
-            />
-          </div>
-          
-          <div>
-            <Label htmlFor="interest-rate">Interest Rate (% per annum)</Label>
-            <Input
-              id="interest-rate"
-              type="number"
-              step="0.1"
-              value={interestRate}
-              onChange={(e) => setInterestRate(e.target.value)}
-              placeholder="8.5"
-            />
-          </div>
-          
-          <div>
-            <Label htmlFor="loan-tenure">Loan Tenure (Years)</Label>
-            <Input
-              id="loan-tenure"
-              type="number"
-              value={loanTenure}
-              onChange={(e) => setLoanTenure(e.target.value)}
-              placeholder="20"
-            />
-          </div>
-        </CardContent>
-      </Card>
+          <CardContent className="space-y-6">
+            <div>
+              <Label htmlFor="loan-amount">Loan Amount (₹)</Label>
+              <Input
+                id="loan-amount"
+                type="number"
+                value={loanAmount}
+                onChange={(e) => setLoanAmount(e.target.value)}
+                placeholder="1000000"
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="interest-rate">Interest Rate (% per annum)</Label>
+              <Input
+                id="interest-rate"
+                type="number"
+                step="0.1"
+                value={interestRate}
+                onChange={(e) => setInterestRate(e.target.value)}
+                placeholder="8.5"
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="loan-tenure">Loan Tenure (Years)</Label>
+              <Input
+                id="loan-tenure"
+                type="number"
+                value={loanTenure}
+                onChange={(e) => setLoanTenure(e.target.value)}
+                placeholder="20"
+              />
+            </div>
+          </CardContent>
+        </Card>
 
       <Card>
         <CardHeader>
