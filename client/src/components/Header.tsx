@@ -134,17 +134,22 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Mobile Slide-out Navigation */}
-        {mobileMenuOpen && (
-          <>
-            {/* Backdrop */}
-            <div 
-              className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm md:hidden"
-              onClick={() => setMobileMenuOpen(false)}
-            />
-            
-            {/* Slide-out Menu */}
-            <div className="fixed top-0 right-0 z-50 h-full w-80 bg-white dark:bg-gray-900 shadow-2xl transform transition-transform duration-300 ease-in-out md:hidden">
+        </div>
+
+      {/* Mobile Slide-out Navigation */}
+      <>
+        {/* Backdrop */}
+        <div 
+          className={`fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity duration-300 md:hidden ${
+            mobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+          }`}
+          onClick={() => setMobileMenuOpen(false)}
+        />
+        
+        {/* Slide-out Menu */}
+        <div className={`fixed top-0 right-0 z-50 h-full w-80 max-w-[85vw] bg-white dark:bg-gray-900 shadow-2xl transform transition-transform duration-300 ease-in-out md:hidden ${
+          mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}>
               <div className="flex flex-col h-full">
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
@@ -241,9 +246,9 @@ export default function Header() {
                 </div>
               </div>
             </div>
-          </>
-        )}
-      </div>
+          </div>
+        </div>
+      </>
     </header>
   );
 }
