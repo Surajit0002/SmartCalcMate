@@ -6,6 +6,29 @@ import { Button } from "@/components/ui/button";
 import { Copy, Share2 } from "lucide-react";
 import { calculateEMI } from "@/lib/calculations";
 import { useToast } from "@/hooks/use-toast";
+import { Pie, Line } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+} from 'chart.js';
+
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title
+);
 
 export default function EMICalculator() {
   const [loanAmount, setLoanAmount] = useState("1000000");
@@ -47,12 +70,57 @@ export default function EMICalculator() {
     }
   };
 
+  const pieData = {
+    labels: ['Principal Amount', 'Total Interest'],
+    datasets: [
+      {
+        data: [parseFloat(loanAmount), result.totalInterest],
+        backgroundColor: ['#3b82f6', '#ef4444'],
+        borderColor: ['#2563eb', '#dc2626'],
+        borderWidth: 2,
+      },
+    ],
+  };
+
+  const years = parseInt(loanTenure) || 1;
+  const lineData = {
+    labels: Array.from({length: years}, (_, i) => `Year ${i + 1}`),
+    datasets: [
+      {
+        label: 'Remaining Balance',
+        data: Array.from({length: years}, (_, i) => {
+          const remainingMonths = (years * 12) - (i * 12);
+          const monthlyRate = parseFloat(interestRate) / (12 * 100);
+          const totalMonths = years * 12;
+          const emi = result.emi;
+          const remainingBalance = parseFloat(loanAmount) - (emi * i * 12);
+          return Math.max(0, remainingBalance);
+        }),
+        borderColor: '#3b82f6',
+        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+        tension: 0.4,
+        fill: true,
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom' as const,
+      },
+    },
+  };
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <Card>
-        <CardHeader>
-          <CardTitle>Loan Details</CardTitle>
-        </CardHeader>
+    <div className="space-y-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <Card>
+          <CardHeader>
+            <CardTitle>Loan Details</CardTitle>
+          </CardHeader>
         <CardContent className="space-y-6">
           <div>
             <Label htmlFor="loan-amount">Loan Amount (₹)</Label>
@@ -124,6 +192,32 @@ export default function EMICalculator() {
           </div>
         </CardContent>
       </Card>
+      </div>
+
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <Card>
+          <CardHeader>
+            <CardTitle>Loan Breakdown</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div style={{ height: '300px' }}>
+              <Pie data={pieData} options={chartOptions} />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Remaining Balance Over Time</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div style={{ height: '300px' }}>
+              <Line data={lineData} options={chartOptions} />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
