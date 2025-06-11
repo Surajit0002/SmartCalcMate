@@ -117,7 +117,7 @@ export default function BMICalculator() {
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-blue-600">Underweight</span>
-                <span className="text-gray-600 dark:text-gray-300">< 18.5</span>
+                <span className="text-gray-600 dark:text-gray-300">&lt; 18.5</span>
               </div>
               <div className="flex justify-between font-semibold text-green-600">
                 <span>Normal Weight</span>
@@ -129,7 +129,7 @@ export default function BMICalculator() {
               </div>
               <div className="flex justify-between">
                 <span className="text-red-600">Obese</span>
-                <span className="text-gray-600 dark:text-gray-300">≥ 30</span>
+                <span className="text-gray-600 dark:text-gray-300">&ge; 30</span>
               </div>
             </div>
           </div>
