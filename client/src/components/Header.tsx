@@ -77,15 +77,25 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-1">
-            {navigationItems.map((item) => (
+            <Button
+              variant="ghost"
+              onClick={() => setLocation('/')}
+              className={`nav-tab relative ${isActive('/') ? 'active' : ''}`}
+            >
+              Home
+              {isActive('/') && (
+                <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-blue-600 rounded-full"></div>
+              )}
+            </Button>
+            {categories.slice(0, 4).map((category) => (
               <Button
-                key={item.name}
+                key={category.id}
                 variant="ghost"
-                onClick={() => setLocation(item.path)}
-                className={`nav-tab relative ${item.active ? 'active' : ''}`}
+                onClick={() => setLocation(`/category/${category.id}`)}
+                className={`nav-tab relative ${isActive(`/category/${category.id}`) ? 'active' : ''}`}
               >
-                {item.name}
-                {item.active && (
+                {category.name}
+                {isActive(`/category/${category.id}`) && (
                   <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-blue-600 rounded-full"></div>
                 )}
               </Button>
