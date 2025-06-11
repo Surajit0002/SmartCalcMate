@@ -1,4 +1,3 @@
-
 import { Moon, Sun, Calculator, Menu, X, Home, DollarSign, Activity, Brain, Grid3X3, BarChart3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -133,8 +132,6 @@ export default function Header() {
             </Button>
           </div>
         </div>
-
-        </div>
       </div>
 
       {/* Mobile Slide-out Navigation */}
@@ -146,7 +143,7 @@ export default function Header() {
           }`}
           onClick={() => setMobileMenuOpen(false)}
         />
-        
+
         {/* Slide-out Menu */}
         <div className={`fixed top-0 right-0 z-50 h-full w-80 max-w-[85vw] bg-white dark:bg-gray-900 shadow-2xl transform transition-transform duration-300 ease-in-out md:hidden ${
           mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
