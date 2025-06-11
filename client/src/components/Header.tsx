@@ -171,8 +171,8 @@ export default function Header() {
             </div>
 
             {/* Navigation */}
-            <div className="flex-1 overflow-y-auto py-6">
-              <div className="px-6 space-y-2">
+            <div className="flex-1 overflow-y-auto py-4">
+              <div className="px-6 space-y-1">
                 {/* Home */}
                 <Button
                   variant="ghost"
@@ -180,19 +180,21 @@ export default function Header() {
                   className={`w-full justify-start p-4 h-auto rounded-xl transition-all duration-300 ${
                     isActive('/')
                       ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
-                      : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+                      : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-gray-100'
                   }`}
                 >
-                  <Home className="w-5 h-5 mr-3" />
-                  <span className="font-medium">Home</span>
+                  <div className="flex-shrink-0">
+                    <Home className="w-5 h-5" />
+                  </div>
+                  <span className="font-medium ml-3">Home</span>
                 </Button>
 
                 {/* Categories */}
-                <div className="pt-4">
-                  <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 px-2">
+                <div className="pt-6">
+                  <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4 px-2">
                     Categories
                   </h3>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     {categories.map((category) => (
                       <Button
                         key={category.id}
@@ -201,19 +203,21 @@ export default function Header() {
                         className={`w-full justify-start p-4 h-auto rounded-xl transition-all duration-300 ${
                           isActive(`/category/${category.id}`)
                             ? `bg-gradient-to-r ${getCategoryGradient(category.id)} text-white shadow-lg`
-                            : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+                            : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-gray-100'
                         }`}
                       >
                         <div className="flex items-center justify-between w-full">
                           <div className="flex items-center">
-                            {getCategoryIcon(category.id)}
-                            <span className="font-medium ml-3">{category.name}</span>
+                            <div className="flex-shrink-0">
+                              {getCategoryIcon(category.id)}
+                            </div>
+                            <span className="font-medium ml-3 text-left">{category.name}</span>
                           </div>
                           <Badge 
                             variant="secondary" 
-                            className={`text-xs ${
+                            className={`text-xs flex-shrink-0 ml-2 ${
                               isActive(`/category/${category.id}`)
-                                ? 'bg-white/20 text-white'
+                                ? 'bg-white/20 text-white border-white/20'
                                 : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
                             }`}
                           >
