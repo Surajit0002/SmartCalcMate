@@ -135,6 +135,7 @@ export default function Header() {
         </div>
 
         </div>
+      </div>
 
       {/* Mobile Slide-out Navigation */}
       <>
@@ -150,99 +151,97 @@ export default function Header() {
         <div className={`fixed top-0 right-0 z-50 h-full w-80 max-w-[85vw] bg-white dark:bg-gray-900 shadow-2xl transform transition-transform duration-300 ease-in-out md:hidden ${
           mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}>
-              <div className="flex flex-col h-full">
-                {/* Header */}
-                <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
-                      <Calculator className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <h2 className="text-lg font-bold text-gray-900 dark:text-white">CalcMate</h2>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">Smart Calculator Hub</p>
-                    </div>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="w-10 h-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
-                  >
-                    <X className="w-5 h-5" />
-                  </Button>
+          <div className="flex flex-col h-full">
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
+                  <Calculator className="w-5 h-5 text-white" />
                 </div>
+                <div>
+                  <h2 className="text-lg font-bold text-gray-900 dark:text-white">CalcMate</h2>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Smart Calculator Hub</p>
+                </div>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-10 h-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                <X className="w-5 h-5" />
+              </Button>
+            </div>
 
-                {/* Navigation */}
-                <div className="flex-1 overflow-y-auto py-6">
-                  <div className="px-6 space-y-2">
-                    {/* Home */}
-                    <Button
-                      variant="ghost"
-                      onClick={() => handleNavigation('/')}
-                      className={`w-full justify-start p-4 h-auto rounded-xl transition-all duration-300 ${
-                        isActive('/')
-                          ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
-                          : 'hover:bg-gray-100 dark:hover:bg-gray-800'
-                      }`}
-                    >
-                      <Home className="w-5 h-5 mr-3" />
-                      <span className="font-medium">Home</span>
-                    </Button>
+            {/* Navigation */}
+            <div className="flex-1 overflow-y-auto py-6">
+              <div className="px-6 space-y-2">
+                {/* Home */}
+                <Button
+                  variant="ghost"
+                  onClick={() => handleNavigation('/')}
+                  className={`w-full justify-start p-4 h-auto rounded-xl transition-all duration-300 ${
+                    isActive('/')
+                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
+                      : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+                  }`}
+                >
+                  <Home className="w-5 h-5 mr-3" />
+                  <span className="font-medium">Home</span>
+                </Button>
 
-                    {/* Categories */}
-                    <div className="pt-4">
-                      <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 px-2">
-                        Categories
-                      </h3>
-                      <div className="space-y-2">
-                        {categories.map((category) => (
-                          <Button
-                            key={category.id}
-                            variant="ghost"
-                            onClick={() => handleNavigation(`/category/${category.id}`)}
-                            className={`w-full justify-start p-4 h-auto rounded-xl transition-all duration-300 ${
+                {/* Categories */}
+                <div className="pt-4">
+                  <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 px-2">
+                    Categories
+                  </h3>
+                  <div className="space-y-2">
+                    {categories.map((category) => (
+                      <Button
+                        key={category.id}
+                        variant="ghost"
+                        onClick={() => handleNavigation(`/category/${category.id}`)}
+                        className={`w-full justify-start p-4 h-auto rounded-xl transition-all duration-300 ${
+                          isActive(`/category/${category.id}`)
+                            ? `bg-gradient-to-r ${getCategoryGradient(category.id)} text-white shadow-lg`
+                            : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between w-full">
+                          <div className="flex items-center">
+                            {getCategoryIcon(category.id)}
+                            <span className="font-medium ml-3">{category.name}</span>
+                          </div>
+                          <Badge 
+                            variant="secondary" 
+                            className={`text-xs ${
                               isActive(`/category/${category.id}`)
-                                ? `bg-gradient-to-r ${getCategoryGradient(category.id)} text-white shadow-lg`
-                                : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+                                ? 'bg-white/20 text-white'
+                                : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
                             }`}
                           >
-                            <div className="flex items-center justify-between w-full">
-                              <div className="flex items-center">
-                                {getCategoryIcon(category.id)}
-                                <span className="font-medium ml-3">{category.name}</span>
-                              </div>
-                              <Badge 
-                                variant="secondary" 
-                                className={`text-xs ${
-                                  isActive(`/category/${category.id}`)
-                                    ? 'bg-white/20 text-white'
-                                    : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
-                                }`}
-                              >
-                                {category.calculators.length}
-                              </Badge>
-                            </div>
-                          </Button>
-                        ))}
-                      </div>
-                    </div>
+                            {category.calculators.length}
+                          </Badge>
+                        </div>
+                      </Button>
+                    ))}
                   </div>
                 </div>
+              </div>
+            </div>
 
-                {/* Footer Stats */}
-                <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-                  <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
-                    <div className="flex items-center space-x-2">
-                      <Grid3X3 className="w-4 h-4" />
-                      <span className="font-medium">
-                        {categories.reduce((total, cat) => total + cat.calculators.length, 0)} Tools
-                      </span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <BarChart3 className="w-4 h-4" />
-                      <span className="font-medium">Pro Grade</span>
-                    </div>
-                  </div>
+            {/* Footer Stats */}
+            <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+              <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
+                <div className="flex items-center space-x-2">
+                  <Grid3X3 className="w-4 h-4" />
+                  <span className="font-medium">
+                    {categories.reduce((total, cat) => total + cat.calculators.length, 0)} Tools
+                  </span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <BarChart3 className="w-4 h-4" />
+                  <span className="font-medium">Pro Grade</span>
                 </div>
               </div>
             </div>
