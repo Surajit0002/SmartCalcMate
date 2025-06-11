@@ -135,30 +135,30 @@ export default function BMICalculator() {
           <CardHeader>
             <CardTitle>Your Details</CardTitle>
           </CardHeader>
-        <CardContent className="space-y-6">
-          <div>
-            <Label htmlFor="height">Height (cm)</Label>
-            <Input
-              id="height"
-              type="number"
-              value={height}
-              onChange={(e) => setHeight(e.target.value)}
-              placeholder="170"
-            />
-          </div>
-          
-          <div>
-            <Label htmlFor="weight">Weight (kg)</Label>
-            <Input
-              id="weight"
-              type="number"
-              value={weight}
-              onChange={(e) => setWeight(e.target.value)}
-              placeholder="70"
-            />
-          </div>
-        </CardContent>
-      </Card>
+          <CardContent className="space-y-6">
+            <div>
+              <Label htmlFor="height">Height (cm)</Label>
+              <Input
+                id="height"
+                type="number"
+                value={height}
+                onChange={(e) => setHeight(e.target.value)}
+                placeholder="170"
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="weight">Weight (kg)</Label>
+              <Input
+                id="weight"
+                type="number"
+                value={weight}
+                onChange={(e) => setWeight(e.target.value)}
+                placeholder="70"
+              />
+            </div>
+          </CardContent>
+        </Card>
 
       <Card>
         <CardHeader>
