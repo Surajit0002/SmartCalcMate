@@ -51,6 +51,9 @@ export default function CategoryView({ params }: CategoryViewProps) {
                     {calculator.id.includes('emi') && 'Home & Car Loan EMI'}
                     {calculator.id.includes('sip') && 'Mutual Fund SIP'}
                     {calculator.id.includes('compound') && 'Investment Growth'}
+                    {calculator.id.includes('mortgage') && 'Mortgage Analysis'}
+                    {calculator.id.includes('investment') && 'Portfolio Planning'}
+                    {calculator.id.includes('loan-comparison') && 'Compare Loans'}
                     {calculator.id.includes('bmi') && 'Body Mass Index'}
                     {calculator.id.includes('bmr') && 'Calorie Needs'}
                     {calculator.id.includes('scientific') && 'Advanced Math'}
@@ -58,6 +61,7 @@ export default function CategoryView({ params }: CategoryViewProps) {
                     {calculator.id.includes('age') && 'Calculate Age'}
                     {calculator.id.includes('tip') && 'Split Bills'}
                     {calculator.id.includes('unit') && 'Convert Units'}
+                    {calculator.id.includes('currency') && 'Currency Exchange'}
                   </p>
                 </div>
               </div>

@@ -12,6 +12,10 @@ import ScientificCalculator from "@/components/calculators/ScientificCalculator"
 import BMRCalculator from "@/components/calculators/BMRCalculator";
 import AgeCalculator from "@/components/calculators/AgeCalculator";
 import UnitConverter from "@/components/calculators/UnitConverter";
+import MortgageCalculator from "@/components/calculators/MortgageCalculator";
+import InvestmentCalculator from "@/components/calculators/InvestmentCalculator";
+import LoanComparison from "@/components/calculators/LoanComparison";
+import CurrencyConverter from "@/components/calculators/CurrencyConverter";
 
 interface CalculatorViewProps {
   params: {
@@ -58,6 +62,14 @@ export default function CalculatorView({ params }: CalculatorViewProps) {
         return <AgeCalculator />;
       case 'unit-converter':
         return <UnitConverter />;
+      case 'mortgage':
+        return <MortgageCalculator />;
+      case 'investment':
+        return <InvestmentCalculator />;
+      case 'loan-comparison':
+        return <LoanComparison />;
+      case 'currency-converter':
+        return <CurrencyConverter />;
       default:
         return (
           <div className="text-center py-12">
@@ -87,6 +99,10 @@ export default function CalculatorView({ params }: CalculatorViewProps) {
           {calculator.id === 'sip' && 'Calculate the future value of your systematic investment plans with detailed projections.'}
           {calculator.id === 'compound-interest' && 'Calculate compound interest on your investments over time.'}
           {calculator.id === 'scientific' && 'Perform advanced mathematical calculations with our full-featured scientific calculator.'}
+          {calculator.id === 'mortgage' && 'Comprehensive mortgage calculator with payment breakdown, charts, and amortization analysis.'}
+          {calculator.id === 'investment' && 'Plan your investment portfolio with detailed growth projections and risk analysis.'}
+          {calculator.id === 'loan-comparison' && 'Compare multiple loan offers side-by-side to find the best deal.'}
+          {calculator.id === 'currency-converter' && 'Convert between currencies with real-time exchange rates and historical data.'}
           {calculator.id === 'bmr' && 'Calculate your Basal Metabolic Rate and daily calorie requirements.'}
           {calculator.id === 'age' && 'Calculate your exact age in years, months, days, and more.'}
           {calculator.id === 'unit-converter' && 'Convert between different units of measurement easily.'}
