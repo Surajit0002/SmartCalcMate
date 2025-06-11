@@ -54,7 +54,7 @@ export default function BMICalculator() {
 
   const handleShare = async () => {
     const text = `BMI Calculator Result:\nHeight: ${height}cm\nWeight: ${weight}kg\n\nBMI: ${result.bmi}\nCategory: ${result.category}`;
-    
+
     if (navigator.share) {
       await navigator.share({ text });
     } else {
@@ -128,119 +128,147 @@ export default function BMICalculator() {
     }
   };
 
+  const bmiRanges = [
+    { name: 'Underweight', range: '< 18.5', color: '#3b82f6' },
+    { name: 'Normal weight', range: '18.5 - 24.9', color: '#10b981' },
+    { name: 'Overweight', range: '25 - 29.9', color: '#f59e0b' },
+    { name: 'Obese', range: '≥ 30', color: '#ef4444' },
+  ];
+
+  const getCurrentCategory = () => {
+    if (result.bmi < 18.5) return bmiRanges[0];
+    if (result.bmi < 25) return bmiRanges[1];
+    if (result.bmi < 30) return bmiRanges[2];
+    return bmiRanges[3];
+  };
+
   return (
-    <div className="space-y-8">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>Your Details</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div>
-              <Label htmlFor="height">Height (cm)</Label>
+    <div className="space-y-6">
+      {/* Input Section */}
+      <Card className="shadow-lg border-0 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-gray-900 dark:to-gray-800">
+        <CardHeader className="pb-4">
+          <CardTitle className="flex items-center gap-2 text-2xl font-bold text-gray-900 dark:text-white">
+            <i className="fas fa-weight text-blue-600"></i>
+            BMI Calculator
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <Label htmlFor="height" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Height (cm)
+              </Label>
               <Input
                 id="height"
                 type="number"
                 value={height}
                 onChange={(e) => setHeight(e.target.value)}
-                placeholder="170"
+                className="text-lg font-semibold border-2 focus:border-blue-500"
+                placeholder="Enter your height in cm"
               />
             </div>
-            
-            <div>
-              <Label htmlFor="weight">Weight (kg)</Label>
+            <div className="space-y-2">
+              <Label htmlFor="weight" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Weight (kg)
+              </Label>
               <Input
                 id="weight"
                 type="number"
                 value={weight}
                 onChange={(e) => setWeight(e.target.value)}
-                placeholder="70"
+                className="text-lg font-semibold border-2 focus:border-blue-500"
+                placeholder="Enter your weight in kg"
               />
             </div>
-          </CardContent>
-        </Card>
+          </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Your BMI Result</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className={`p-4 rounded-lg ${getColorClasses(result.color)}`}>
-            <div className="text-sm text-gray-600 dark:text-gray-300">Your BMI</div>
-            <div className={`text-3xl font-bold ${result.color === 'blue' ? 'text-blue-600 dark:text-blue-400' : 
-              result.color === 'green' ? 'text-green-600 dark:text-green-400' : 
-              result.color === 'yellow' ? 'text-yellow-600 dark:text-yellow-400' : 
-              'text-red-600 dark:text-red-400'}`}>
-              {result.bmi}
-            </div>
-            <div className={`text-sm font-medium ${result.color === 'blue' ? 'text-blue-700 dark:text-blue-300' : 
-              result.color === 'green' ? 'text-green-700 dark:text-green-300' : 
-              result.color === 'yellow' ? 'text-yellow-700 dark:text-yellow-300' : 
-              'text-red-700 dark:text-red-300'}`}>
-              {result.category}
-            </div>
-          </div>
-          
-          <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-            <h4 className="font-semibold text-gray-900 dark:text-white mb-2">BMI Categories</h4>
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-blue-600">Underweight</span>
-                <span className="text-gray-600 dark:text-gray-300">&lt; 18.5</span>
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border-2">
+            <div className="text-center space-y-4">
+              <div>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Your BMI</p>
+                <p className="text-4xl font-bold" style={{ color: getCurrentCategory().color }}>{result.bmi}</p>
               </div>
-              <div className="flex justify-between font-semibold text-green-600">
-                <span>Normal Weight</span>
-                <span>18.5 - 24.9</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-yellow-600">Overweight</span>
-                <span className="text-gray-600 dark:text-gray-300">25 - 29.9</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-red-600">Obese</span>
-                <span className="text-gray-600 dark:text-gray-300">&ge; 30</span>
+              <div>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Category</p>
+                <p className="text-xl font-semibold" style={{ color: getCurrentCategory().color }}>{result.category}</p>
               </div>
             </div>
           </div>
-          
-          <div className="flex space-x-3">
-            <Button variant="outline" className="flex-1" onClick={handleCopy}>
+
+          <div className="flex gap-2">
+            <Button onClick={handleCopy} variant="outline" className="flex-1">
               <Copy className="w-4 h-4 mr-2" />
-              Copy
+              Copy Results
             </Button>
-            <Button variant="outline" className="flex-1" onClick={handleShare}>
+            <Button variant="outline" className="flex-1">
               <Share2 className="w-4 h-4 mr-2" />
               Share
             </Button>
           </div>
         </CardContent>
       </Card>
-      </div>
 
-      {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>BMI Categories</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div style={{ height: '300px' }}>
-              <Doughnut data={bmiCategoryData} options={chartOptions} />
-            </div>
-          </CardContent>
-        </Card>
+      {/* BMI Categories Chart */}
+      <Card className="shadow-lg border-0">
+        <CardHeader>
+          <CardTitle className="text-xl font-bold text-gray-900 dark:text-white">
+            BMI Categories & Your Position
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {bmiRanges.map((range, index) => (
+              <div key={index} className="flex items-center justify-between p-3 rounded-lg border-2" 
+                   style={{ borderColor: range.name === getCurrentCategory().name ? range.color : 'transparent', 
+                           backgroundColor: range.name === getCurrentCategory().name ? `${range.color}10` : 'transparent' }}>
+                <div className="flex items-center gap-3">
+                  <div className="w-4 h-4 rounded-full" style={{ backgroundColor: range.color }}></div>
+                  <span className="font-medium">{range.name}</span>
+                </div>
+                <div className="text-right">
+                  <span className="text-sm text-gray-600 dark:text-gray-300">{range.range}</span>
+                  {range.name === getCurrentCategory().name && (
+                    <div className="text-xs font-bold" style={{ color: range.color }}>← Your BMI</div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Your BMI vs Normal Range</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div style={{ height: '300px' }}>
-              <Bar data={yourBMIData} options={chartOptions} />
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      {/* Health Recommendations */}
+      <Card className="shadow-lg border-0 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-gray-900 dark:to-gray-800">
+        <CardHeader>
+          <CardTitle className="text-xl font-bold text-gray-900 dark:text-white">
+            Health Recommendations
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {result.category === 'Normal weight' && (
+              <div className="p-4 bg-green-100 dark:bg-green-900 rounded-lg">
+                <p className="text-green-800 dark:text-green-200">Great! You're in the healthy weight range. Maintain your current lifestyle with regular exercise and balanced nutrition.</p>
+              </div>
+            )}
+            {result.category === 'Underweight' && (
+              <div className="p-4 bg-blue-100 dark:bg-blue-900 rounded-lg">
+                <p className="text-blue-800 dark:text-blue-200">Consider consulting with a healthcare provider about healthy ways to gain weight through proper nutrition and strength training.</p>
+              </div>
+            )}
+            {result.category === 'Overweight' && (
+              <div className="p-4 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
+                <p className="text-yellow-800 dark:text-yellow-200">Consider adopting a balanced diet and regular exercise routine. Small lifestyle changes can make a big difference.</p>
+              </div>
+            )}
+            {(result.category === 'Obese' || result.category === 'Extremely obese') && (
+              <div className="p-4 bg-red-100 dark:bg-red-900 rounded-lg">
+                <p className="text-red-800 dark:text-red-200">It's recommended to consult with a healthcare provider for personalized advice on achieving a healthy weight.</p>
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
