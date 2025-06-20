@@ -692,25 +692,43 @@
 /* Custom Scrollbars */
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+  scrollbar-color: rgba(59, 130, 246, 0.3) transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 4px;
+  height: 4px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
+  border-radius: 2px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: rgba(156, 163, 175, 0.5);
-  border-radius: 3px;
+  background: linear-gradient(45deg, rgba(59, 130, 246, 0.4), rgba(147, 51, 234, 0.4));
+  border-radius: 2px;
+  transition: all 0.3s ease;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(156, 163, 175, 0.8);
+  background: linear-gradient(45deg, rgba(59, 130, 246, 0.7), rgba(147, 51, 234, 0.7));
+}
+
+/* Enhanced slide-in animation for featured items */
+@keyframes slideInFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.featured-item {
+  animation: slideInFromRight 0.5s ease-out forwards;
 }
 
 /* Loading States */
