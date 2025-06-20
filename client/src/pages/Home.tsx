@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from "wouter";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -32,7 +31,15 @@ import {
   Rocket,
   Globe,
   Shield,
-  BarChart3
+  BarChart3,
+  Play,
+  FileText,
+  Image,
+  Video,
+  Music,
+  Code,
+  Settings,
+  Crown
 } from "lucide-react";
 
 export default function Home() {
@@ -45,335 +52,219 @@ export default function Home() {
 
   useEffect(() => {
     let filtered = calculators;
-    
+
     if (activeCategory !== 'all') {
       filtered = filtered.filter(calc => calc.category.toLowerCase() === activeCategory.toLowerCase());
     }
-    
+
     if (searchQuery) {
       filtered = filtered.filter(calc => 
         calc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         calc.description.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
-    
+
     setFilteredCalculators(filtered);
   }, [searchQuery, activeCategory]);
 
   const stats = [
-    { icon: Users, label: 'Active Users', value: '2.5M+', color: 'text-blue-600' },
-    { icon: Calculator, label: 'Total Tools', value: `${calculators.length}+`, color: 'text-green-600' },
-    { icon: Star, label: 'Categories', value: `${categories.length}`, color: 'text-yellow-600' },
-    { icon: Clock, label: 'AI-Powered', value: `${calculators.filter(c => c.isPro).length}`, color: 'text-purple-600' },
+    { icon: Users, label: 'Active Users', value: '5M+', color: 'text-blue-600', gradient: 'from-blue-500 to-cyan-500' },
+    { icon: Calculator, label: 'Total Tools', value: `100+`, color: 'text-green-600', gradient: 'from-green-500 to-emerald-500' },
+    { icon: Star, label: 'Categories', value: `13`, color: 'text-yellow-600', gradient: 'from-yellow-500 to-orange-500' },
+    { icon: Brain, label: 'AI-Powered', value: `25+`, color: 'text-purple-600', gradient: 'from-purple-500 to-pink-500' },
   ];
 
-  const quickActions = [
-    { icon: '💰', title: 'EMI Calculator', desc: 'Calculate loan EMI', href: '/calculator/emi', popular: true },
-    { icon: '🤖', title: 'AI OCR Tool', desc: 'Extract text from images', href: '/calculator/ocr', popular: true, isPro: true },
-    { icon: '📁', title: 'PDF Converter', desc: 'Convert PDF files', href: '/calculator/pdf-to-word', popular: true },
-    { icon: '🎵', title: 'Video to MP3', desc: 'Extract audio', href: '/calculator/video-to-mp3', popular: false },
-    { icon: '🔄', title: 'Unit Converter', desc: 'Advanced conversions', href: '/calculator/length-converter', popular: true },
-    { icon: '🌐', title: 'Language Detector', desc: 'AI text analysis', href: '/calculator/language-detector', popular: false },
-  ];
-
-  const featureHighlights = [
+  const featuredCategories = [
     {
-      title: 'AI-Powered Processing',
-      description: 'Advanced artificial intelligence for OCR, speech recognition, and document analysis',
+      id: 'finance',
+      name: 'Finance & Investment',
+      description: 'Professional financial calculations',
+      icon: <DollarSign className="w-6 h-6" />,
+      gradient: 'from-emerald-500 to-teal-500',
+      toolCount: 8,
+      tools: ['EMI Calculator', 'SIP Calculator', 'Investment Calculator']
+    },
+    {
+      id: 'converters',
+      name: 'File Converters',
+      description: 'Transform files between formats',
+      icon: <FileText className="w-6 h-6" />,
+      gradient: 'from-purple-500 to-indigo-500',
+      toolCount: 15,
+      tools: ['PDF to Word', 'Image to PDF', 'Video to MP3']
+    },
+    {
+      id: 'ai',
+      name: 'AI-Powered Tools',
+      description: 'Intelligent automation tools',
       icon: <Brain className="w-6 h-6" />,
-      count: calculators.filter(c => c.category === 'ai-converters').length,
-      gradient: 'from-purple-500 to-pink-500'
+      gradient: 'from-cyan-500 to-blue-500',
+      toolCount: 7,
+      tools: ['OCR Scanner', 'Speech to Text', 'AI Translator']
     },
     {
-      title: 'File Conversion Hub',
-      description: 'Convert between PDF, Word, Excel, and 15+ other formats with precision',
-      icon: <Zap className="w-6 h-6" />,
-      count: calculators.filter(c => c.category === 'file-converters').length,
-      gradient: 'from-blue-500 to-cyan-500'
-    },
-    {
-      title: 'Media Processing',
-      description: 'Professional video, audio, and image conversion with quality controls',
-      icon: <Sparkles className="w-6 h-6" />,
-      count: calculators.filter(c => c.category === 'media-converters').length,
-      gradient: 'from-green-500 to-emerald-500'
-    },
-    {
-      title: 'Advanced Analytics',
-      description: 'Comprehensive financial planning and mathematical computation tools',
-      icon: <BarChart3 className="w-6 h-6" />,
-      count: calculators.filter(c => c.category === 'finance').length,
-      gradient: 'from-orange-500 to-red-500'
+      id: 'media',
+      name: 'Media Processing',
+      description: 'Audio, video & image tools',
+      icon: <Video className="w-6 h-6" />,
+      gradient: 'from-red-500 to-pink-500',
+      toolCount: 9,
+      tools: ['Video Converter', 'Audio Compressor', 'GIF Maker']
     }
   ];
 
-  const getCategoryIcon = (categoryId: string) => {
-    switch (categoryId) {
-      case 'finance':
-        return <DollarSign className="w-8 h-8" />;
-      case 'health':
-        return <Activity className="w-8 h-8" />;
-      case 'math':
-        return <Brain className="w-8 h-8" />;
-      case 'daily':
-        return <Calculator className="w-8 h-8" />;
-      default:
-        return <Calculator className="w-8 h-8" />;
-    }
-  };
-
-  const getCategoryGradient = (categoryId: string) => {
-    switch (categoryId) {
-      case 'finance':
-        return 'from-emerald-400 via-teal-500 to-cyan-600';
-      case 'health':
-        return 'from-rose-400 via-pink-500 to-purple-600';
-      case 'math':
-        return 'from-blue-400 via-indigo-500 to-purple-600';
-      case 'daily':
-        return 'from-orange-400 via-amber-500 to-yellow-600';
-      default:
-        return 'from-gray-400 via-gray-500 to-gray-600';
-    }
-  };
+  const popularTools = [
+    { id: 'emi', name: 'EMI Calculator', description: 'Calculate loan EMI with precision', icon: 'fa-calculator', category: 'Finance', gradient: 'from-emerald-500 to-teal-500', isPopular: true },
+    { id: 'file-converter', name: 'File Converter Hub', description: 'Convert files between formats', icon: 'fa-exchange-alt', category: 'Converters', gradient: 'from-purple-500 to-indigo-500', isNew: true },
+    { id: 'bmi', name: 'BMI Calculator', description: 'Check your body mass index', icon: 'fa-weight', category: 'Health', gradient: 'from-rose-500 to-pink-500', isPopular: true },
+    { id: 'currency-converter', name: 'Currency Converter', description: 'Live exchange rates', icon: 'fa-coins', category: 'Finance', gradient: 'from-blue-500 to-cyan-500', isPro: true },
+    { id: 'percentage', name: 'Percentage Calculator', description: 'Quick percentage calculations', icon: 'fa-percent', category: 'Math', gradient: 'from-orange-500 to-yellow-500', isPopular: true },
+    { id: 'scientific', name: 'Scientific Calculator', description: 'Advanced mathematical functions', icon: 'fa-calculator', category: 'Math', gradient: 'from-indigo-500 to-purple-500', isPro: true }
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      {/* Enhanced Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white">
-        <div className="absolute inset-0 bg-black/20" />
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/90 to-purple-600/90" />
-        <div className="relative section-container section-padding">
-          <div className="text-center max-w-4xl mx-auto">
-            <div className="flex items-center justify-center mb-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-indigo-900">
+      {/* Hero Section */}
+      <section className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white">
+        <div className="absolute inset-0 bg-black/20"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-pink-600/20 backdrop-blur-3xl"></div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+          <div className="text-center space-y-8">
+            <div className="flex items-center justify-center gap-4 mb-6">
               <div className="relative">
-                <Calculator className="h-20 w-20 text-white mr-6 animate-pulse" />
-                <div className="absolute -top-2 -right-2">
-                  <Sparkles className="h-8 w-8 text-yellow-400 animate-spin" />
-                </div>
+                <Calculator className="w-16 h-16 text-white animate-pulse" />
+                <Sparkles className="w-8 h-8 text-yellow-400 absolute -top-2 -right-2 animate-bounce" />
               </div>
-              <div className="text-left">
-                <h1 className="text-5xl md:text-7xl font-bold mb-2">
-                  CalcMate
-                </h1>
-                <p className="text-xl md:text-2xl text-blue-100">
-                  Professional Calculator Hub
-                </p>
-              </div>
+              <h1 className="text-4xl md:text-7xl font-bold">
+                CalcMate<span className="text-yellow-400">Pro</span>
+              </h1>
             </div>
-            
-            <div className="mb-6">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-yellow-400 text-black rounded-full text-sm font-bold mb-4 animate-bounce">
-                <Star className="h-4 w-4" />
-                #1 Calculator Hub 2024
-                <TrendingUp className="h-4 w-4" />
-              </div>
-            </div>
-            
-            <p className="text-xl md:text-2xl text-blue-100 leading-relaxed mb-8 max-w-3xl mx-auto">
-              Join over <span className="font-bold text-yellow-300">2.5 million users</span> using the world's most popular calculator platform. 
-              Professional tools with AI-powered insights and real-time data.
+
+            <p className="text-xl md:text-3xl max-w-4xl mx-auto font-light">
+              Professional Calculator Hub with <span className="font-bold text-yellow-400">100+ Tools</span>, 
+              <span className="font-bold text-cyan-400"> AI-Powered</span> Features, and 
+              <span className="font-bold text-pink-400"> Lightning-Fast</span> Performance
             </p>
-            
-            <div className="flex items-center justify-center gap-6 mb-8 text-blue-100">
-              <div className="flex items-center gap-2">
-                <div className="flex -space-x-2">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-green-400 to-blue-500 border-2 border-white"></div>
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-400 to-pink-500 border-2 border-white"></div>
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 border-2 border-white"></div>
-                </div>
-                <span className="text-sm font-medium">10,000+ users online now</span>
-              </div>
-              <div className="flex items-center gap-1 text-sm">
-                <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                Live community support
-              </div>
-            </div>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-              <Link href="/calculator/emi">
-                <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-4 text-lg">
-                  <Rocket className="mr-2 h-5 w-5" />
-                  Start Calculating
-                </Button>
-              </Link>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-12">
               <Link href="/categories">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 font-semibold px-8 py-4 text-lg">
-                  <Target className="mr-2 h-5 w-5" />
-                  Explore Tools
+                <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-4 rounded-2xl font-semibold shadow-2xl">
+                  <Rocket className="w-6 h-6 mr-3" />
+                  Explore All Tools
                 </Button>
               </Link>
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/20 text-lg px-8 py-4 rounded-2xl font-semibold backdrop-blur-sm">
+                <Play className="w-6 h-6 mr-3" />
+                Watch Demo
+              </Button>
             </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-              {stats.map((stat) => (
-                <div key={stat.label} className="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-center">
-                  <stat.icon className="h-8 w-8 mx-auto mb-2 text-white" />
-                  <div className="text-2xl font-bold">{stat.value}</div>
-                  <div className="text-sm text-blue-100">{stat.label}</div>
-                </div>
-              ))}
+            {/* Search Bar */}
+            <div className="max-w-2xl mx-auto mt-12">
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-6 h-6" />
+                <Input
+                  placeholder="Search calculators, converters, tools..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-14 pr-6 py-4 text-lg rounded-2xl border-0 bg-white/10 backdrop-blur-sm text-white placeholder-white/70 focus:bg-white/20"
+                />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Trending Calculators */}
-      <section className="section-container py-16">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-full text-sm font-bold mb-4 animate-pulse">
-            <TrendingUp className="h-4 w-4" />
-            Trending Now
-            <div className="w-2 h-2 bg-red-500 rounded-full animate-ping"></div>
-          </div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Most Viral Calculators</h2>
-          <p className="text-muted-foreground text-lg">Join millions using these trending calculation tools</p>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {quickActions.map((action, index) => (
-            <Link key={action.title} href={action.href}>
-              <Card className="group hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden border-2 hover:border-blue-500 transform hover:scale-105">
-                {action.popular && (
-                  <div className="absolute top-3 right-3 z-10">
-                    <Badge className="bg-gradient-to-r from-red-500 to-pink-500 text-white animate-bounce shadow-lg">
-                      <Trophy className="h-3 w-3 mr-1" />
-                      🔥 Viral
-                    </Badge>
+      {/* Stats Section */}
+      <section className="py-16 bg-white/50 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {stats.map((stat, index) => (
+              <Card key={index} className="text-center p-6 hover:shadow-2xl transition-all duration-500 hover:scale-105 border-0 bg-white/80 backdrop-blur-sm overflow-hidden group">
+                <div className={`absolute inset-0 bg-gradient-to-br ${stat.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}></div>
+                <div className="relative z-10">
+                  <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br ${stat.gradient} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
+                    <stat.icon className="w-8 h-8 text-white" />
                   </div>
-                )}
-                {index === 0 && (
-                  <div className="absolute top-3 left-3 z-10">
-                    <Badge className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold">
-                      #1 Most Used
-                    </Badge>
+                  <div className="text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+                    {stat.value}
                   </div>
-                )}
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
-                <CardHeader className="text-center">
-                  <div className="text-5xl mb-4 group-hover:scale-110 transition-transform duration-300 group-hover:rotate-12">
-                    {action.icon}
-                  </div>
-                  <CardTitle className="text-xl group-hover:text-blue-600 transition-colors">
-                    {action.title}
-                  </CardTitle>
-                  <CardDescription className="text-base">
-                    {action.desc}
-                  </CardDescription>
-                  {action.popular && (
-                    <div className="flex items-center justify-center gap-2 text-xs text-gray-500 mt-2">
-                      <Users className="h-3 w-3" />
-                      <span className="font-semibold">{index === 0 ? '500K+' : index === 1 ? '350K+' : '200K+'} daily users</span>
-                    </div>
-                  )}
-                </CardHeader>
-                <CardContent className="text-center">
-                  <Button variant="ghost" className="group-hover:bg-gradient-to-r group-hover:from-blue-50 group-hover:to-purple-50 dark:group-hover:from-blue-900/20 dark:group-hover:to-purple-900/20 font-semibold">
-                    Try Now - It's Free!
-                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </CardContent>
+                  <div className="text-sm text-gray-600">{stat.label}</div>
+                </div>
               </Card>
-            </Link>
-          ))}
-        </div>
-
-        {/* Social Proof Banner */}
-        <div className="mt-12 bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-2xl p-8 text-center border border-green-200 dark:border-green-800">
-          <div className="flex items-center justify-center gap-4 mb-4">
-            <div className="flex -space-x-3">
-              {[1,2,3,4,5].map((i) => (
-                <div key={i} className="w-10 h-10 rounded-full bg-gradient-to-r from-green-400 to-blue-500 border-3 border-white flex items-center justify-center text-white font-bold text-xs">
-                  👤
-                </div>
-              ))}
-            </div>
-            <div className="text-left">
-              <div className="text-lg font-bold text-gray-900 dark:text-white">2.5M+ Calculator Pros</div>
-              <div className="text-sm text-green-600 dark:text-green-400 font-semibold">⭐ Rated #1 Calculator Platform</div>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-            <div className="flex items-center justify-center gap-2 text-green-700 dark:text-green-300">
-              <Shield className="h-4 w-4" />
-              <span className="font-semibold">100% Secure & Private</span>
-            </div>
-            <div className="flex items-center justify-center gap-2 text-blue-700 dark:text-blue-300">
-              <Zap className="h-4 w-4" />
-              <span className="font-semibold">Lightning Fast Results</span>
-            </div>
-            <div className="flex items-center justify-center gap-2 text-purple-700 dark:text-purple-300">
-              <Star className="h-4 w-4" />
-              <span className="font-semibold">4.9/5 User Rating</span>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Feature Highlights */}
-      <section className="section-container py-16">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 text-purple-700 dark:text-purple-300 rounded-full text-sm font-bold mb-4">
-            <Sparkles className="h-4 w-4" />
-            Advanced Capabilities
+      {/* Featured Categories */}
+      <section className="py-20 bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-800 dark:to-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent">
+              Featured Categories
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+              Discover our most popular tool categories, each packed with professional-grade calculators and converters
+            </p>
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Comprehensive Tool Ecosystem</h2>
-          <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
-            From AI-powered processing to professional-grade conversions, discover our complete suite of advanced tools
-          </p>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {featureHighlights.map((feature, index) => (
-            <Card key={feature.title} className="group hover:shadow-xl transition-all duration-300 border-2 hover:border-purple-200 dark:hover:border-purple-800 overflow-hidden">
-              <div className={`h-2 bg-gradient-to-r ${feature.gradient}`}></div>
-              <CardHeader>
-                <div className="flex items-center justify-between mb-4">
-                  <div className={`p-3 rounded-xl bg-gradient-to-r ${feature.gradient} text-white group-hover:scale-110 transition-transform duration-300`}>
-                    {feature.icon}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {featuredCategories.map((category, index) => (
+              <Link key={category.id} href={`/categories#${category.id}`}>
+                <Card className="group cursor-pointer h-full hover:shadow-2xl transition-all duration-500 hover:scale-105 border-0 overflow-hidden">
+                  <div className={`bg-gradient-to-br ${category.gradient} p-6 text-white relative`}>
+                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300"></div>
+                    <div className="relative z-10">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="bg-white/20 backdrop-blur-sm rounded-xl p-3 group-hover:scale-110 transition-transform duration-300">
+                          {category.icon}
+                        </div>
+                        <Badge className="bg-white/20 text-white border-0">
+                          {category.toolCount} tools
+                        </Badge>
+                      </div>
+                      <h3 className="text-xl font-bold mb-2">{category.name}</h3>
+                      <p className="text-white/90 text-sm mb-4">{category.description}</p>
+                      <div className="flex flex-wrap gap-1">
+                        {category.tools.map((tool, idx) => (
+                          <span key={idx} className="text-xs bg-white/20 rounded-full px-2 py-1">
+                            {tool}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   </div>
-                  <Badge variant="outline" className="text-sm font-bold">
-                    {feature.count} Tools
-                  </Badge>
-                </div>
-                <CardTitle className="text-xl group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-                  {feature.title}
-                </CardTitle>
-                <CardDescription className="text-base leading-relaxed">
-                  {feature.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between">
-                  <div className="text-sm text-muted-foreground">
-                    Professional-grade processing
-                  </div>
-                  <Button variant="ghost" size="sm" className="group-hover:bg-purple-50 dark:group-hover:bg-purple-900/20">
-                    Explore
-                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                  <CardContent className="p-6 bg-white dark:bg-gray-800">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                        Explore Category
+                      </span>
+                      <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all duration-300" />
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Featured Calculators */}
-      <section className="bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-800 dark:to-gray-900 py-16">
-        <div className="section-container">
+      {/* Popular Tools */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-12">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 flex items-center gap-3">
-                <Star className="h-8 w-8 text-yellow-500" />
-                Featured Calculators
+              <h2 className="text-4xl md:text-5xl font-bold mb-4 flex items-center gap-3">
+                <Star className="h-10 w-10 text-yellow-500" />
+                Popular Tools
               </h2>
-              <p className="text-muted-foreground text-lg">
-                Most popular and frequently used calculators by our community
+              <p className="text-xl text-gray-600 dark:text-gray-400">
+                Most used tools by our 5M+ community members
               </p>
             </div>
-            
+
             <div className="flex items-center gap-4 mt-6 lg:mt-0">
               <div className="flex items-center gap-2">
                 <Button
@@ -391,74 +282,79 @@ export default function Home() {
                   <List className="h-4 w-4" />
                 </Button>
               </div>
-              <Link href="/calculators">
-                <Button variant="outline">
-                  View All
-                  <ChevronRight className="ml-2 h-4 w-4" />
+              <Link href="/categories">
+                <Button variant="outline" className="bg-white/50 backdrop-blur-sm">
+                  View All Tools
+                  <ChevronRight className="h-4 w-4 ml-2" />
                 </Button>
               </Link>
             </div>
           </div>
 
-          {/* Search and Filter */}
-          <div className="flex flex-col md:flex-row gap-4 mb-8">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search calculators..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-            <div className="flex items-center gap-2">
-              <Filter className="h-4 w-4 text-muted-foreground" />
-              <Tabs value={activeCategory} onValueChange={setActiveCategory} className="w-auto">
-                <TabsList>
-                  <TabsTrigger value="all">All</TabsTrigger>
-                  <TabsTrigger value="financial">Finance</TabsTrigger>
-                  <TabsTrigger value="health">Health</TabsTrigger>
-                  <TabsTrigger value="mathematical">Math</TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div>
-          </div>
-          
-          <div className={viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6' : 'space-y-4'}>
-            {filteredCalculators.slice(0, 8).map((calculator) => (
-              <Link key={calculator.id} href={`/calculator/${calculator.id}`}>
-                <Card className={`calculator-card group ${viewMode === 'list' ? 'flex items-center' : ''}`}>
-                  <CardHeader className={viewMode === 'list' ? 'flex-row items-center space-y-0 pb-2' : 'pb-4'}>
-                    <div className={`flex items-center ${viewMode === 'list' ? 'gap-4' : 'justify-between'}`}>
-                      <div className="text-4xl group-hover:scale-125 transition-transform duration-300">
-                        <i className={`fas ${calculator.icon} text-blue-600 dark:text-blue-400`}></i>
+          <div className={`grid gap-6 ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1 md:grid-cols-2'}`}>
+            {popularTools.map((tool, index) => (
+              <Link key={tool.id} href={`/calculator/${tool.id}`}>
+                <Card className={`group cursor-pointer transition-all duration-500 hover:scale-105 hover:shadow-2xl border-0 bg-white/70 backdrop-blur-sm h-full ${viewMode === 'list' ? 'flex items-center' : ''}`}>
+                  <div className={`bg-gradient-to-br ${tool.gradient} text-white relative overflow-hidden ${viewMode === 'list' ? 'w-32 flex-shrink-0' : ''}`}>
+                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300"></div>
+
+                    {/* Status Badges */}
+                    <div className="absolute top-3 right-3 z-20 flex gap-2">
+                      {tool.isNew && (
+                        <Badge className="bg-green-400 text-green-900 text-xs font-bold animate-pulse">NEW</Badge>
+                      )}
+                      {tool.isPro && (
+                        <Badge className="bg-yellow-400 text-yellow-900 text-xs font-bold">
+                          <Crown className="w-3 h-3 mr-1" />
+                          AI
+                        </Badge>
+                      )}
+                      {tool.isPopular && (
+                        <Badge className="bg-orange-400 text-orange-900 text-xs font-bold">🔥</Badge>
+                      )}
+                    </div>
+
+                    <CardHeader className={`relative z-10 ${viewMode === 'list' ? 'pb-2' : 'pb-4'}`}>
+                      <div className={`flex items-center ${viewMode === 'list' ? 'justify-center' : 'justify-between'}`}>
+                        <div className="bg-white/20 backdrop-blur-sm rounded-xl p-3 group-hover:scale-110 transition-transform duration-300">
+                          <i className={`fas ${tool.icon} text-2xl text-white`}></i>
+                        </div>
                       </div>
                       {viewMode === 'grid' && (
-                        <Badge variant="secondary" className="bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 dark:from-blue-900/20 dark:to-purple-900/20 dark:text-blue-300">
-                          {calculator.category}
-                        </Badge>
+                        <CardTitle className="text-xl text-white group-hover:text-yellow-200 transition-colors">
+                          {tool.name}
+                        </CardTitle>
                       )}
-                    </div>
-                    <div className={viewMode === 'list' ? 'flex-1' : ''}>
-                      <CardTitle className="text-xl group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                        {calculator.name}
-                      </CardTitle>
-                      {viewMode === 'list' && (
-                        <Badge variant="outline" className="mt-1">
-                          {calculator.category}
-                        </Badge>
-                      )}
-                    </div>
-                  </CardHeader>
-                  <CardContent className={viewMode === 'list' ? 'flex-1' : ''}>
-                    <CardDescription className={`leading-relaxed ${viewMode === 'list' ? 'text-sm' : 'text-base'}`}>
-                      {calculator.description}
-                    </CardDescription>
-                    {calculator.featured && (
-                      <Badge className="mt-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white">
-                        <Star className="h-3 w-3 mr-1" />
-                        Featured
-                      </Badge>
+                    </CardHeader>
+                  </div>
+
+                  <CardContent className={`bg-white dark:bg-gray-800 ${viewMode === 'list' ? 'flex-1 flex items-center justify-between p-6' : 'p-6'}`}>
+                    {viewMode === 'list' && (
+                      <div className="flex-1">
+                        <CardTitle className="text-xl mb-2 group-hover:text-blue-600 transition-colors">
+                          {tool.name}
+                        </CardTitle>
+                        <CardDescription className="text-base mb-3">
+                          {tool.description}
+                        </CardDescription>
+                        <Badge variant="outline">{tool.category}</Badge>
+                      </div>
+                    )}
+
+                    {viewMode === 'grid' && (
+                      <>
+                        <CardDescription className="text-base leading-relaxed mb-4">
+                          {tool.description}
+                        </CardDescription>
+                        <div className="flex items-center justify-between">
+                          <Badge variant="outline">{tool.category}</Badge>
+                          <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all duration-300" />
+                        </div>
+                      </>
+                    )}
+
+                    {viewMode === 'list' && (
+                      <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all duration-300" />
                     )}
                   </CardContent>
                 </Card>
@@ -468,123 +364,26 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Enhanced Categories Section */}
-      <section className="section-container py-16">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Calculator Categories</h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Organized collections of calculators for specific domains and professional use cases
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            Ready to Boost Your Productivity?
+          </h2>
+          <p className="text-xl mb-8 text-white/90">
+            Join millions of professionals using CalcMate for faster, smarter calculations
           </p>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {categories.map((category) => (
-            <Link key={category.id} href={`/category/${category.id}`}>
-              <Card className="category-card group h-full">
-                <CardHeader>
-                  <div className="flex items-center space-x-4">
-                    <div className={`p-4 rounded-2xl bg-gradient-to-br ${getCategoryGradient(category.id)} text-white text-3xl group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                      {getCategoryIcon(category.id)}
-                    </div>
-                    <div className="flex-1">
-                      <CardTitle className="text-2xl group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-2">
-                        {category.name}
-                      </CardTitle>
-                      <CardDescription className="text-base">
-                        {category.id === 'finance' && 'Make informed financial decisions with comprehensive analysis tools'}
-                        {category.id === 'health' && 'Monitor and optimize your health with scientific precision'}
-                        {category.id === 'math' && 'Solve complex mathematical problems with advanced algorithms'}
-                        {category.id === 'daily' && 'Streamline everyday calculations with intuitive interfaces'}
-                      </CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {category.calculators.slice(0, 4).map((calc) => (
-                      <Badge key={calc.id} variant="outline" className="text-sm hover:bg-blue-50 dark:hover:bg-blue-900/20">
-                        {calc.icon} {calc.name}
-                      </Badge>
-                    ))}
-                    {category.calculators.length > 4 && (
-                      <Badge variant="outline" className="text-sm bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
-                        +{category.calculators.length - 4} more tools
-                      </Badge>
-                    )}
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">
-                      {category.calculators.length} calculators
-                    </span>
-                    <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
-                  </div>
-                </CardContent>
-              </Card>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/categories">
+              <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-4 rounded-2xl font-semibold">
+                <Target className="w-6 h-6 mr-3" />
+                Start Calculating
+              </Button>
             </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Enhanced Features Section */}
-      <section className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm py-20">
-        <div className="section-container">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Why Choose CalcMate?
-            </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Trusted by professionals and individuals worldwide for accurate calculations
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="text-center space-y-4 group">
-              <div className="w-20 h-20 mx-auto bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                <Calculator className="w-10 h-10 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold">Professional Grade</h3>
-              <p className="text-muted-foreground">Industry-standard calculations with verified formulas and real-time validation for accuracy you can trust.</p>
-            </div>
-            
-            <div className="text-center space-y-4 group">
-              <div className="w-20 h-20 mx-auto bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                <Heart className="w-10 h-10 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold">User Friendly</h3>
-              <p className="text-muted-foreground">Intuitive interfaces designed for both beginners and professionals with step-by-step guidance.</p>
-            </div>
-            
-            <div className="text-center space-y-4 group">
-              <div className="w-20 h-20 mx-auto bg-gradient-to-br from-rose-500 to-pink-600 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                <BarChart3 className="w-10 h-10 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold">Advanced Analytics</h3>
-              <p className="text-muted-foreground">Interactive charts and detailed breakdowns for deeper insights into your calculations.</p>
-            </div>
-            
-            <div className="text-center space-y-4 group">
-              <div className="w-20 h-20 mx-auto bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                <Globe className="w-10 h-10 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold">Multi-Language</h3>
-              <p className="text-muted-foreground">Available in multiple languages with automatic currency conversion for global users.</p>
-            </div>
-            
-            <div className="text-center space-y-4 group">
-              <div className="w-20 h-20 mx-auto bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                <Shield className="w-10 h-10 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold">Secure & Private</h3>
-              <p className="text-muted-foreground">Your data stays private with client-side calculations and no data collection.</p>
-            </div>
-            
-            <div className="text-center space-y-4 group">
-              <div className="w-20 h-20 mx-auto bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                <Zap className="w-10 h-10 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold">Lightning Fast</h3>
-              <p className="text-muted-foreground">Instant calculations with real-time results and responsive design for all devices.</p>
-            </div>
+            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/20 text-lg px-8 py-4 rounded-2xl font-semibold">
+              <Shield className="w-6 h-6 mr-3" />
+              Learn More
+            </Button>
           </div>
         </div>
       </section>

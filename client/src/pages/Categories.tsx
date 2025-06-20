@@ -1,378 +1,500 @@
-import { useState } from 'react';
-import { Link } from 'wouter';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
+import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'wouter';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
-  Search, Calculator, TrendingUp, Heart, Activity, Beaker, Shuffle, Star, Users,
-  DollarSign, PiggyBank, BarChart3, Coins, CreditCard, Banknote, Receipt,
-  Scale, Thermometer, Droplets, Clock, Ruler, Gauge, Zap, HardDrive,
-  FileText, File, FileImage, FileVideo, FileAudio, FolderOpen, Download, Upload,
-  Video, Music, Image, Play, Pause, Volume2, Mic, Camera,
-  Brain, Eye, MessageSquare, Languages, Sparkles, Bot, Cpu, Code,
-  Type, Hash, QrCode, Globe, Mail, Phone, MapPin,
-  Euro, Bitcoin, Landmark, PieChart, Palette, Brush, Wand2, Edit, Copy, Scissors,
-  Settings, Wrench, Cog, Shield, Lock, Key, Database, ArrowRight, Filter
+  Search, Filter, Grid3X3, List, ArrowRight, TrendingUp, Star, Zap,
+  Calculator, Heart, Activity, DollarSign, FileText, Image, Video,
+  Music, Code, Globe, Cpu, Palette, Shield, Sparkles, Crown,
+  BarChart3, Clock, Users, Target, Rocket, Brain, Magic, 
+  Layers, Settings, Play, Download, Upload, Share2, Eye
 } from 'lucide-react';
 import { categories, calculators } from '@/lib/calculatorData';
-import { useI18n } from '@/hooks/useI18n';
 import SEOHead from '@/components/SEOHead';
 
-// Tool icon mapping with popular Lucide React icons
-const getToolIcon = (toolId: string) => {
-  const iconMap: Record<string, any> = {
-    // Financial Tools
-    'emi': <CreditCard className="w-5 h-5" />,
-    'sip': <PiggyBank className="w-5 h-5" />,
-    'compound-interest': <TrendingUp className="w-5 h-5" />,
-    'mortgage': <DollarSign className="w-5 h-5" />,
-    'investment': <BarChart3 className="w-5 h-5" />,
-    'loan-comparison': <Receipt className="w-5 h-5" />,
-    'financial-dashboard': <Landmark className="w-5 h-5" />,
-    'currency-converter': <Coins className="w-5 h-5" />,
-    
-    // Unit Converters
-    'length-converter': <Ruler className="w-5 h-5" />,
-    'weight-converter': <Scale className="w-5 h-5" />,
-    'temperature-converter': <Thermometer className="w-5 h-5" />,
-    'time-converter': <Clock className="w-5 h-5" />,
-    'speed-converter': <Gauge className="w-5 h-5" />,
-    'area-converter': <MapPin className="w-5 h-5" />,
-    'volume-converter': <Droplets className="w-5 h-5" />,
-    'data-converter': <HardDrive className="w-5 h-5" />,
-    'power-converter': <Zap className="w-5 h-5" />,
-    'pressure-converter': <Activity className="w-5 h-5" />,
-    
-    // File Converters
-    'pdf-to-word': <FileText className="w-5 h-5" />,
-    'pdf-to-excel': <File className="w-5 h-5" />,
-    'pdf-to-image': <FileImage className="w-5 h-5" />,
-    'excel-to-csv': <Database className="w-5 h-5" />,
-    'csv-to-json': <Code className="w-5 h-5" />,
-    'json-to-xml': <Settings className="w-5 h-5" />,
-    'word-to-pdf': <FileText className="w-5 h-5" />,
-    'image-to-pdf': <FileImage className="w-5 h-5" />,
-    'pdf-merge': <Copy className="w-5 h-5" />,
-    'pdf-split': <Scissors className="w-5 h-5" />,
-    'pdf-compress': <Download className="w-5 h-5" />,
-    'pdf-password-remove': <Lock className="w-5 h-5" />,
-    'excel-to-pdf': <File className="w-5 h-5" />,
-    'csv-to-excel': <Database className="w-5 h-5" />,
-    'json-to-csv': <Code className="w-5 h-5" />,
-    
-    // Media Converters
-    'video-to-mp4': <Video className="w-5 h-5" />,
-    'video-to-avi': <FileVideo className="w-5 h-5" />,
-    'video-to-mkv': <Play className="w-5 h-5" />,
-    'video-to-mp3': <Music className="w-5 h-5" />,
-    'mp4-to-gif': <Image className="w-5 h-5" />,
-    'audio-to-mp3': <Volume2 className="w-5 h-5" />,
-    'audio-to-wav': <FileAudio className="w-5 h-5" />,
-    'audio-merge': <Mic className="w-5 h-5" />,
-    'image-converter': <Camera className="w-5 h-5" />,
-    
-    // AI Tools
-    'ocr': <Eye className="w-5 h-5" />,
-    'speech-to-text': <Mic className="w-5 h-5" />,
-    'text-to-speech': <Volume2 className="w-5 h-5" />,
-    'ai-translator': <Languages className="w-5 h-5" />,
-    'language-detector': <Globe className="w-5 h-5" />,
-    'code-explainer': <Brain className="w-5 h-5" />,
-    'ai-summarizer': <Bot className="w-5 h-5" />,
-    
-    // Text & Code Tools
-    'text-case-converter': <Type className="w-5 h-5" />,
-    'text-reverser': <Shuffle className="w-5 h-5" />,
-    'duplicate-remover': <Copy className="w-5 h-5" />,
-    'slug-generator': <Hash className="w-5 h-5" />,
-    'binary-converter': <Code className="w-5 h-5" />,
-    'base64-encoder': <Key className="w-5 h-5" />,
-    'qr-generator': <QrCode className="w-5 h-5" />,
-    'uuid-generator': <Hash className="w-5 h-5" />,
-    'json-formatter': <Code className="w-5 h-5" />,
-    'html-to-markdown': <Edit className="w-5 h-5" />,
-    'css-beautifier': <Palette className="w-5 h-5" />,
-    'sql-formatter': <Database className="w-5 h-5" />,
-    'regex-tester': <Search className="w-5 h-5" />,
-    'url-encoder': <Globe className="w-5 h-5" />,
-    'password-generator': <Shield className="w-5 h-5" />,
-    
-    // Health Tools
-    'bmi': <Scale className="w-5 h-5" />,
-    'bmr': <Activity className="w-5 h-5" />,
-    'age': <Clock className="w-5 h-5" />,
-    
-    // Math Tools
-    'scientific': <Calculator className="w-5 h-5" />,
-    'percentage': <BarChart3 className="w-5 h-5" />,
-    'tip-calculator': <Receipt className="w-5 h-5" />,
-  };
-  
-  return iconMap[toolId] || <Calculator className="w-5 h-5" />;
-};
-
-// Color schemes for different categories
-const getCategoryColor = (categoryId: string) => {
-  const colorMap: Record<string, string> = {
-    'finance': 'bg-emerald-500',
-    'unit-converters': 'bg-blue-500',
-    'file-converters': 'bg-purple-500',
-    'media-converters': 'bg-orange-500',
-    'ai-converters': 'bg-pink-500',
-    'text-converters': 'bg-indigo-500',
-    'currency-crypto': 'bg-yellow-500',
-    'language-tools': 'bg-teal-500',
-    'specialized': 'bg-red-500',
-    'health': 'bg-rose-500',
-    'mathematical': 'bg-cyan-500',
-    'utility': 'bg-violet-500',
-    'scientific': 'bg-slate-500'
-  };
-  
-  return colorMap[categoryId] || 'bg-gray-500';
-};
-
-const getBgGradient = (categoryId: string) => {
-  const gradientMap: Record<string, string> = {
-    'finance': 'from-emerald-400 to-emerald-600',
-    'unit-converters': 'from-blue-400 to-blue-600',
-    'file-converters': 'from-purple-400 to-purple-600',
-    'media-converters': 'from-orange-400 to-orange-600',
-    'ai-converters': 'from-pink-400 to-pink-600',
-    'text-converters': 'from-indigo-400 to-indigo-600',
-    'currency-crypto': 'from-yellow-400 to-yellow-600',
-    'language-tools': 'from-teal-400 to-teal-600',
-    'specialized': 'from-red-400 to-red-600',
-    'health': 'from-rose-400 to-rose-600',
-    'mathematical': 'from-cyan-400 to-cyan-600',
-    'utility': 'from-violet-400 to-violet-600',
-    'scientific': 'from-slate-400 to-slate-600'
-  };
-  
-  return gradientMap[categoryId] || 'from-gray-400 to-gray-600';
-};
+const enhancedCategories = [
+  {
+    id: 'finance',
+    name: 'Finance & Investment',
+    description: 'Professional financial calculations and investment planning',
+    icon: <DollarSign className="w-6 h-6" />,
+    gradient: 'from-emerald-500 via-teal-500 to-cyan-600',
+    tools: [
+      { id: 'emi', name: 'EMI Calculator', description: 'Monthly loan EMI with precision', icon: 'fa-calculator', isPopular: true },
+      { id: 'sip', name: 'SIP Calculator', description: 'Systematic investment planning', icon: 'fa-chart-line', isNew: true },
+      { id: 'compound-interest', name: 'Compound Interest', description: 'Visualize compound growth', icon: 'fa-percentage', isPro: true },
+      { id: 'mortgage', name: 'Mortgage Calculator', description: 'Full mortgage breakdown', icon: 'fa-home', isPopular: true },
+      { id: 'investment', name: 'Investment Calculator', description: 'Portfolio future growth', icon: 'fa-chart-area', isPro: true },
+      { id: 'loan-comparison', name: 'Loan Comparison', description: 'Compare loan offers', icon: 'fa-balance-scale' },
+      { id: 'loan-interest', name: 'Loan Interest', description: 'Calculate interest rates', icon: 'fa-percent' },
+      { id: 'discount-calculator', name: 'Discount Calculator', description: 'Sale price calculations', icon: 'fa-tags', isNew: true }
+    ]
+  },
+  {
+    id: 'health',
+    name: 'Health & Fitness',
+    description: 'Health monitoring and fitness calculations',
+    icon: <Heart className="w-6 h-6" />,
+    gradient: 'from-rose-500 via-pink-500 to-purple-600',
+    tools: [
+      { id: 'bmi', name: 'BMI Calculator', description: 'Body Mass Index checker', icon: 'fa-weight', isPopular: true },
+      { id: 'bmr', name: 'BMR Calculator', description: 'Daily calorie requirements', icon: 'fa-fire', isPro: true }
+    ]
+  },
+  {
+    id: 'math',
+    name: 'Math & Numbers',
+    description: 'Advanced mathematical calculations and conversions',
+    icon: <Calculator className="w-6 h-6" />,
+    gradient: 'from-blue-500 via-indigo-500 to-purple-600',
+    tools: [
+      { id: 'scientific', name: 'Scientific Calculator', description: 'Advanced calculations', icon: 'fa-calculator', isPro: true },
+      { id: 'percentage', name: 'Percentage Calculator', description: 'Quick percentage solutions', icon: 'fa-percent', isPopular: true },
+      { id: 'roman-decimal', name: 'Roman ↔ Decimal', description: 'Number system conversion', icon: 'fa-roman', isNew: true },
+      { id: 'binary-decimal', name: 'Binary ↔ Decimal ↔ Hex', description: 'Multi-base converter', icon: 'fa-binary', isPro: true }
+    ]
+  },
+  {
+    id: 'daily',
+    name: 'Daily Utilities',
+    description: 'Everyday calculation tools and utilities',
+    icon: <Clock className="w-6 h-6" />,
+    gradient: 'from-orange-500 via-amber-500 to-yellow-600',
+    tools: [
+      { id: 'age', name: 'Age Calculator', description: 'Exact age calculation', icon: 'fa-birthday-cake' },
+      { id: 'tip', name: 'Tip Calculator', description: 'Calculate tips & split bills', icon: 'fa-receipt', isPopular: true },
+      { id: 'unit-converter', name: 'Unit Converter', description: 'Convert between units', icon: 'fa-exchange-alt' },
+      { id: 'currency-converter', name: 'Currency Converter', description: 'Live exchange rates', icon: 'fa-coins', isPro: true }
+    ]
+  },
+  {
+    id: 'converters',
+    name: 'Unit Converters',
+    description: 'Comprehensive unit conversion tools',
+    icon: <Settings className="w-6 h-6" />,
+    gradient: 'from-teal-500 via-cyan-500 to-blue-600',
+    tools: [
+      { id: 'length-converter', name: 'Length Converter', description: 'Distance & length units', icon: 'fa-ruler' },
+      { id: 'weight-converter', name: 'Weight Converter', description: 'Mass & weight units', icon: 'fa-weight' },
+      { id: 'temperature-converter', name: 'Temperature Converter', description: 'Temperature scales', icon: 'fa-thermometer' },
+      { id: 'time-converter', name: 'Time Converter', description: 'Time zone conversions', icon: 'fa-clock' },
+      { id: 'speed-converter', name: 'Speed Converter', description: 'Velocity measurements', icon: 'fa-tachometer-alt' },
+      { id: 'area-converter', name: 'Area Converter', description: 'Surface area units', icon: 'fa-square' },
+      { id: 'volume-converter', name: 'Volume Converter', description: 'Capacity measurements', icon: 'fa-cube' },
+      { id: 'data-converter', name: 'Data Size Converter', description: 'Digital storage units', icon: 'fa-hdd', isPro: true },
+      { id: 'power-converter', name: 'Power Converter', description: 'Energy & power units', icon: 'fa-bolt' },
+      { id: 'pressure-converter', name: 'Pressure Converter', description: 'Pressure measurements', icon: 'fa-gauge' }
+    ]
+  },
+  {
+    id: 'file-converters',
+    name: 'File Converters',
+    description: 'Document and file format conversions',
+    icon: <FileText className="w-6 h-6" />,
+    gradient: 'from-violet-500 via-purple-500 to-indigo-600',
+    tools: [
+      { id: 'pdf-to-word', name: 'PDF to Word', description: 'PDF to DOCX conversion', icon: 'fa-file-word', isPopular: true },
+      { id: 'word-to-pdf', name: 'Word to PDF', description: 'DOCX to PDF conversion', icon: 'fa-file-pdf', isPopular: true },
+      { id: 'pdf-to-excel', name: 'PDF to Excel', description: 'Extract tables to Excel', icon: 'fa-file-excel', isPro: true },
+      { id: 'pdf-to-image', name: 'PDF to Image', description: 'Convert PDF pages to images', icon: 'fa-image' },
+      { id: 'image-to-pdf', name: 'Image to PDF', description: 'Combine images to PDF', icon: 'fa-file-pdf' },
+      { id: 'text-to-pdf', name: 'Text to PDF', description: 'Plain text to PDF', icon: 'fa-file-alt' },
+      { id: 'csv-to-excel', name: 'CSV to Excel', description: 'CSV to XLSX conversion', icon: 'fa-file-excel' },
+      { id: 'csv-to-json', name: 'CSV to JSON', description: 'Data format conversion', icon: 'fa-code', isNew: true },
+      { id: 'json-to-csv', name: 'JSON to CSV', description: 'JSON to spreadsheet', icon: 'fa-table' },
+      { id: 'csv-to-xml', name: 'CSV to XML', description: 'Structured data conversion', icon: 'fa-code' },
+      { id: 'docx-to-odt', name: 'DOCX to ODT', description: 'Document format conversion', icon: 'fa-file' },
+      { id: 'merge-pdf', name: 'Merge PDFs', description: 'Combine multiple PDFs', icon: 'fa-object-group', isPopular: true },
+      { id: 'split-pdf', name: 'Split PDF', description: 'Separate PDF pages', icon: 'fa-cut' },
+      { id: 'compress-pdf', name: 'Compress PDF', description: 'Reduce PDF file size', icon: 'fa-compress', isPro: true },
+      { id: 'pdf-password', name: 'Remove PDF Password', description: 'Unlock protected PDFs', icon: 'fa-unlock', isPro: true }
+    ]
+  },
+  {
+    id: 'media',
+    name: 'Media Converters',
+    description: 'Audio, video, and multimedia processing',
+    icon: <Video className="w-6 h-6" />,
+    gradient: 'from-red-500 via-orange-500 to-pink-600',
+    tools: [
+      { id: 'video-to-mp3', name: 'Video to MP3', description: 'Extract audio from video', icon: 'fa-music', isPopular: true },
+      { id: 'audio-to-mp3', name: 'Audio to MP3/WAV', description: 'Audio format conversion', icon: 'fa-headphones' },
+      { id: 'video-converter', name: 'Video Converter', description: 'Video format conversion', icon: 'fa-video', isPro: true },
+      { id: 'audio-compressor', name: 'Audio Compressor', description: 'Compress audio files', icon: 'fa-compress' },
+      { id: 'video-compressor', name: 'Video Compressor', description: 'Reduce video file size', icon: 'fa-compress' },
+      { id: 'mp4-to-gif', name: 'MP4 to GIF', description: 'Video to animated GIF', icon: 'fa-gif', isNew: true },
+      { id: 'gif-to-mp4', name: 'GIF to MP4', description: 'Animated GIF to video', icon: 'fa-play' },
+      { id: 'youtube-to-mp3', name: 'YouTube to MP3', description: 'Download YouTube audio', icon: 'fa-youtube', isPro: true },
+      { id: 'youtube-thumbnail', name: 'YouTube Thumbnail', description: 'Download video thumbnails', icon: 'fa-image' }
+    ]
+  },
+  {
+    id: 'crypto',
+    name: 'Currency & Crypto',
+    description: 'Cryptocurrency and currency tools',
+    icon: <Cpu className="w-6 h-6" />,
+    gradient: 'from-yellow-500 via-orange-500 to-red-600',
+    tools: [
+      { id: 'crypto-converter', name: 'Crypto Converter', description: 'BTC/ETH conversions', icon: 'fa-bitcoin', isPro: true },
+      { id: 'currency-history', name: 'Currency Rate History', description: 'Historical exchange rates', icon: 'fa-chart-line' },
+      { id: 'precious-metals', name: 'Gold & Silver Rate', description: 'Precious metal prices', icon: 'fa-coins' }
+    ]
+  },
+  {
+    id: 'text',
+    name: 'Text Converters',
+    description: 'Text processing and transformation tools',
+    icon: <FileText className="w-6 h-6" />,
+    gradient: 'from-green-500 via-emerald-500 to-teal-600',
+    tools: [
+      { id: 'text-case', name: 'Text Case Converter', description: 'Change text case', icon: 'fa-font' },
+      { id: 'binary-text', name: 'Binary ↔ Text', description: 'Binary text conversion', icon: 'fa-binary' },
+      { id: 'text-reverser', name: 'Text Reverser', description: 'Reverse text strings', icon: 'fa-undo' },
+      { id: 'slug-generator', name: 'Slug Generator', description: 'URL-friendly text', icon: 'fa-link' },
+      { id: 'text-capitalizer', name: 'Text Capitalizer', description: 'Smart capitalization', icon: 'fa-font' },
+      { id: 'duplicate-remover', name: 'Remove Duplicate Lines', description: 'Clean up text', icon: 'fa-filter' },
+      { id: 'text-encryptor', name: 'ROT13/Base64 Encryptor', description: 'Text encryption', icon: 'fa-lock', isPro: true }
+    ]
+  },
+  {
+    id: 'code',
+    name: 'Code Converters',
+    description: 'Programming and code tools',
+    icon: <Code className="w-6 h-6" />,
+    gradient: 'from-purple-500 via-violet-500 to-indigo-600',
+    tools: [
+      { id: 'json-xml', name: 'JSON ↔ XML', description: 'Data format conversion', icon: 'fa-code', isPopular: true },
+      { id: 'json-csv', name: 'JSON ↔ CSV', description: 'JSON spreadsheet conversion', icon: 'fa-table' },
+      { id: 'html-markdown', name: 'HTML ↔ Markdown', description: 'Markup conversion', icon: 'fa-markdown' },
+      { id: 'code-beautifier', name: 'HTML/CSS/JS Beautifier', description: 'Format and beautify code', icon: 'fa-magic', isPro: true },
+      { id: 'sql-formatter', name: 'SQL Formatter', description: 'Format SQL queries', icon: 'fa-database' },
+      { id: 'js-obfuscator', name: 'JavaScript Obfuscator', description: 'Protect JS code', icon: 'fa-shield-alt', isPro: true },
+      { id: 'qr-generator', name: 'QR Code Generator', description: 'Create QR codes', icon: 'fa-qrcode', isPopular: true },
+      { id: 'qr-reader', name: 'QR Code Reader', description: 'Decode QR codes', icon: 'fa-camera' },
+      { id: 'regex-tester', name: 'Regex Tester', description: 'Test regular expressions', icon: 'fa-search', isPro: true },
+      { id: 'uuid-generator', name: 'UUID Generator', description: 'Generate unique IDs', icon: 'fa-id-card' }
+    ]
+  },
+  {
+    id: 'language',
+    name: 'Language Tools',
+    description: 'Multi-language processing tools',
+    icon: <Globe className="w-6 h-6" />,
+    gradient: 'from-blue-600 via-indigo-600 to-purple-700',
+    tools: [
+      { id: 'text-translator', name: 'Text Translator', description: 'Multi-language translation', icon: 'fa-language', isPro: true },
+      { id: 'script-converter', name: 'Script Converter', description: 'Hindi ↔ Roman conversion', icon: 'fa-font' },
+      { id: 'font-converter', name: 'Font Style Converter', description: 'Text styling options', icon: 'fa-palette' },
+      { id: 'unicode-ascii', name: 'Unicode ↔ ASCII', description: 'Character encoding', icon: 'fa-code' },
+      { id: 'language-detector', name: 'Language Detector', description: 'Auto-detect language', icon: 'fa-search', isPro: true }
+    ]
+  },
+  {
+    id: 'ai',
+    name: 'AI-Powered Tools',
+    description: 'Artificial intelligence enhanced tools',
+    icon: <Brain className="w-6 h-6" />,
+    gradient: 'from-gradient-to-r from-cyan-500 via-blue-500 to-purple-600',
+    tools: [
+      { id: 'ocr-tool', name: 'OCR (Image to Text)', description: 'Extract text from images', icon: 'fa-eye', isPro: true },
+      { id: 'speech-to-text', name: 'Speech to Text', description: 'Voice transcription', icon: 'fa-microphone', isPro: true },
+      { id: 'text-to-speech', name: 'Text to Speech', description: 'Voice synthesis', icon: 'fa-volume-up', isPro: true },
+      { id: 'ai-translator', name: 'AI Translator', description: 'Smart translation', icon: 'fa-robot', isPro: true },
+      { id: 'code-explainer', name: 'Code to Explanation', description: 'Explain code functionality', icon: 'fa-lightbulb', isPro: true },
+      { id: 'document-summarizer', name: 'Document Summarizer', description: 'AI text summarization', icon: 'fa-compress-alt', isPro: true },
+      { id: 'audio-transcriber', name: 'Audio Transcriber', description: 'Advanced audio transcription', icon: 'fa-file-audio', isPro: true }
+    ]
+  },
+  {
+    id: 'special',
+    name: 'Special Tools',
+    description: 'Specialized utility tools',
+    icon: <Sparkles className="w-6 h-6" />,
+    gradient: 'from-pink-500 via-rose-500 to-red-600',
+    tools: [
+      { id: 'ico-converter', name: 'ICO to PNG / PNG to ICO', description: 'Icon format conversion', icon: 'fa-image' },
+      { id: 'vcf-converter', name: 'VCF to CSV', description: 'Contact format conversion', icon: 'fa-address-book' },
+      { id: 'metadata-extractor', name: 'Metadata Extractor', description: 'Extract file metadata', icon: 'fa-info-circle', isPro: true },
+      { id: 'favicon-generator', name: 'Favicon Generator', description: 'Create website favicons', icon: 'fa-star' },
+      { id: 'youtube-timestamp', name: 'YouTube Timestamp Link', description: 'Create timestamped links', icon: 'fa-clock' },
+      { id: 'url-shortener', name: 'URL Shortener', description: 'Shorten long URLs', icon: 'fa-link' },
+      { id: 'text-diff', name: 'Text Diff Checker', description: 'Compare text differences', icon: 'fa-not-equal', isPro: true },
+      { id: 'color-picker', name: 'Color Picker & Palette', description: 'Advanced color tools', icon: 'fa-palette', isNew: true }
+    ]
+  }
+];
 
 export default function Categories() {
+  const [, setLocation] = useLocation();
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const { language } = useI18n();
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [sortBy, setSortBy] = useState('name');
+  const [filteredTools, setFilteredTools] = useState<any[]>([]);
 
-  const filteredCategories = categories.filter(category =>
-    category.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    category.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  useEffect(() => {
+    let allTools: any[] = [];
+    enhancedCategories.forEach(category => {
+      allTools = [...allTools, ...category.tools.map(tool => ({ ...tool, categoryId: category.id, categoryName: category.name }))];
+    });
 
-  const filteredCalculators = calculators.filter(calc => {
-    const matchesSearch = calc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      calc.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === 'all' || calc.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+    let filtered = allTools;
+    
+    if (selectedCategory !== 'all') {
+      filtered = filtered.filter(tool => tool.categoryId === selectedCategory);
+    }
+    
+    if (searchQuery) {
+      filtered = filtered.filter(tool => 
+        tool.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        tool.description.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    // Sort tools
+    filtered.sort((a, b) => {
+      if (sortBy === 'name') return a.name.localeCompare(b.name);
+      if (sortBy === 'popular') return (b.isPopular ? 1 : 0) - (a.isPopular ? 1 : 0);
+      if (sortBy === 'new') return (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0);
+      return 0;
+    });
+
+    setFilteredTools(filtered);
+  }, [searchQuery, selectedCategory, sortBy]);
+
+  const getToolGradient = (categoryId: string) => {
+    const category = enhancedCategories.find(cat => cat.id === categoryId);
+    return category?.gradient || 'from-gray-500 to-gray-600';
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <>
       <SEOHead 
-        title="All Tools & Converters - CalcMate Pro"
-        description="Browse our comprehensive collection of 100+ tools including calculators, converters, AI processors, and specialized utilities"
-        keywords="calculator tools, file converters, AI tools, unit converters, media processing"
+        title="Calculator Categories - CalcMate" 
+        description="Browse all calculator categories and tools"
       />
       
-      <div className="container mx-auto px-4 py-8">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-indigo-900">
         {/* Hero Section */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full text-sm font-bold mb-6 shadow-lg">
-            <Sparkles className="h-5 w-5" />
-            100+ Professional Tools
-            <Star className="h-5 w-5 text-yellow-300" />
-          </div>
-          <h1 className="text-5xl font-bold text-gray-900 dark:text-white mb-6">
-            Complete Tool Ecosystem
-          </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-4xl mx-auto mb-8">
-            Advanced calculators, file converters, AI processors, and specialized utilities. 
-            Everything you need in one powerful platform.
-          </p>
-          
-          {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto mb-12">
-            <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-lg border border-gray-200 dark:border-gray-700">
-              <div className="text-3xl font-bold text-emerald-600">{calculators.length}+</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Total Tools</div>
-            </div>
-            <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-lg border border-gray-200 dark:border-gray-700">
-              <div className="text-3xl font-bold text-blue-600">{categories.length}</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Categories</div>
-            </div>
-            <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-lg border border-gray-200 dark:border-gray-700">
-              <div className="text-3xl font-bold text-purple-600">{calculators.filter(c => c.isPro).length}</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">AI-Powered</div>
-            </div>
-            <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-lg border border-gray-200 dark:border-gray-700">
-              <div className="text-3xl font-bold text-orange-600">2.5M+</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Users</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Search and Filter */}
-        <div className="mb-12 bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
-          <div className="flex flex-col lg:flex-row gap-6 items-center">
-            <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-              <Input
-                placeholder="Search tools & converters..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 h-12 text-lg border-2 focus:border-purple-500 rounded-xl"
-              />
-            </div>
-            
-            <div className="flex items-center gap-3">
-              <Filter className="h-5 w-5 text-gray-500" />
-              <div className="flex gap-2 flex-wrap">
-                <Button
-                  variant={selectedCategory === 'all' ? 'default' : 'outline'}
-                  onClick={() => setSelectedCategory('all')}
-                  size="sm"
-                  className="rounded-full"
-                >
-                  All Tools
-                </Button>
-                {categories.slice(0, 5).map((category) => (
-                  <Button
-                    key={category.id}
-                    variant={selectedCategory === category.id ? 'default' : 'outline'}
-                    onClick={() => setSelectedCategory(category.id)}
-                    size="sm"
-                    className="rounded-full"
-                  >
-                    {category.name}
-                  </Button>
-                ))}
+        <div className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white">
+          <div className="absolute inset-0 bg-black/20"></div>
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div className="text-center space-y-6">
+              <h1 className="text-4xl md:text-6xl font-bold mb-4">
+                Professional Calculator Hub
+              </h1>
+              <p className="text-xl md:text-2xl max-w-3xl mx-auto mb-8 text-white/90">
+                Discover 100+ advanced calculators and converters, powered by AI and designed for professionals
+              </p>
+              
+              {/* Stats */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mt-12">
+                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center">
+                  <div className="text-3xl font-bold mb-2">100+</div>
+                  <div className="text-sm opacity-90">Total Tools</div>
+                </div>
+                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center">
+                  <div className="text-3xl font-bold mb-2">{enhancedCategories.length}</div>
+                  <div className="text-sm opacity-90">Categories</div>
+                </div>
+                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center">
+                  <div className="text-3xl font-bold mb-2">25+</div>
+                  <div className="text-sm opacity-90">AI-Powered</div>
+                </div>
+                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center">
+                  <div className="text-3xl font-bold mb-2">5M+</div>
+                  <div className="text-sm opacity-90">Users</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Tools Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-          {filteredCalculators.map((calculator) => {
-            const category = categories.find(c => c.id === calculator.category);
-            const bgGradient = getBgGradient(calculator.category);
+        {/* Controls */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex flex-col lg:flex-row gap-6 mb-8">
+            {/* Search */}
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Input
+                placeholder="Search tools and calculators..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 h-12 text-lg"
+              />
+            </div>
             
-            return (
-              <Link key={calculator.id} href={`/calculator/${calculator.id}`}>
-                <Card className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-2 hover:border-purple-300 dark:hover:border-purple-600 overflow-hidden cursor-pointer h-full">
-                  {/* Solid Colorful Header */}
-                  <div className={`bg-gradient-to-br ${bgGradient} p-4 text-white relative`}>
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="bg-white/20 backdrop-blur-sm rounded-lg p-2 group-hover:scale-110 transition-transform duration-300">
-                        {getToolIcon(calculator.id)}
-                      </div>
-                      {calculator.isPro && (
-                        <Badge className="bg-yellow-400 text-yellow-900 text-xs font-bold">
-                          AI
-                        </Badge>
-                      )}
-                      {calculator.isNew && (
-                        <Badge className="bg-green-400 text-green-900 text-xs font-bold">
+            {/* Filters */}
+            <div className="flex gap-4">
+              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                <SelectTrigger className="w-48 h-12">
+                  <SelectValue placeholder="All Categories" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Categories</SelectItem>
+                  {enhancedCategories.map(category => (
+                    <SelectItem key={category.id} value={category.id}>
+                      {category.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="w-40 h-12">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="name">Name</SelectItem>
+                  <SelectItem value="popular">Popular</SelectItem>
+                  <SelectItem value="new">Newest</SelectItem>
+                </SelectContent>
+              </Select>
+              
+              <div className="flex bg-white rounded-lg p-1 border">
+                <Button
+                  variant={viewMode === 'grid' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setViewMode('grid')}
+                  className="h-10"
+                >
+                  <Grid3X3 className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant={viewMode === 'list' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setViewMode('list')}
+                  className="h-10"
+                >
+                  <List className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Category Tabs */}
+          <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="mb-8">
+            <TabsList className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-12 w-full h-auto p-2 bg-white/50 backdrop-blur-sm">
+              <TabsTrigger value="all" className="flex flex-col gap-1 p-3">
+                <Sparkles className="w-4 h-4" />
+                <span className="text-xs">All</span>
+              </TabsTrigger>
+              {enhancedCategories.slice(0, 11).map(category => (
+                <TabsTrigger key={category.id} value={category.id} className="flex flex-col gap-1 p-3">
+                  {category.icon}
+                  <span className="text-xs truncate">{category.name.split(' ')[0]}</span>
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
+
+          {/* Tools Grid */}
+          <div className={`grid gap-6 ${
+            viewMode === 'grid' 
+              ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6' 
+              : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+          }`}>
+            {filteredTools.map((tool, index) => (
+              <Link key={tool.id} href={`/calculator/${tool.id}`}>
+                <Card className={`group cursor-pointer h-full transition-all duration-500 hover:scale-105 hover:shadow-2xl border-0 overflow-hidden ${
+                  viewMode === 'list' ? 'flex items-center' : ''
+                }`}>
+                  {/* Header with gradient */}
+                  <div className={`bg-gradient-to-br ${getToolGradient(tool.categoryId)} p-4 text-white relative ${
+                    viewMode === 'list' ? 'flex-shrink-0 w-32' : ''
+                  }`}>
+                    {/* Status badges */}
+                    <div className="absolute top-2 right-2 flex gap-1">
+                      {tool.isNew && (
+                        <Badge className="bg-green-400 text-green-900 text-xs font-bold px-2 py-1 animate-pulse">
                           NEW
                         </Badge>
                       )}
+                      {tool.isPro && (
+                        <Badge className="bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1">
+                          <Crown className="w-3 h-3 mr-1" />
+                          AI
+                        </Badge>
+                      )}
+                      {tool.isPopular && (
+                        <Badge className="bg-orange-400 text-orange-900 text-xs font-bold px-2 py-1">
+                          🔥
+                        </Badge>
+                      )}
                     </div>
-                    <h3 className="font-bold text-sm leading-tight line-clamp-2 min-h-[2.5rem]">
-                      {calculator.name}
-                    </h3>
+                    
+                    {/* Icon */}
+                    <div className={`${viewMode === 'list' ? 'mb-2' : 'mb-4'} flex items-center justify-center`}>
+                      <div className="bg-white/20 backdrop-blur-sm rounded-xl p-3 group-hover:scale-110 transition-transform duration-300">
+                        <i className={`fas ${tool.icon} text-2xl text-white`}></i>
+                      </div>
+                    </div>
+                    
+                    {viewMode === 'grid' && (
+                      <h3 className="font-bold text-sm leading-tight line-clamp-2 min-h-[2.5rem]">
+                        {tool.name}
+                      </h3>
+                    )}
                   </div>
                   
-                  {/* White Content Area */}
-                  <CardContent className="p-3 bg-white dark:bg-gray-800">
-                    <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2 mb-3 min-h-[2rem]">
-                      {calculator.description}
-                    </p>
+                  {/* Content */}
+                  <CardContent className={`bg-white dark:bg-gray-800 ${
+                    viewMode === 'list' ? 'flex-1 flex items-center justify-between p-4' : 'p-4'
+                  }`}>
+                    {viewMode === 'list' && (
+                      <div className="flex-1">
+                        <h3 className="font-bold text-lg mb-1">{tool.name}</h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{tool.description}</p>
+                        <Badge variant="outline" className="text-xs">
+                          {tool.categoryName}
+                        </Badge>
+                      </div>
+                    )}
                     
-                    <div className="flex items-center justify-between">
-                      <Badge 
-                        variant="outline" 
-                        className="text-xs"
-                        style={{ borderColor: `rgb(${bgGradient.includes('emerald') ? '16 185 129' : bgGradient.includes('blue') ? '59 130 246' : bgGradient.includes('purple') ? '147 51 234' : '156 163 175'})` }}
-                      >
-                        {category?.name}
-                      </Badge>
-                      <ArrowRight className="h-3 w-3 text-gray-400 group-hover:text-purple-600 group-hover:translate-x-1 transition-all duration-300" />
-                    </div>
+                    {viewMode === 'grid' && (
+                      <>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2 mb-3 min-h-[2rem]">
+                          {tool.description}
+                        </p>
+                        
+                        <div className="flex items-center justify-between">
+                          <Badge variant="outline" className="text-xs">
+                            {tool.categoryName}
+                          </Badge>
+                          <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all duration-300" />
+                        </div>
+                      </>
+                    )}
+                    
+                    {viewMode === 'list' && (
+                      <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all duration-300" />
+                    )}
                   </CardContent>
                 </Card>
               </Link>
-            );
-          })}
+            ))}
+          </div>
+
+          {/* No results */}
+          {filteredTools.length === 0 && (
+            <div className="text-center py-16">
+              <div className="w-24 h-24 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-6">
+                <Search className="w-12 h-12 text-gray-400" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">No tools found</h3>
+              <p className="text-gray-600 dark:text-gray-400 mb-6">Try adjusting your search or filter criteria</p>
+              <Button onClick={() => {setSearchQuery(''); setSelectedCategory('all');}}>
+                Clear Filters
+              </Button>
+            </div>
+          )}
         </div>
-
-        {/* No Results */}
-        {filteredCalculators.length === 0 && (
-          <div className="text-center py-16">
-            <div className="bg-gray-100 dark:bg-gray-800 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
-              <Search className="h-12 w-12 text-gray-400" />
-            </div>
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-              No tools found
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400 max-w-md mx-auto">
-              Try adjusting your search terms or browse different categories to find the perfect tool.
-            </p>
-            <Button 
-              onClick={() => { setSearchQuery(''); setSelectedCategory('all'); }} 
-              className="mt-6"
-            >
-              Show All Tools
-            </Button>
-          </div>
-        )}
-
-        {/* Category Overview */}
-        {searchQuery === '' && selectedCategory === 'all' && (
-          <div className="mt-16 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-3xl p-8">
-            <h2 className="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white">
-              Browse by Category
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {categories.map((category) => {
-                const bgGradient = getBgGradient(category.id);
-                
-                return (
-                  <Link key={category.id} href={`/category/${category.id}`}>
-                    <Card className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-2 hover:border-purple-300 dark:hover:border-purple-600">
-                      <CardHeader className={`bg-gradient-to-br ${bgGradient} text-white`}>
-                        <div className="flex items-center gap-4">
-                          <div className="bg-white/20 backdrop-blur-sm rounded-xl p-3 group-hover:scale-110 transition-transform duration-300">
-                            <Activity className="h-6 w-6" />
-                          </div>
-                          <div>
-                            <CardTitle className="text-xl font-bold">{category.name}</CardTitle>
-                            <Badge className="bg-white/20 text-white mt-1">
-                              {category.calculators.length} tools
-                            </Badge>
-                          </div>
-                        </div>
-                      </CardHeader>
-                      <CardContent className="p-4 bg-white dark:bg-gray-800">
-                        <CardDescription className="text-sm mb-4">
-                          {category.description}
-                        </CardDescription>
-                        <Button variant="ghost" size="sm" className="w-full group-hover:bg-purple-50 dark:group-hover:bg-purple-900/20">
-                          Explore Category
-                          <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                        </Button>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        )}
       </div>
-    </div>
+    </>
   );
 }
