@@ -58,11 +58,11 @@ export default function EnhancedHeader() {
   }, [searchQuery]);
 
   const navigationItems = [
-    { href: '/', label: t.navigation.home, icon: Home },
-    { href: '/categories', label: t.navigation.categories, icon: Grid3X3 },
-    { href: '/favorites', label: t.navigation.favorites, icon: Heart, badge: 3 },
-    { href: '/history', label: t.navigation.history, icon: Clock },
-    { href: '/profile', label: 'Profile', icon: User },
+    { href: '/', label: t.navigation.home, icon: Home, badge: null, hot: true },
+    { href: '/categories', label: t.navigation.categories, icon: Grid3X3, badge: '15+', hot: false },
+    { href: '/favorites', label: t.navigation.favorites, icon: Heart, badge: '3', hot: false },
+    { href: '/history', label: t.navigation.history, icon: Clock, badge: null, hot: false },
+    { href: '/profile', label: 'Profile', icon: User, badge: 'New', hot: true },
   ];
 
   return (
@@ -98,9 +98,15 @@ export default function EnhancedHeader() {
                       <Icon className="h-4 w-4 mr-2" />
                       {item.label}
                       {item.badge && (
-                        <Badge variant="destructive" className="ml-2 px-1.5 py-0.5 text-xs">
+                        <Badge 
+                          variant={item.hot ? "destructive" : "secondary"} 
+                          className={`ml-2 px-1.5 py-0.5 text-xs ${item.hot ? 'animate-pulse bg-gradient-to-r from-red-500 to-pink-500' : ''}`}
+                        >
                           {item.badge}
                         </Badge>
+                      )}
+                      {item.hot && !item.badge && (
+                        <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-ping"></div>
                       )}
                     </Button>
                   </Link>

@@ -8,6 +8,7 @@ import { I18nProvider } from "@/hooks/useI18n";
 import EnhancedHeader from "@/components/EnhancedHeader";
 import EnhancedFooter from "@/components/EnhancedFooter";
 import FloatingActionButton from "@/components/FloatingActionButton";
+import TrendingBanner from "@/components/TrendingBanner";
 import Home from "@/pages/Home";
 import Categories from "@/pages/Categories";
 import Favorites from "@/pages/Favorites";
@@ -19,21 +20,24 @@ import CalculatorView from "@/pages/CalculatorView";
 function Router() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300">
-      <EnhancedHeader />
-      <main className="relative">
-        <Switch>
-          <Route path="/" component={Home} />
-          <Route path="/categories" component={Categories} />
-          <Route path="/favorites" component={Favorites} />
-          <Route path="/history" component={History} />
-          <Route path="/profile" component={Profile} />
-          <Route path="/category/:category" component={CategoryView} />
-          <Route path="/calculator/:calculator" component={CalculatorView} />
-          <Route component={Home} />
-        </Switch>
-      </main>
-      <EnhancedFooter />
-      <FloatingActionButton />
+      <TrendingBanner />
+      <div className="mt-12">
+        <EnhancedHeader />
+        <main className="relative">
+          <Switch>
+            <Route path="/" component={Home} />
+            <Route path="/categories" component={Categories} />
+            <Route path="/favorites" component={Favorites} />
+            <Route path="/history" component={History} />
+            <Route path="/profile" component={Profile} />
+            <Route path="/category/:category" component={CategoryView} />
+            <Route path="/calculator/:calculator" component={CalculatorView} />
+            <Route component={Home} />
+          </Switch>
+        </main>
+        <EnhancedFooter />
+        <FloatingActionButton />
+      </div>
     </div>
   );
 }
