@@ -349,7 +349,7 @@ export default function Home() {
                   <CardHeader className={viewMode === 'list' ? 'flex-row items-center space-y-0 pb-2' : 'pb-4'}>
                     <div className={`flex items-center ${viewMode === 'list' ? 'gap-4' : 'justify-between'}`}>
                       <div className="text-4xl group-hover:scale-125 transition-transform duration-300">
-                        {calculator.icon}
+                        <i className={`fas ${calculator.icon} text-blue-600 dark:text-blue-400`}></i>
                       </div>
                       {viewMode === 'grid' && (
                         <Badge variant="secondary" className="bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 dark:from-blue-900/20 dark:to-purple-900/20 dark:text-blue-300">
