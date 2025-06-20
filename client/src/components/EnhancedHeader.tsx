@@ -101,50 +101,89 @@ export default function EnhancedHeader() {
             <Link href="/" className="flex items-center space-x-3 group">
               <div className="relative">
                 {/* Main Icon with Enhanced Animation */}
-                <div className="relative p-2 rounded-xl bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 shadow-lg group-hover:shadow-xl transition-all duration-500 group-hover:scale-110 group-hover:rotate-3">
-                  <Calculator className="h-6 w-6 text-white transition-transform duration-500 group-hover:scale-110 group-hover:rotate-12" />
+                <div className="relative p-3 rounded-2xl bg-gradient-to-br from-cyan-500 via-blue-600 via-indigo-600 to-purple-700 shadow-2xl group-hover:shadow-3xl transition-all duration-700 group-hover:scale-110 group-hover:rotate-6 animate-pulse">
+                  <div className="relative flex items-center justify-center">
+                    <Calculator className="h-7 w-7 text-white transition-transform duration-700 group-hover:scale-125 group-hover:rotate-12 drop-shadow-lg" />
+                    
+                    {/* AI Neural Network Effect */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-12 h-12 border-2 border-white/20 rounded-full animate-spin opacity-50"></div>
+                      <div className="absolute w-8 h-8 border border-white/30 rounded-full animate-ping"></div>
+                    </div>
+                  </div>
                   
-                  {/* Animated Background Glow */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-500 rounded-xl blur-lg opacity-30 group-hover:opacity-60 transition-opacity duration-500 animate-pulse"></div>
+                  {/* Multi-layer Animated Background Glow */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600 rounded-2xl blur-xl opacity-40 group-hover:opacity-80 transition-opacity duration-700 animate-pulse"></div>
+                  <div className="absolute inset-0 bg-gradient-to-tr from-pink-400 via-purple-500 to-indigo-600 rounded-2xl blur-2xl opacity-20 group-hover:opacity-60 transition-opacity duration-700 animate-pulse" style={{ animationDelay: '0.3s' }}></div>
                 </div>
                 
-                {/* Status Indicator */}
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full border-2 border-white dark:border-gray-900 shadow-lg">
-                  <div className="w-full h-full bg-green-500 rounded-full animate-ping opacity-75"></div>
+                {/* Enhanced Status Indicator */}
+                <div className="absolute -top-2 -right-2 w-5 h-5 bg-gradient-to-r from-green-400 via-emerald-500 to-teal-500 rounded-full border-2 border-white dark:border-gray-900 shadow-xl animate-bounce">
+                  <div className="w-full h-full bg-gradient-to-r from-green-500 to-emerald-500 rounded-full animate-ping opacity-75"></div>
+                  <div className="absolute inset-0.5 bg-white rounded-full animate-pulse"></div>
                 </div>
                 
-                {/* Floating Particles */}
-                <div className="absolute -top-2 -left-2 w-2 h-2 bg-blue-400 rounded-full animate-bounce opacity-60" style={{ animationDelay: '0.5s' }}></div>
-                <div className="absolute -bottom-2 -right-2 w-1.5 h-1.5 bg-purple-400 rounded-full animate-bounce opacity-60" style={{ animationDelay: '1s' }}></div>
+                {/* Floating AI Particles */}
+                <div className="absolute -top-3 -left-3 w-2.5 h-2.5 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full animate-bounce opacity-70" style={{ animationDelay: '0.2s' }}></div>
+                <div className="absolute -bottom-3 -right-3 w-2 h-2 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full animate-bounce opacity-70" style={{ animationDelay: '0.8s' }}></div>
+                <div className="absolute top-0 -right-4 w-1.5 h-1.5 bg-gradient-to-r from-indigo-400 to-purple-500 rounded-full animate-bounce opacity-60" style={{ animationDelay: '1.2s' }}></div>
+                
+                {/* Orbital Ring */}
+                <div className="absolute inset-0 w-16 h-16 border border-blue-300/30 rounded-full animate-spin opacity-40" style={{ animationDuration: '8s' }}></div>
               </div>
               
               <div className="flex flex-col">
                 {/* Enhanced Brand Name */}
                 <div className="relative">
-                  <span className="text-xl lg:text-2xl font-black bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent transition-all duration-500 group-hover:scale-105">
-                    CalcMate
+                  <span className="text-2xl lg:text-3xl font-black bg-gradient-to-r from-cyan-600 via-blue-700 via-indigo-700 to-purple-800 bg-clip-text text-transparent transition-all duration-700 group-hover:scale-110 filter drop-shadow-sm">
+                    MultiTools
+                    <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 bg-clip-text text-transparent animate-pulse">AI</span>
                   </span>
                   
-                  {/* Animated Underline */}
-                  <div className="absolute -bottom-1 left-0 h-0.5 w-0 bg-gradient-to-r from-blue-500 to-purple-500 group-hover:w-full transition-all duration-500 rounded-full"></div>
+                  {/* Enhanced Animated Underline */}
+                  <div className="absolute -bottom-1 left-0 h-1 w-0 bg-gradient-to-r from-cyan-500 via-blue-500 via-purple-500 to-pink-500 group-hover:w-full transition-all duration-700 rounded-full shadow-lg"></div>
+                  
+                  {/* Shimmer Effect */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 group-hover:translate-x-full transition-transform duration-1000 opacity-0 group-hover:opacity-100"></div>
                 </div>
                 
-                {/* Dynamic Tagline */}
-                <div className="flex items-center gap-1">
-                  <span className="text-xs lg:text-sm text-muted-foreground font-medium transition-colors duration-300 group-hover:text-blue-600 dark:group-hover:text-blue-400">
-                    Pro Calculator Hub
+                {/* Enhanced Dynamic Tagline */}
+                <div className="flex items-center gap-2 mt-1">
+                  <span className="text-sm lg:text-base text-muted-foreground font-semibold transition-colors duration-500 group-hover:text-blue-700 dark:group-hover:text-blue-300 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text group-hover:text-transparent">
+                    Smart Calculator Ecosystem
                   </span>
-                  <Zap className="h-3 w-3 text-yellow-500 animate-pulse" />
+                  <div className="flex items-center gap-1">
+                    <Zap className="h-4 w-4 text-yellow-500 animate-pulse" />
+                    <div className="w-2 h-2 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full animate-ping"></div>
+                  </div>
                 </div>
                 
-                {/* Live Stats */}
-                <div className="flex items-center gap-2 mt-0.5">
-                  <div className="flex items-center gap-1">
-                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
-                    <span className="text-xs text-green-600 dark:text-green-400 font-medium">Online</span>
+                {/* Enhanced Live Stats */}
+                <div className="flex items-center gap-3 mt-1">
+                  <div className="flex items-center gap-1.5 px-2 py-1 bg-green-100/80 dark:bg-green-900/30 rounded-full">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <span className="text-xs text-green-700 dark:text-green-300 font-bold">AI Online</span>
                   </div>
                   <div className="text-xs text-muted-foreground">•</div>
-                  <span className="text-xs text-muted-foreground">100+ Tools</span>
+                  <div className="flex items-center gap-1 px-2 py-1 bg-blue-100/80 dark:bg-blue-900/30 rounded-full">
+                    <Calculator className="h-3 w-3 text-blue-600 dark:text-blue-400" />
+                    <span className="text-xs text-blue-700 dark:text-blue-300 font-bold">150+ Tools</span>
+                  </div>
+                  <div className="text-xs text-muted-foreground">•</div>
+                  <div className="flex items-center gap-1 px-2 py-1 bg-purple-100/80 dark:bg-purple-900/30 rounded-full">
+                    <TrendingUp className="h-3 w-3 text-purple-600 dark:text-purple-400" />
+                    <span className="text-xs text-purple-700 dark:text-purple-300 font-bold">Pro</span>
+                  </div>
+                </div>
+                
+                {/* Real-time Activity Indicator */}
+                <div className="flex items-center gap-2 mt-1">
+                  <div className="flex items-center gap-1">
+                    <div className="w-1 h-1 bg-blue-400 rounded-full animate-ping"></div>
+                    <div className="w-1 h-1 bg-purple-400 rounded-full animate-ping" style={{ animationDelay: '0.2s' }}></div>
+                    <div className="w-1 h-1 bg-pink-400 rounded-full animate-ping" style={{ animationDelay: '0.4s' }}></div>
+                  </div>
+                  <span className="text-xs text-muted-foreground font-medium">Real-time processing</span>
                 </div>
               </div>
             </Link>
@@ -379,14 +418,27 @@ export default function EnhancedHeader() {
           </div>
         </div>
 
-        {/* Compact Featured Calculators Bar */}
-        <div className="border-t border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-gray-800/80 dark:to-gray-900/80 backdrop-blur-sm">
-          <div className="container-responsive">
-            <div className="flex items-center py-3 gap-3 overflow-x-auto scrollbar-hide">
-              {/* Compact Label */}
-              <div className="flex items-center gap-2 text-xs font-bold whitespace-nowrap bg-gradient-to-r from-orange-400 to-red-500 px-3 py-1.5 rounded-lg shadow-lg flex-shrink-0">
-                <Zap className="h-3 w-3 text-white" />
-                <span className="text-white">FEATURED</span>
+        {/* Enhanced Featured AI Tools Bar */}
+        <div className="border-t border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-cyan-50/60 via-blue-50/60 via-purple-50/60 to-pink-50/60 dark:from-gray-800/90 dark:via-gray-850/90 dark:to-gray-900/90 backdrop-blur-md relative overflow-hidden">
+          {/* Animated Background Pattern */}
+          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-blue-500/5 via-purple-500/5 to-pink-500/5 animate-pulse"></div>
+          <div className="absolute inset-0">
+            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer"></div>
+          </div>
+          
+          <div className="container-responsive relative z-10">
+            <div className="flex items-center py-4 gap-4 overflow-x-auto scrollbar-hide">
+              {/* Enhanced AI-Powered Label */}
+              <div className="flex items-center gap-2 text-sm font-black whitespace-nowrap bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-700 px-4 py-2.5 rounded-xl shadow-xl flex-shrink-0 border border-white/20 backdrop-blur-sm relative group hover:scale-105 transition-transform duration-300">
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-purple-600 rounded-xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
+                <div className="relative flex items-center gap-2">
+                  <div className="flex items-center gap-1">
+                    <Zap className="h-4 w-4 text-white animate-pulse" />
+                    <div className="w-1.5 h-1.5 bg-white rounded-full animate-ping"></div>
+                  </div>
+                  <span className="text-white font-extrabold tracking-wide">AI FEATURED</span>
+                  <div className="w-2 h-2 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full animate-bounce"></div>
+                </div>
               </div>
               
               {/* Compact Calculator Cards */}
@@ -453,12 +505,19 @@ export default function EnhancedHeader() {
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-50 bg-black/50 md:hidden" onClick={() => setMobileMenuOpen(false)}>
           <div className="fixed inset-y-0 left-0 w-64 bg-white dark:bg-gray-900 shadow-xl" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between p-4 border-b">
-              <div className="flex items-center space-x-2">
-                <Calculator className="h-6 w-6 text-blue-600" />
-                <span className="text-lg font-bold">CalcMate</span>
+            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-cyan-50 to-purple-50 dark:from-gray-800 dark:to-gray-900">
+              <div className="flex items-center space-x-3">
+                <div className="p-2 bg-gradient-to-br from-cyan-500 via-blue-600 to-purple-700 rounded-xl shadow-lg">
+                  <Calculator className="h-6 w-6 text-white" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-lg font-black bg-gradient-to-r from-cyan-600 via-blue-700 to-purple-800 bg-clip-text text-transparent">
+                    MultiTools<span className="text-purple-600">AI</span>
+                  </span>
+                  <span className="text-xs text-muted-foreground font-medium">Smart Calculator Hub</span>
+                </div>
               </div>
-              <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(false)}>
+              <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(false)} className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-gray-700 dark:hover:to-gray-600">
                 <X className="h-5 w-5" />
               </Button>
             </div>
