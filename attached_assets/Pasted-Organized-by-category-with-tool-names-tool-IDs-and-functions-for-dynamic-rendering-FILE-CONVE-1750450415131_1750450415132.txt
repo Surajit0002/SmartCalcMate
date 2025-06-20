@@ -1,0 +1,115 @@
+Organized by category with tool names, tool IDs, and functions for dynamic rendering.
+
+📁 FILE CONVERTERS
+Tool Name	Tool ID	Function
+PDF to Word	pdf-to-word	Converts PDF files to editable DOCX
+Word to PDF	word-to-pdf	Converts Word files to PDF
+PDF to Excel	pdf-to-excel	Extracts tabular data from PDF
+PDF to Image	pdf-to-image	Converts PDF pages into PNG/JPG
+Image to PDF	image-to-pdf	Combines images into a PDF
+Text to PDF	text-to-pdf	Converts text files to PDF format
+CSV to Excel	csv-to-excel	Converts CSV to .xlsx
+CSV to JSON	csv-to-json	Converts CSV to JSON
+JSON to CSV	json-to-csv	Converts JSON to tabular data
+CSV to XML	csv-to-xml	Converts CSV to XML format
+DOCX to ODT	docx-to-odt	Converts Word to OpenDocument
+Merge PDFs	merge-pdf	Combines multiple PDFs
+Split PDFs	split-pdf	Splits PDF pages
+Compress PDF	compress-pdf	Reduces PDF file size
+Remove PDF Password	remove-pdf-password	Unlocks protected PDFs
+
+🎧 MEDIA CONVERTERS
+Tool Name	Tool ID	Function
+Video to MP3	video-to-mp3	Extracts audio from video
+Audio to MP3/WAV	audio-converter	Converts between audio formats
+Video Converter	video-converter	MP4, AVI, MKV format conversion
+Audio Compressor	audio-compressor	Reduces audio file size
+Video Compressor	video-compressor	Compresses video files
+MP4 to GIF	mp4-to-gif	Converts video to animated GIF
+GIF to MP4	gif-to-mp4	Converts GIF to MP4
+YouTube to MP3	youtube-to-mp3	Downloads and extracts audio
+YouTube Thumbnail Downloader	youtube-thumbnail	Grabs video thumbnails
+
+📐 UNIT CONVERTERS
+Tool Name	Tool ID
+Length (cm/inch/km/mi)	length-converter
+Weight (kg/lb)	weight-converter
+Temperature (C/F/K)	temperature-converter
+Time (s/min/h/d)	time-converter
+Speed (km/h to mph)	speed-converter
+Area (sqm to acres)	area-converter
+Volume (L, gal, m³)	volume-converter
+Data Size (KB/MB/GB)	data-converter
+Power (W/kW/HP)	power-converter
+Pressure (Pa/bar/atm)	pressure-converter
+
+💱 CURRENCY & CRYPTO
+Tool Name	Tool ID
+Currency Converter (Live)	currency-converter
+Crypto Converter (BTC/ETH)	crypto-converter
+Currency Rate History Viewer	currency-history
+Gold & Silver Rate	gold-converter
+
+💬 TEXT FORMAT CONVERTERS
+Tool Name	Tool ID
+Text Case Converter	text-case
+Binary ↔ Text	binary-text
+Text Reverser	text-reverser
+Slug Generator	slug-generator
+Text Capitalizer	text-capitalizer
+Remove Duplicate Lines	remove-lines
+ROT13 / Base64 Encryptor	text-encryptor
+
+👨‍💻 CODE CONVERTERS
+Tool Name	Tool ID
+JSON ↔ XML	json-xml
+JSON ↔ CSV	json-csv
+HTML ↔ Markdown	html-markdown
+HTML/CSS/JS Beautifier	code-beautifier
+SQL Formatter	sql-formatter
+JavaScript Obfuscator	js-obfuscator
+QR Code Generator	qr-generator
+QR Code Reader	qr-scanner
+Regex Tester	regex-tester
+UUID Generator	uuid-generator
+
+🌐 LANGUAGE & SCRIPT CONVERTERS
+Tool Name	Tool ID
+Text Translator	text-translator
+Script Converter (e.g., Hindi ↔ Roman)	script-converter
+Font Style Converter	font-converter
+Unicode ↔ ASCII	unicode-converter
+Language Detector	language-detector
+
+🧮 MATH & NUMBER CONVERTERS
+Tool Name	Tool ID
+Roman ↔ Decimal	roman-decimal
+Binary ↔ Decimal ↔ Hex	binary-decimal
+EMI Calculator	emi-calculator
+BMI Calculator	bmi-calculator
+Age Calculator	age-calculator
+Percentage Calculator	percentage-calculator
+Discount Price Calculator	discount-calculator
+Loan Interest Calculator	interest-calculator
+
+🧠 AI-ENHANCED CONVERTERS
+Tool Name	Tool ID
+OCR (Image to Text)	ocr
+Speech to Text	speech-to-text
+Text to Speech	text-to-speech
+AI Translator	ai-translator
+Code to Explanation	code-explainer
+Document Summarizer	pdf-summarizer
+Audio Transcriber	audio-transcriber
+
+🛠️ MISC & SPECIAL FORMAT CONVERTERS
+Tool Name	Tool ID
+ICO to PNG	ico-to-png
+PNG to ICO	png-to-ico
+VCF to CSV	vcf-to-csv
+Metadata Extractor	metadata-extractor
+Favicon Generator	favicon-generator
+YouTube Timestamp Link	youtube-timestamp-link
+URL Shortener	link-shortener
+Text Diff Checker	text-diff-checker
+
