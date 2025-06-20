@@ -1,0 +1,167 @@
+💸 Finance Tools
+
+EMI Calculator: Calculate your monthly loan EMI with precision.
+
+SIP Calculator: Plan and forecast systematic investment returns.
+
+Compound Interest: Visualize compound growth over time.
+
+Mortgage Calculator: Full mortgage breakdown with charts.
+
+Investment Calculator: Estimate your portfolio's future growth.
+
+Loan Comparison: Compare different loan offers.
+
+Loan Interest Calculator: Calculate interest rates for loans.
+
+Discount Price Calculator: Calculate sale or discounted prices.
+
+❤️ Health & Fitness
+
+BMI Calculator: Find your Body Mass Index.
+
+BMR Calculator: Daily calorie requirement estimator.
+
+🌍 Math & Numbers
+
+Scientific Calculator: Perform advanced calculations.
+
+Percentage Calculator: Quickly solve % problems.
+
+Roman ↔ Decimal: Convert between Roman and decimal.
+
+Binary ↔ Decimal ↔ Hex: Number system converter.
+
+📅 Daily Utilities
+
+Age Calculator: Determine age from birthdate.
+
+Tip Calculator: Calculate tips & split bills.
+
+Unit Converter: Convert between unit types.
+
+Currency Converter: Live exchange rates.
+
+⚖️ Unit Converters
+
+Length Converter
+
+Weight Converter
+
+Temperature Converter
+
+Time Converter
+
+Speed Converter
+
+Area Converter
+
+Volume Converter
+
+Data Size Converter
+
+Power Converter
+
+Pressure Converter
+
+📄 File Converters
+
+PDF to Word, Word to PDF, PDF to Excel
+
+PDF to Image, Image to PDF, Text to PDF
+
+CSV to Excel, CSV to JSON, JSON to CSV, CSV to XML
+
+DOCX to ODT, Merge PDFs, Split PDFs, Compress PDF, Remove PDF Password
+
+🎧 Media Converters
+
+Video to MP3, Audio to MP3/WAV, Video Converter
+
+Audio Compressor, Video Compressor
+
+MP4 to GIF, GIF to MP4
+
+YouTube to MP3, YouTube Thumbnail Downloader
+
+💵 Currency & Crypto
+
+Crypto Converter (BTC/ETH)
+
+Currency Rate History Viewer
+
+Gold & Silver Rate
+
+📇 Text Converters
+
+Text Case Converter, Binary ↔ Text, Text Reverser
+
+Slug Generator, Text Capitalizer
+
+Remove Duplicate Lines, ROT13/Base64 Encryptor
+
+📁 Code Converters
+
+JSON ↔ XML, JSON ↔ CSV, HTML ↔ Markdown
+
+HTML/CSS/JS Beautifier, SQL Formatter, JavaScript Obfuscator
+
+QR Code Generator, QR Code Reader, Regex Tester, UUID Generator
+
+🔤 Language Tools
+
+Text Translator, Script Converter (Hindi ↔ Roman)
+
+Font Style Converter, Unicode ↔ ASCII, Language Detector
+
+🧵 AI-Powered Tools
+
+OCR (Image to Text), Speech to Text, Text to Speech
+
+AI Translator, Code to Explanation, Document Summarizer, Audio Transcriber
+
+🌐 Special Tools
+
+ICO to PNG, PNG to ICO, VCF to CSV
+
+Metadata Extractor, Favicon Generator
+
+YouTube Timestamp Link, URL Shortener, Text Diff Checker
+
+📂 Category Navigation Pages
+
+Finance (8 tools)
+
+Health & Fitness (2 tools)
+
+Math & Numbers (4 tools)
+
+Daily Utilities (4 tools)
+
+Unit Converters (10 tools)
+
+File Converters (15 tools)
+
+Media Converters (9 tools)
+
+Currency & Crypto (3 tools)
+
+Text Converters (7 tools)
+
+Code Converters (10 tools)
+
+Language Tools (5 tools)
+
+AI-Powered Tools (7 tools)
+
+Special Tools (8 tools)
+
+🚀 CalcMate Integration
+
+Featured: EMI, BMI, Investment, Currency tools
+
+Categories: Finance & Investment, Health, Math, Utilities
+
+Learning: Help Center, Blog, API Docs, Video Tutorials
+
+Company: About, Terms, Privacy, Support
