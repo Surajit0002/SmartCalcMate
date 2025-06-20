@@ -124,11 +124,11 @@ export default function FloatingActionButton() {
         {quickActions.map((action, index) => (
           <div 
             key={action.label} 
-            className="relative group"
+            className={`relative group transition-all duration-400 ease-out ${
+              isOpen ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'
+            }`}
             style={{ 
-              animationDelay: `${index * 100}ms`,
-              transform: isOpen ? 'translateY(0)' : 'translateY(20px)',
-              transition: `all 0.4s ease-out ${index * 0.1}s`
+              transitionDelay: `${index * 100}ms`
             }}
           >
             <Link href={action.href}>
@@ -150,12 +150,12 @@ export default function FloatingActionButton() {
                   {[...Array(3)].map((_, i) => (
                     <div
                       key={i}
-                      className="absolute w-1 h-1 bg-white/80 rounded-full"
+                      className="absolute w-1 h-1 bg-white/80 rounded-full animate-bounce"
                       style={{
                         left: `${20 + i * 20}%`,
                         top: `${30 + i * 15}%`,
-                        animation: `float-up 2s ease-out infinite`,
-                        animationDelay: `${i * 0.3}s`
+                        animationDelay: `${i * 0.3}s`,
+                        animationDuration: '2s'
                       }}
                     />
                   ))}
@@ -234,12 +234,12 @@ export default function FloatingActionButton() {
             {sparklePositions.map((sparkle, i) => (
               <div
                 key={i}
-                className="absolute w-1 h-1 bg-white/80 rounded-full"
+                className="absolute w-1 h-1 bg-white/80 rounded-full animate-pulse"
                 style={{
                   left: `${sparkle.x}%`,
                   top: `${sparkle.y}%`,
-                  animation: `sparkle 3s ease-in-out infinite`,
-                  animationDelay: `${sparkle.delay}s`
+                  animationDelay: `${sparkle.delay}s`,
+                  animationDuration: '3s'
                 }}
               />
             ))}
@@ -250,13 +250,13 @@ export default function FloatingActionButton() {
             {[0, 120, 240].map((rotation, i) => (
               <div
                 key={i}
-                className="absolute w-2 h-2 opacity-50"
+                className={`absolute w-2 h-2 opacity-50 ${isHovered ? 'animate-spin' : ''}`}
                 style={{
                   left: '50%',
                   top: '50%',
                   transform: `rotate(${rotation}deg) translateY(-32px) translateX(-4px)`,
-                  animation: isHovered ? `orbit 4s linear infinite` : 'none',
-                  animationDelay: `${i * 0.5}s`
+                  animationDelay: `${i * 0.5}s`,
+                  animationDuration: isHovered ? '4s' : undefined
                 }}
               >
                 <div className="w-full h-full bg-white rounded-full opacity-60" />
