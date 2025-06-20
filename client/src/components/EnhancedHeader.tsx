@@ -19,7 +19,13 @@ import {
   User,
   Home,
   Grid3X3,
-  Clock
+  Clock,
+  DollarSign,
+  Building,
+  TrendingDown,
+  Weight,
+  Percent,
+  Receipt
 } from 'lucide-react';
 import { useI18n } from '@/hooks/useI18n';
 import { useTheme } from '@/hooks/useTheme';
@@ -33,6 +39,27 @@ export default function EnhancedHeader() {
   const [showSearch, setShowSearch] = useState(false);
   const [location] = useLocation();
   const { language } = useI18n();
+
+  // Icon mapping for calculators
+  const getIconComponent = (iconName: string) => {
+    const iconMap: { [key: string]: any } = {
+      'fa-home': Home,
+      'fa-building': Building,
+      'fa-chart-area': TrendingUp,
+      'fa-weight': Weight,
+      'fa-percent': Percent,
+      'fa-receipt': Receipt,
+      'fa-dollar-sign': DollarSign,
+      'fa-chart-line': TrendingUp,
+      'fa-percentage': Percent,
+      'fa-balance-scale': Calculator,
+      'fa-fire': Zap,
+      'fa-calculator': Calculator,
+      'fa-birthday-cake': Home,
+      'fa-exchange-alt': Calculator
+    };
+    return iconMap[iconName] || Calculator;
+  };
   
   const t = {
     navigation: {
@@ -193,46 +220,49 @@ export default function EnhancedHeader() {
               </div>
               
               {/* Dynamic calculator cards */}
-              {featuredCalculators.slice(0, 8).map((calc, index) => (
-                <Link key={calc.id} href={`/calculator/${calc.id}`}>
-                  <div className="group relative">
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="whitespace-nowrap h-auto p-3 bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-700 border border-gray-200/50 dark:border-gray-600/50 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 backdrop-blur-sm"
-                      style={{ animationDelay: `${index * 100}ms` }}
-                    >
-                      <div className="flex items-center space-x-2">
-                        <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white text-lg shadow-lg">
-                          {calc.icon}
-                        </div>
-                        <div className="flex flex-col items-start">
-                          <span className="font-semibold text-gray-900 dark:text-white text-xs leading-tight">
-                            {calc.name}
-                          </span>
-                          <div className="flex items-center space-x-1">
-                            <Star className="h-2.5 w-2.5 text-yellow-500 fill-current" />
-                            <Star className="h-2.5 w-2.5 text-yellow-500 fill-current" />
-                            <Star className="h-2.5 w-2.5 text-yellow-500 fill-current" />
-                            <Star className="h-2.5 w-2.5 text-yellow-500 fill-current" />
-                            <Star className="h-2.5 w-2.5 text-yellow-500 fill-current" />
+              {featuredCalculators.slice(0, 8).map((calc, index) => {
+                const IconComponent = getIconComponent(calc.icon);
+                return (
+                  <Link key={calc.id} href={`/calculator/${calc.id}`}>
+                    <div className="group relative">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="whitespace-nowrap h-auto p-3 bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-700 border border-gray-200/50 dark:border-gray-600/50 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 backdrop-blur-sm"
+                        style={{ animationDelay: `${index * 100}ms` }}
+                      >
+                        <div className="flex items-center space-x-2">
+                          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white shadow-lg">
+                            <IconComponent className="h-4 w-4" />
+                          </div>
+                          <div className="flex flex-col items-start">
+                            <span className="font-semibold text-gray-900 dark:text-white text-xs leading-tight">
+                              {calc.name}
+                            </span>
+                            <div className="flex items-center space-x-1">
+                              <Star className="h-2.5 w-2.5 text-yellow-500 fill-current" />
+                              <Star className="h-2.5 w-2.5 text-yellow-500 fill-current" />
+                              <Star className="h-2.5 w-2.5 text-yellow-500 fill-current" />
+                              <Star className="h-2.5 w-2.5 text-yellow-500 fill-current" />
+                              <Star className="h-2.5 w-2.5 text-yellow-500 fill-current" />
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </Button>
-                    
-                    {/* Hover effect overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-                    
-                    {/* Popular badge for first few items */}
-                    {index < 3 && (
-                      <div className="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs px-1.5 py-0.5 rounded-full font-bold animate-pulse">
-                        HOT
-                      </div>
-                    )}
-                  </div>
-                </Link>
-              ))}
+                      </Button>
+                      
+                      {/* Hover effect overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                      
+                      {/* Popular badge for first few items */}
+                      {index < 3 && (
+                        <div className="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs px-1.5 py-0.5 rounded-full font-bold animate-pulse">
+                          HOT
+                        </div>
+                      )}
+                    </div>
+                  </Link>
+                );
+              })}
               
               {/* View All button */}
               <Link href="/categories">
