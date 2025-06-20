@@ -415,7 +415,7 @@
   }
 }
 
-/* Animate pulse for status indicator */
+/* Enhanced Animations */
 @keyframes pulse-soft {
   0%, 100% {
     opacity: 1;
@@ -423,6 +423,341 @@
   50% {
     opacity: 0.7;
   }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+/* Animation Classes */
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-slide-up {
+  animation: slideInUp 0.5s ease-out;
+}
+
+.animate-slide-down {
+  animation: slideInDown 0.5s ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.3s ease-out;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Mobile-First Responsive Design */
+@media (max-width: 640px) {
+  .section-container {
+    @apply px-4;
+  }
+  
+  .section-padding {
+    @apply py-8;
+  }
+  
+  .grid-responsive {
+    @apply grid-cols-1 gap-4;
+  }
+  
+  .grid-responsive-2 {
+    @apply grid-cols-1 gap-4;
+  }
+  
+  .grid-responsive-3 {
+    @apply grid-cols-1 gap-4;
+  }
+  
+  .text-responsive-xl {
+    @apply text-xl;
+  }
+  
+  .text-responsive-2xl {
+    @apply text-2xl;
+  }
+  
+  .text-responsive-3xl {
+    @apply text-3xl;
+  }
+  
+  /* Mobile Calculator Cards */
+  .calculator-card {
+    @apply p-4;
+  }
+  
+  .category-card {
+    @apply p-4;
+  }
+  
+  /* Mobile Forms */
+  .form-input {
+    @apply text-base; /* Prevent zoom on iOS */
+  }
+  
+  /* Mobile Navigation */
+  .nav-tab {
+    @apply px-2 py-1 text-sm;
+  }
+}
+
+/* Tablet Optimizations */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .grid-responsive {
+    @apply grid-cols-2 gap-6;
+  }
+  
+  .grid-responsive-2 {
+    @apply grid-cols-2 gap-6;
+  }
+  
+  .grid-responsive-3 {
+    @apply grid-cols-2 gap-6;
+  }
+  
+  .text-responsive-xl {
+    @apply text-2xl;
+  }
+  
+  .text-responsive-2xl {
+    @apply text-3xl;
+  }
+  
+  .text-responsive-3xl {
+    @apply text-4xl;
+  }
+}
+
+/* Desktop Optimizations */
+@media (min-width: 1025px) {
+  .grid-responsive {
+    @apply grid-cols-4 gap-8;
+  }
+  
+  .grid-responsive-2 {
+    @apply grid-cols-2 gap-8;
+  }
+  
+  .grid-responsive-3 {
+    @apply grid-cols-3 gap-8;
+  }
+  
+  .text-responsive-xl {
+    @apply text-3xl;
+  }
+  
+  .text-responsive-2xl {
+    @apply text-4xl;
+  }
+  
+  .text-responsive-3xl {
+    @apply text-5xl;
+  }
+}
+
+/* Large Desktop */
+@media (min-width: 1536px) {
+  .grid-responsive {
+    @apply grid-cols-5 gap-10;
+  }
+  
+  .text-responsive-xl {
+    @apply text-4xl;
+  }
+  
+  .text-responsive-2xl {
+    @apply text-5xl;
+  }
+  
+  .text-responsive-3xl {
+    @apply text-6xl;
+  }
+}
+
+/* Enhanced Mobile Touch Targets */
+@media (max-width: 768px) {
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+  
+  button, .button, [role="button"] {
+    @apply min-h-[44px] touch-manipulation;
+  }
+  
+  /* Improved tap highlighting */
+  * {
+    -webkit-tap-highlight-color: rgba(59, 130, 246, 0.1);
+  }
+}
+
+/* High DPI Display Optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .sharp-text {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Dark Mode Enhancements */
+@media (prefers-color-scheme: dark) {
+  .auto-dark-shadow {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Motion Preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-friendly {
+    @apply text-black bg-white;
+  }
+  
+  .calculator-card,
+  .category-card {
+    @apply border border-gray-300 break-inside-avoid;
+  }
+}
+
+/* Focus Visible for Accessibility */
+.focus-visible:focus {
+  @apply outline-none ring-2 ring-blue-500 ring-offset-2;
+}
+
+/* Custom Scrollbars */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.5);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(156, 163, 175, 0.8);
+}
+
+/* Loading States */
+.skeleton {
+  @apply animate-pulse bg-gray-200 dark:bg-gray-700 rounded;
+}
+
+.loading-spinner {
+  @apply animate-spin rounded-full border-2 border-gray-300 border-t-blue-600;
+}
+
+/* Utility Classes for Responsive Typography */
+.text-fluid-sm {
+  font-size: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
+}
+
+.text-fluid-base {
+  font-size: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
+}
+
+.text-fluid-lg {
+  font-size: clamp(1.125rem, 1rem + 0.625vw, 1.25rem);
+}
+
+.text-fluid-xl {
+  font-size: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+}
+
+.text-fluid-2xl {
+  font-size: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+}
+
+.text-fluid-3xl {
+  font-size: clamp(1.875rem, 1.6rem + 1.375vw, 2.5rem);
+}
+
+.text-fluid-4xl {
+  font-size: clamp(2.25rem, 1.9rem + 1.75vw, 3rem);
+}
+
+/* Enhanced Glassmorphism */
+.glass {
+  @apply bg-white/20 dark:bg-gray-900/20 backdrop-blur-md border border-white/20 dark:border-gray-700/20;
+}
+
+.glass-strong {
+  @apply bg-white/30 dark:bg-gray-900/30 backdrop-blur-lg border border-white/30 dark:border-gray-700/30;
 }
 
 .animate-pulse-soft {

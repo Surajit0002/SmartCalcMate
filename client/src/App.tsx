@@ -4,18 +4,19 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/hooks/useTheme";
-import Header from "@/components/Header";
-import Navigation from "@/components/Navigation";
+import { I18nProvider } from "@/hooks/useI18n";
+import EnhancedHeader from "@/components/EnhancedHeader";
+import EnhancedFooter from "@/components/EnhancedFooter";
+import FloatingActionButton from "@/components/FloatingActionButton";
 import Home from "@/pages/Home";
 import CategoryView from "@/pages/CategoryView";
 import CalculatorView from "@/pages/CalculatorView";
 
 function Router() {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-      <Header />
-      <Navigation />
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300">
+      <EnhancedHeader />
+      <main className="relative">
         <Switch>
           <Route path="/" component={Home} />
           <Route path="/category/:category" component={CategoryView} />
@@ -23,6 +24,8 @@ function Router() {
           <Route component={Home} />
         </Switch>
       </main>
+      <EnhancedFooter />
+      <FloatingActionButton />
     </div>
   );
 }
@@ -32,8 +35,10 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <ThemeProvider>
-          <Toaster />
-          <Router />
+          <I18nProvider>
+            <Toaster />
+            <Router />
+          </I18nProvider>
         </ThemeProvider>
       </TooltipProvider>
     </QueryClientProvider>
