@@ -1,6 +1,7 @@
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Star, Crown, Zap } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { getCalculatorById } from "@/lib/calculatorData";
 import EMICalculator from "@/components/calculators/EMICalculator";
 import BMICalculator from "@/components/calculators/BMICalculator";
@@ -16,6 +17,11 @@ import MortgageCalculator from "@/components/calculators/MortgageCalculator";
 import InvestmentCalculator from "@/components/calculators/InvestmentCalculator";
 import LoanComparison from "@/components/calculators/LoanComparison";
 import CurrencyConverter from "@/components/calculators/CurrencyConverter";
+import AdvancedUnitConverter from "@/components/calculators/AdvancedUnitConverter";
+import FileConverterHub from "@/components/calculators/FileConverterHub";
+import TextCodeConverterHub from "@/components/calculators/TextCodeConverterHub";
+import MediaConverterHub from "@/components/calculators/MediaConverterHub";
+import AIConverterHub from "@/components/calculators/AIConverterHub";
 
 interface CalculatorViewProps {
   params: {
@@ -42,6 +48,7 @@ export default function CalculatorView({ params }: CalculatorViewProps) {
 
   const renderCalculator = () => {
     switch (params.calculator) {
+      // Original Calculators
       case 'emi':
         return <EMICalculator />;
       case 'bmi':
@@ -70,10 +77,122 @@ export default function CalculatorView({ params }: CalculatorViewProps) {
         return <LoanComparison />;
       case 'currency-converter':
         return <CurrencyConverter />;
+
+      // Advanced Unit Converters
+      case 'length-converter':
+      case 'weight-converter':
+      case 'temperature-converter':
+      case 'time-converter':
+      case 'speed-converter':
+      case 'area-converter':
+      case 'volume-converter':
+      case 'data-converter':
+      case 'power-converter':
+      case 'pressure-converter':
+        return <AdvancedUnitConverter />;
+
+      // File Converters
+      case 'pdf-to-word':
+      case 'word-to-pdf':
+      case 'pdf-to-excel':
+      case 'pdf-to-image':
+      case 'image-to-pdf':
+      case 'text-to-pdf':
+      case 'csv-to-excel':
+      case 'csv-to-json':
+      case 'json-to-csv':
+      case 'csv-to-xml':
+      case 'docx-to-odt':
+      case 'merge-pdf':
+      case 'split-pdf':
+      case 'compress-pdf':
+      case 'remove-pdf-password':
+        return <FileConverterHub />;
+
+      // Media Converters
+      case 'video-to-mp3':
+      case 'audio-converter':
+      case 'video-converter':
+      case 'audio-compressor':
+      case 'video-compressor':
+      case 'mp4-to-gif':
+      case 'gif-to-mp4':
+      case 'youtube-to-mp3':
+      case 'youtube-thumbnail':
+        return <MediaConverterHub />;
+
+      // Text & Code Converters
+      case 'text-case':
+      case 'binary-text':
+      case 'text-reverser':
+      case 'slug-generator':
+      case 'text-capitalizer':
+      case 'remove-lines':
+      case 'text-encryptor':
+      case 'json-xml':
+      case 'json-csv':
+      case 'html-markdown':
+      case 'code-beautifier':
+      case 'sql-formatter':
+      case 'js-obfuscator':
+      case 'qr-generator':
+      case 'qr-scanner':
+      case 'regex-tester':
+      case 'uuid-generator':
+      case 'unicode-converter':
+        return <TextCodeConverterHub />;
+
+      // AI-Powered Converters
+      case 'ocr':
+      case 'speech-to-text':
+      case 'text-to-speech':
+      case 'ai-translator':
+      case 'code-explainer':
+      case 'pdf-summarizer':
+      case 'audio-transcriber':
+        return <AIConverterHub />;
+
+      // Cryptocurrency & Currency
+      case 'crypto-converter':
+      case 'currency-history':
+      case 'gold-converter':
+        return <CurrencyConverter />;
+
+      // Mathematical Converters
+      case 'roman-decimal':
+      case 'binary-decimal':
+        return <ScientificCalculator />;
+
+      // Finance Tools
+      case 'interest-calculator':
+      case 'discount-calculator':
+        return <EMICalculator />;
+
+      // Misc Converters
+      case 'ico-to-png':
+      case 'png-to-ico':
+      case 'vcf-to-csv':
+      case 'metadata-extractor':
+      case 'favicon-generator':
+      case 'youtube-timestamp-link':
+      case 'link-shortener':
+      case 'text-diff-checker':
+        return <TextCodeConverterHub />;
+
       default:
         return (
-          <div className="text-center py-12">
-            <p className="text-gray-600 dark:text-gray-300">Calculator component not implemented yet.</p>
+          <div className="text-center py-12 space-y-4">
+            <div className="w-16 h-16 mx-auto bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 rounded-full flex items-center justify-center">
+              <Zap className="w-8 h-8 text-blue-600" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Tool Coming Soon</h3>
+            <p className="text-gray-600 dark:text-gray-300 max-w-md mx-auto">
+              This advanced tool is currently being developed and will be available soon with powerful features and intuitive interface.
+            </p>
+            <Badge variant="outline" className="bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30">
+              <Crown className="w-3 h-3 mr-1" />
+              Premium Feature
+            </Badge>
           </div>
         );
     }
@@ -90,22 +209,24 @@ export default function CalculatorView({ params }: CalculatorViewProps) {
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to {calculator.category.charAt(0).toUpperCase() + calculator.category.slice(1)}
         </Button>
-        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">{calculator.name}</h2>
+        <div className="flex items-center gap-3 mb-4">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white">{calculator.name}</h2>
+          {calculator.isNew && (
+            <Badge variant="outline" className="bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900/30 dark:to-blue-900/30 text-green-700 dark:text-green-300">
+              <Star className="w-3 h-3 mr-1" />
+              NEW
+            </Badge>
+          )}
+          {calculator.isPro && (
+            <Badge variant="outline" className="bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 text-purple-700 dark:text-purple-300">
+              <Crown className="w-3 h-3 mr-1" />
+              PRO
+            </Badge>
+          )}
+        </div>
+        
         <p className="text-gray-600 dark:text-gray-300">
-          {calculator.id === 'emi' && 'Calculate your Equated Monthly Installment for home or car loans with detailed breakdown.'}
-          {calculator.id === 'bmi' && 'Calculate your Body Mass Index and understand your weight category for better health management.'}
-          {calculator.id === 'percentage' && 'Calculate percentages, percentage increases, decreases, and more with ease.'}
-          {calculator.id === 'tip' && 'Calculate tips and split bills among friends with customizable tip percentages.'}
-          {calculator.id === 'sip' && 'Calculate the future value of your systematic investment plans with detailed projections.'}
-          {calculator.id === 'compound-interest' && 'Calculate compound interest on your investments over time.'}
-          {calculator.id === 'scientific' && 'Perform advanced mathematical calculations with our full-featured scientific calculator.'}
-          {calculator.id === 'mortgage' && 'Comprehensive mortgage calculator with payment breakdown, charts, and amortization analysis.'}
-          {calculator.id === 'investment' && 'Plan your investment portfolio with detailed growth projections and risk analysis.'}
-          {calculator.id === 'loan-comparison' && 'Compare multiple loan offers side-by-side to find the best deal.'}
-          {calculator.id === 'currency-converter' && 'Convert between currencies with real-time exchange rates and historical data.'}
-          {calculator.id === 'bmr' && 'Calculate your Basal Metabolic Rate and daily calorie requirements.'}
-          {calculator.id === 'age' && 'Calculate your exact age in years, months, days, and more.'}
-          {calculator.id === 'unit-converter' && 'Convert between different units of measurement easily.'}
+          {calculator.function || calculator.description}
         </p>
       </div>
 

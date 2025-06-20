@@ -62,16 +62,49 @@ export default function Home() {
 
   const stats = [
     { icon: Users, label: 'Active Users', value: '2.5M+', color: 'text-blue-600' },
-    { icon: Calculator, label: 'Calculations', value: '50M+', color: 'text-green-600' },
-    { icon: Star, label: 'Rating', value: '4.9/5', color: 'text-yellow-600' },
-    { icon: Clock, label: 'Uptime', value: '99.9%', color: 'text-purple-600' },
+    { icon: Calculator, label: 'Total Tools', value: `${calculators.length}+`, color: 'text-green-600' },
+    { icon: Star, label: 'Categories', value: `${categories.length}`, color: 'text-yellow-600' },
+    { icon: Clock, label: 'AI-Powered', value: `${calculators.filter(c => c.isPro).length}`, color: 'text-purple-600' },
   ];
 
   const quickActions = [
     { icon: '💰', title: 'EMI Calculator', desc: 'Calculate loan EMI', href: '/calculator/emi', popular: true },
-    { icon: '📈', title: 'SIP Calculator', desc: 'Investment planning', href: '/calculator/sip', popular: true },
-    { icon: '⚖️', title: 'BMI Calculator', desc: 'Health metrics', href: '/calculator/bmi', popular: false },
-    { icon: '🔬', title: 'Scientific Calc', desc: 'Advanced math', href: '/calculator/scientific', popular: false },
+    { icon: '🤖', title: 'AI OCR Tool', desc: 'Extract text from images', href: '/calculator/ocr', popular: true, isPro: true },
+    { icon: '📁', title: 'PDF Converter', desc: 'Convert PDF files', href: '/calculator/pdf-to-word', popular: true },
+    { icon: '🎵', title: 'Video to MP3', desc: 'Extract audio', href: '/calculator/video-to-mp3', popular: false },
+    { icon: '🔄', title: 'Unit Converter', desc: 'Advanced conversions', href: '/calculator/length-converter', popular: true },
+    { icon: '🌐', title: 'Language Detector', desc: 'AI text analysis', href: '/calculator/language-detector', popular: false },
+  ];
+
+  const featureHighlights = [
+    {
+      title: 'AI-Powered Processing',
+      description: 'Advanced artificial intelligence for OCR, speech recognition, and document analysis',
+      icon: <Brain className="w-6 h-6" />,
+      count: calculators.filter(c => c.category === 'ai-converters').length,
+      gradient: 'from-purple-500 to-pink-500'
+    },
+    {
+      title: 'File Conversion Hub',
+      description: 'Convert between PDF, Word, Excel, and 15+ other formats with precision',
+      icon: <Zap className="w-6 h-6" />,
+      count: calculators.filter(c => c.category === 'file-converters').length,
+      gradient: 'from-blue-500 to-cyan-500'
+    },
+    {
+      title: 'Media Processing',
+      description: 'Professional video, audio, and image conversion with quality controls',
+      icon: <Sparkles className="w-6 h-6" />,
+      count: calculators.filter(c => c.category === 'media-converters').length,
+      gradient: 'from-green-500 to-emerald-500'
+    },
+    {
+      title: 'Advanced Analytics',
+      description: 'Comprehensive financial planning and mathematical computation tools',
+      icon: <BarChart3 className="w-6 h-6" />,
+      count: calculators.filter(c => c.category === 'finance').length,
+      gradient: 'from-orange-500 to-red-500'
+    }
   ];
 
   const getCategoryIcon = (categoryId: string) => {
@@ -275,6 +308,55 @@ export default function Home() {
               <span className="font-semibold">4.9/5 User Rating</span>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Feature Highlights */}
+      <section className="section-container py-16">
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 text-purple-700 dark:text-purple-300 rounded-full text-sm font-bold mb-4">
+            <Sparkles className="h-4 w-4" />
+            Advanced Capabilities
+          </div>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Comprehensive Tool Ecosystem</h2>
+          <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
+            From AI-powered processing to professional-grade conversions, discover our complete suite of advanced tools
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {featureHighlights.map((feature, index) => (
+            <Card key={feature.title} className="group hover:shadow-xl transition-all duration-300 border-2 hover:border-purple-200 dark:hover:border-purple-800 overflow-hidden">
+              <div className={`h-2 bg-gradient-to-r ${feature.gradient}`}></div>
+              <CardHeader>
+                <div className="flex items-center justify-between mb-4">
+                  <div className={`p-3 rounded-xl bg-gradient-to-r ${feature.gradient} text-white group-hover:scale-110 transition-transform duration-300`}>
+                    {feature.icon}
+                  </div>
+                  <Badge variant="outline" className="text-sm font-bold">
+                    {feature.count} Tools
+                  </Badge>
+                </div>
+                <CardTitle className="text-xl group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                  {feature.title}
+                </CardTitle>
+                <CardDescription className="text-base leading-relaxed">
+                  {feature.description}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between">
+                  <div className="text-sm text-muted-foreground">
+                    Professional-grade processing
+                  </div>
+                  <Button variant="ghost" size="sm" className="group-hover:bg-purple-50 dark:group-hover:bg-purple-900/20">
+                    Explore
+                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </section>
 
