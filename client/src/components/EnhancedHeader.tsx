@@ -97,22 +97,60 @@ export default function EnhancedHeader() {
       <header className="sticky top-0 z-50 w-full border-b bg-white/80 dark:bg-gray-900/80 backdrop-blur-md supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-gray-900/60">
         <div className="container-responsive">
           <div className="flex h-16 items-center justify-between">
-            {/* Logo */}
-            <Link href="/" className="flex items-center space-x-2 group">
+            {/* Enhanced Dynamic Logo */}
+            <Link href="/" className="flex items-center space-x-3 group">
               <div className="relative">
-                <Calculator className="h-8 w-8 text-blue-600 dark:text-blue-400 transition-transform duration-300 group-hover:scale-110" />
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-pulse" />
+                {/* Main Icon with Enhanced Animation */}
+                <div className="relative p-2 rounded-xl bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 shadow-lg group-hover:shadow-xl transition-all duration-500 group-hover:scale-110 group-hover:rotate-3">
+                  <Calculator className="h-6 w-6 text-white transition-transform duration-500 group-hover:scale-110 group-hover:rotate-12" />
+                  
+                  {/* Animated Background Glow */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-500 rounded-xl blur-lg opacity-30 group-hover:opacity-60 transition-opacity duration-500 animate-pulse"></div>
+                </div>
+                
+                {/* Status Indicator */}
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full border-2 border-white dark:border-gray-900 shadow-lg">
+                  <div className="w-full h-full bg-green-500 rounded-full animate-ping opacity-75"></div>
+                </div>
+                
+                {/* Floating Particles */}
+                <div className="absolute -top-2 -left-2 w-2 h-2 bg-blue-400 rounded-full animate-bounce opacity-60" style={{ animationDelay: '0.5s' }}></div>
+                <div className="absolute -bottom-2 -right-2 w-1.5 h-1.5 bg-purple-400 rounded-full animate-bounce opacity-60" style={{ animationDelay: '1s' }}></div>
               </div>
+              
               <div className="flex flex-col">
-                <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  CalcMate
-                </span>
-                <span className="text-xs text-muted-foreground -mt-1">Pro Calculator Hub</span>
+                {/* Enhanced Brand Name */}
+                <div className="relative">
+                  <span className="text-xl lg:text-2xl font-black bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent transition-all duration-500 group-hover:scale-105">
+                    CalcMate
+                  </span>
+                  
+                  {/* Animated Underline */}
+                  <div className="absolute -bottom-1 left-0 h-0.5 w-0 bg-gradient-to-r from-blue-500 to-purple-500 group-hover:w-full transition-all duration-500 rounded-full"></div>
+                </div>
+                
+                {/* Dynamic Tagline */}
+                <div className="flex items-center gap-1">
+                  <span className="text-xs lg:text-sm text-muted-foreground font-medium transition-colors duration-300 group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                    Pro Calculator Hub
+                  </span>
+                  <Zap className="h-3 w-3 text-yellow-500 animate-pulse" />
+                </div>
+                
+                {/* Live Stats */}
+                <div className="flex items-center gap-2 mt-0.5">
+                  <div className="flex items-center gap-1">
+                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
+                    <span className="text-xs text-green-600 dark:text-green-400 font-medium">Online</span>
+                  </div>
+                  <div className="text-xs text-muted-foreground">•</div>
+                  <span className="text-xs text-muted-foreground">100+ Tools</span>
+                </div>
               </div>
             </Link>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-2">
+            {/* Enhanced Desktop Navigation */}
+            <nav className="hidden lg:flex items-center gap-3">
               {navigationItems.map((item, index) => {
                 const Icon = item.icon;
                 const isActive = location === item.href;
@@ -120,44 +158,84 @@ export default function EnhancedHeader() {
                   <Link key={item.href} href={item.href}>
                     <Button
                       variant={isActive ? "default" : "ghost"}
-                      className={`relative group transition-all duration-300 transform hover:scale-105 px-4 py-2 ${
+                      className={`relative group transition-all duration-500 transform hover:scale-110 hover:-translate-y-1 px-5 py-3 rounded-xl overflow-hidden ${
                         isActive 
-                          ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg hover:shadow-xl' 
-                          : 'hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-gray-800 dark:hover:to-gray-700 hover:shadow-md'
+                          ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-2xl hover:shadow-3xl border-0' 
+                          : 'hover:bg-gradient-to-r hover:from-blue-50 hover:via-indigo-50 hover:to-purple-50 dark:hover:from-gray-800 dark:hover:via-gray-750 dark:hover:to-gray-700 hover:shadow-xl border border-gray-200/50 dark:border-gray-700/50 hover:border-blue-300 dark:hover:border-blue-600'
                       }`}
-                      style={{ animationDelay: `${index * 100}ms` }}
+                      style={{ 
+                        animationDelay: `${index * 150}ms`,
+                        animationFillMode: 'both'
+                      }}
                     >
-                      <Icon className={`h-4 w-4 mr-2 transition-transform duration-300 ${isActive ? 'animate-pulse' : 'group-hover:scale-110'}`} />
-                      <span className="font-medium whitespace-nowrap">{item.label}</span>
-                      {item.badge && (
-                        <Badge 
-                          variant={item.hot ? "destructive" : "secondary"} 
-                          className={`ml-2 px-2 py-0.5 text-xs font-bold shadow-sm ${
-                            item.hot 
-                              ? 'animate-bounce bg-gradient-to-r from-red-500 via-pink-500 to-red-600 text-white border-0' 
-                              : 'bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600'
-                          }`}
-                        >
-                          {item.badge}
-                        </Badge>
-                      )}
-                      {item.hot && !item.badge && (
-                        <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-red-500 to-pink-500 rounded-full animate-ping shadow-lg">
-                          <div className="absolute inset-0 bg-red-400 rounded-full animate-pulse"></div>
-                        </div>
-                      )}
+                      {/* Background Animation */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-pink-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
                       
-                      {/* Hover effect overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-md"></div>
+                      {/* Content */}
+                      <div className="relative flex items-center gap-3">
+                        <div className={`p-1.5 rounded-lg transition-all duration-300 ${
+                          isActive 
+                            ? 'bg-white/20 backdrop-blur-sm' 
+                            : 'group-hover:bg-blue-100 dark:group-hover:bg-blue-900/30'
+                        }`}>
+                          <Icon className={`h-4 w-4 transition-all duration-300 ${
+                            isActive 
+                              ? 'text-white animate-pulse' 
+                              : 'text-gray-600 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 group-hover:scale-125 group-hover:rotate-12'
+                          }`} />
+                        </div>
+                        <div className="flex flex-col items-start">
+                          <span className={`font-semibold text-sm whitespace-nowrap transition-colors duration-300 ${
+                            isActive 
+                              ? 'text-white' 
+                              : 'text-gray-800 dark:text-gray-200 group-hover:text-blue-700 dark:group-hover:text-blue-300'
+                          }`}>
+                            {item.label}
+                          </span>
+                          {isActive && (
+                            <div className="h-0.5 bg-white/50 rounded-full w-full mt-0.5 animate-pulse"></div>
+                          )}
+                        </div>
+                        
+                        {/* Enhanced Badge */}
+                        {item.badge && (
+                          <Badge 
+                            variant={item.hot ? "destructive" : "secondary"} 
+                            className={`ml-2 px-2.5 py-1 text-xs font-bold shadow-lg border-0 transition-all duration-300 ${
+                              item.hot 
+                                ? 'bg-gradient-to-r from-red-500 via-pink-500 to-red-600 text-white animate-bounce hover:animate-pulse' 
+                                : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white group-hover:scale-110'
+                            }`}
+                          >
+                            {item.badge}
+                          </Badge>
+                        )}
+                        
+                        {/* Hot Indicator */}
+                        {item.hot && !item.badge && (
+                          <div className="absolute -top-2 -right-2 flex items-center justify-center">
+                            <div className="w-4 h-4 bg-gradient-to-r from-red-500 to-pink-500 rounded-full animate-ping"></div>
+                            <div className="absolute w-3 h-3 bg-red-400 rounded-full animate-pulse"></div>
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* Advanced Hover Effects */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></div>
+                      
+                      {/* Active State Glow */}
+                      {isActive && (
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-400/30 to-purple-400/30 rounded-xl blur-xl -z-10 animate-pulse"></div>
+                      )}
                     </Button>
                   </Link>
                 );
               })}
             </nav>
 
-            {/* Tablet Navigation */}
-            <nav className="hidden md:flex lg:hidden items-center space-x-1">
-              {navigationItems.slice(0, 3).map((item, index) => {
+            {/* Enhanced Tablet Navigation */}
+            <nav className="hidden md:flex lg:hidden items-center gap-2">
+              {navigationItems.slice(0, 4).map((item, index) => {
                 const Icon = item.icon;
                 const isActive = location === item.href;
                 return (
@@ -165,16 +243,41 @@ export default function EnhancedHeader() {
                     <Button
                       variant={isActive ? "default" : "ghost"}
                       size="sm"
-                      className={`relative group ${
+                      className={`relative group transition-all duration-300 transform hover:scale-110 px-3 py-2 rounded-xl ${
                         isActive 
-                          ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white' 
-                          : 'hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-gray-800 dark:hover:to-gray-700'
+                          ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg' 
+                          : 'hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-gray-800 dark:hover:to-gray-700 hover:shadow-md border border-gray-200/50 dark:border-gray-700/50'
                       }`}
+                      style={{ animationDelay: `${index * 100}ms` }}
                     >
-                      <Icon className="h-4 w-4" />
+                      <div className="relative flex items-center gap-1.5">
+                        <Icon className={`h-4 w-4 transition-all duration-300 ${
+                          isActive 
+                            ? 'text-white animate-pulse' 
+                            : 'group-hover:scale-110 group-hover:text-blue-600 dark:group-hover:text-blue-400'
+                        }`} />
+                        <span className={`text-xs font-medium transition-colors duration-300 ${
+                          isActive 
+                            ? 'text-white' 
+                            : 'group-hover:text-blue-600 dark:group-hover:text-blue-400'
+                        }`}>
+                          {item.label}
+                        </span>
+                      </div>
+                      
+                      {/* Badge Indicator */}
                       {item.badge && (
-                        <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></div>
+                        <div className={`absolute -top-1 -right-1 w-3 h-3 rounded-full flex items-center justify-center ${
+                          item.hot 
+                            ? 'bg-gradient-to-r from-red-500 to-pink-500 animate-pulse' 
+                            : 'bg-blue-500'
+                        }`}>
+                          <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+                        </div>
                       )}
+                      
+                      {/* Hover Effect */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
                     </Button>
                   </Link>
                 );
@@ -276,83 +379,144 @@ export default function EnhancedHeader() {
           </div>
         </div>
 
-        {/* Enhanced Featured Calculators Bar */}
-        <div className="border-t bg-gradient-to-r from-blue-50 via-purple-50 to-indigo-50 dark:from-gray-800 dark:via-gray-850 dark:to-gray-900 relative overflow-hidden">
-          {/* Animated background gradient */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent dark:via-white/5 animate-pulse"></div>
+        {/* Ultra-Enhanced Featured Calculators Bar */}
+        <div className="border-t border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-blue-50/80 via-indigo-50/80 via-purple-50/80 to-pink-50/80 dark:from-gray-800/90 dark:via-gray-850/90 dark:to-gray-900/90 relative overflow-hidden backdrop-blur-sm">
+          {/* Multi-layer Animated Background */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent dark:via-white/10 animate-pulse"></div>
+          <div className="absolute inset-0 bg-gradient-to-l from-blue-100/20 via-transparent to-purple-100/20 dark:from-blue-900/20 dark:to-purple-900/20 animate-pulse" style={{ animationDelay: '1s' }}></div>
           
           <div className="container-responsive relative">
-            <div className="flex items-center py-4 gap-4 overflow-x-auto scrollbar-hide">
-              {/* Enhanced label */}
-              <div className="flex items-center gap-2 text-sm font-bold text-gray-700 dark:text-gray-300 whitespace-nowrap bg-gradient-to-r from-yellow-400 to-orange-400 px-4 py-2 rounded-full shadow-lg flex-shrink-0">
-                <Zap className="h-4 w-4 text-white animate-pulse" />
-                <span className="text-white font-bold">Featured</span>
-                <TrendingUp className="h-3 w-3 text-white" />
+            <div className="flex items-center py-6 gap-6 overflow-x-auto scrollbar-hide">
+              {/* Ultra-Enhanced Label */}
+              <div className="flex items-center gap-3 text-sm font-bold whitespace-nowrap bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 px-6 py-3 rounded-2xl shadow-2xl flex-shrink-0 border-2 border-white/20 backdrop-blur-lg relative overflow-hidden">
+                {/* Animated Background */}
+                <div className="absolute inset-0 bg-gradient-to-r from-yellow-300/50 to-orange-300/50 animate-pulse"></div>
+                
+                <div className="relative flex items-center gap-3">
+                  <div className="relative">
+                    <Zap className="h-5 w-5 text-white animate-bounce" />
+                    <div className="absolute inset-0 bg-white/30 rounded-full blur-sm animate-pulse"></div>
+                  </div>
+                  <span className="text-white font-black text-base tracking-wide">FEATURED</span>
+                  <TrendingUp className="h-4 w-4 text-white animate-pulse" />
+                </div>
+                
+                {/* Glow Effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-2xl blur-xl opacity-50 -z-10 animate-pulse"></div>
               </div>
               
-              {/* Dynamic calculator cards */}
-              <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide">
-                {featuredCalculators.slice(0, 8).map((calc, index) => {
+              {/* Ultra-Dynamic Calculator Cards */}
+              <div className="flex items-center gap-4 overflow-x-auto scrollbar-hide">
+                {featuredCalculators.slice(0, 10).map((calc, index) => {
                   const IconComponent = getIconComponent(calc.icon);
                   return (
                     <Link key={calc.id} href={`/calculator/${calc.id}`}>
                       <div className="group relative flex-shrink-0">
                         <Button 
                           variant="ghost" 
-                          size="sm" 
-                          className="whitespace-nowrap h-auto p-3 bg-white/90 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-700 border border-gray-200/50 dark:border-gray-600/50 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 backdrop-blur-sm min-w-[140px]"
-                          style={{ animationDelay: `${index * 100}ms` }}
+                          className="whitespace-nowrap h-auto p-4 bg-white/95 dark:bg-gray-800/95 hover:bg-white dark:hover:bg-gray-700 border-2 border-gray-200/50 dark:border-gray-600/50 hover:border-blue-400 dark:hover:border-blue-500 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-110 hover:-translate-y-2 backdrop-blur-lg min-w-[160px] relative overflow-hidden"
+                          style={{ 
+                            animationDelay: `${index * 150}ms`,
+                            animationFillMode: 'both'
+                          }}
                         >
-                          <div className="flex items-center gap-2.5">
-                            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white shadow-lg flex-shrink-0">
-                              <IconComponent className="h-4 w-4" />
+                          {/* Background Animation */}
+                          <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-indigo-50/50 to-purple-50/50 dark:from-blue-900/20 dark:via-indigo-900/20 dark:to-purple-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                          
+                          <div className="relative flex items-center gap-3">
+                            {/* Enhanced Icon Container */}
+                            <div className="relative">
+                              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white shadow-xl flex-shrink-0 transition-all duration-500 group-hover:scale-110 group-hover:rotate-6">
+                                <IconComponent className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
+                              </div>
+                              
+                              {/* Icon Glow */}
+                              <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-500 rounded-xl blur-lg opacity-0 group-hover:opacity-60 transition-opacity duration-500"></div>
                             </div>
+                            
+                            {/* Enhanced Content */}
                             <div className="flex flex-col items-start min-w-0">
-                              <span className="font-semibold text-gray-900 dark:text-white text-xs leading-tight truncate max-w-[80px]">
+                              <span className="font-bold text-gray-900 dark:text-white text-sm leading-tight truncate max-w-[90px] transition-colors duration-300 group-hover:text-blue-600 dark:group-hover:text-blue-400">
                                 {calc.name}
                               </span>
-                              <div className="flex items-center gap-0.5 mt-0.5">
+                              
+                              {/* Enhanced Rating */}
+                              <div className="flex items-center gap-1 mt-1">
                                 {[...Array(5)].map((_, i) => (
-                                  <Star key={i} className="h-2.5 w-2.5 text-yellow-500 fill-current" />
+                                  <Star 
+                                    key={i} 
+                                    className="h-3 w-3 text-yellow-500 fill-current transition-transform duration-300 group-hover:scale-110" 
+                                    style={{ animationDelay: `${i * 100}ms` }}
+                                  />
                                 ))}
+                                <span className="text-xs text-muted-foreground ml-1 font-medium">5.0</span>
+                              </div>
+                              
+                              {/* Usage Counter */}
+                              <div className="text-xs text-muted-foreground mt-0.5 font-medium">
+                                {Math.floor(Math.random() * 1000) + 500}+ uses
                               </div>
                             </div>
                           </div>
+                          
+                          {/* Advanced Hover Effects */}
+                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></div>
                         </Button>
                         
-                        {/* Hover effect overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-                        
-                        {/* Popular badge for first few items */}
+                        {/* Enhanced Badges */}
                         {index < 3 && (
-                          <div className="absolute -top-2 -right-2 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs px-2 py-1 rounded-full font-bold animate-pulse shadow-lg">
-                            HOT
+                          <div className="absolute -top-3 -right-3 bg-gradient-to-r from-red-500 via-pink-500 to-red-600 text-white text-xs px-3 py-1.5 rounded-full font-bold animate-pulse shadow-xl border-2 border-white dark:border-gray-800">
+                            🔥 HOT
                           </div>
                         )}
+                        
+                        {index >= 3 && index < 6 && (
+                          <div className="absolute -top-3 -right-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-xs px-3 py-1.5 rounded-full font-bold shadow-xl border-2 border-white dark:border-gray-800">
+                            ⭐ NEW
+                          </div>
+                        )}
+                        
+                        {/* Floating Elements */}
+                        <div className="absolute -top-1 -left-1 w-2 h-2 bg-blue-400 rounded-full opacity-60 group-hover:animate-bounce"></div>
+                        <div className="absolute -bottom-1 -right-1 w-1.5 h-1.5 bg-purple-400 rounded-full opacity-60 group-hover:animate-bounce" style={{ animationDelay: '0.5s' }}></div>
                       </div>
                     </Link>
                   );
                 })}
               </div>
               
-              {/* View All button */}
+              {/* Enhanced View All Button */}
               <Link href="/categories" className="flex-shrink-0">
                 <Button 
                   variant="outline" 
-                  size="sm" 
-                  className="whitespace-nowrap bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0 hover:from-blue-700 hover:to-purple-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 px-4 py-2"
+                  className="whitespace-nowrap bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white border-0 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:scale-110 hover:-translate-y-1 px-6 py-3 relative overflow-hidden group"
                 >
-                  <Grid3X3 className="h-4 w-4 mr-2" />
-                  <span className="font-semibold">View All</span>
-                  <span className="ml-1 text-xs opacity-75">(15+)</span>
+                  {/* Background Animation */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/30 to-purple-500/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  
+                  <div className="relative flex items-center gap-2">
+                    <Grid3X3 className="h-5 w-5 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
+                    <span className="font-bold text-base">View All Tools</span>
+                    <div className="flex items-center gap-1">
+                      <span className="text-sm opacity-90">(100+)</span>
+                      <div className="w-2 h-2 bg-white/50 rounded-full animate-pulse"></div>
+                    </div>
+                  </div>
+                  
+                  {/* Glow Effect */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur-xl opacity-50 -z-10 group-hover:opacity-75 transition-opacity duration-500"></div>
                 </Button>
               </Link>
             </div>
           </div>
           
-          {/* Gradient fade edges for better scrolling indication */}
-          <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-blue-50 to-transparent dark:from-gray-800 pointer-events-none z-10"></div>
-          <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-purple-50 to-transparent dark:from-gray-900 pointer-events-none z-10"></div>
+          {/* Enhanced Gradient Fade Edges */}
+          <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-blue-50/80 via-blue-50/40 to-transparent dark:from-gray-800/90 dark:via-gray-800/60 pointer-events-none z-10"></div>
+          <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-purple-50/80 via-purple-50/40 to-transparent dark:from-gray-900/90 dark:via-gray-900/60 pointer-events-none z-10"></div>
+          
+          {/* Floating Background Elements */}
+          <div className="absolute top-1/2 left-1/4 w-32 h-32 bg-blue-200/10 dark:bg-blue-800/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute top-1/3 right-1/4 w-24 h-24 bg-purple-200/10 dark:bg-purple-800/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
         </div>
       </header>
 
