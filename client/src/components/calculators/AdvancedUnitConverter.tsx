@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -27,7 +26,7 @@ import {
   Database,
   Zap,
   Gauge,
-  Trending,
+  TrendingUp,
   BookOpen,
   Search
 } from "lucide-react";
@@ -270,7 +269,7 @@ export default function AdvancedUnitConverter() {
     if (from.category === 'temperature') {
       return convertTemperature(value, from.symbol, to.symbol);
     }
-    
+
     // Standard conversion using multipliers
     const baseValue = value * from.multiplier;
     return baseValue / to.multiplier;
@@ -278,7 +277,7 @@ export default function AdvancedUnitConverter() {
 
   const convertTemperature = (value: number, from: string, to: string): number => {
     let celsius = value;
-    
+
     // Convert to Celsius first
     switch (from) {
       case '°F':
@@ -294,7 +293,7 @@ export default function AdvancedUnitConverter() {
         celsius = value * 5/4;
         break;
     }
-    
+
     // Convert from Celsius to target
     switch (to) {
       case '°F':
@@ -324,7 +323,7 @@ export default function AdvancedUnitConverter() {
     };
 
     setHistory(prev => [conversionRecord, ...prev.slice(0, 9)]);
-    
+
     toast({
       title: "Conversion Added",
       description: `${inputValue} ${fromUnit.symbol} = ${result} ${toUnit.symbol}`,
@@ -367,7 +366,7 @@ export default function AdvancedUnitConverter() {
 
   const handleShare = async () => {
     const text = `Unit Converter Result:\n${inputValue} ${fromUnit?.symbol} = ${result} ${toUnit?.symbol}`;
-    
+
     if (navigator.share) {
       await navigator.share({ text });
     } else {
@@ -382,7 +381,7 @@ export default function AdvancedUnitConverter() {
   const filteredUnits = useMemo(() => {
     if (!currentCategory) return [];
     if (!searchTerm) return currentCategory.units;
-    
+
     return currentCategory.units.filter(unit =>
       unit.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       unit.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -406,7 +405,7 @@ export default function AdvancedUnitConverter() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Trending className="w-5 h-5 text-orange-500" />
+            <TrendingUp className="w-5 h-5 text-orange-500" />
             Popular Categories
           </CardTitle>
         </CardHeader>
