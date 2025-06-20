@@ -312,7 +312,7 @@
   }
 
   .category-card {
-    @apply transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer bg-white/90 dark:bg-gray-800/90 backdrop-blur-md border border-gray-200/50 dark:border-gray-700/50 rounded-2xl overflow-hidden;
+    @apply bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border-2 border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-600 hover:shadow-xl transition-all duration-500 cursor-pointer;
   }
 
   .input-field {
@@ -496,11 +496,11 @@
   .header-mobile-optimized {
     @apply px-3 py-2;
   }
-  
+
   .nav-mobile {
     @apply space-x-0.5;
   }
-  
+
   .search-mobile {
     @apply w-32 focus:w-40;
   }
@@ -511,7 +511,7 @@
   .header-tablet-optimized {
     @apply px-4 py-3;
   }
-  
+
   .nav-tablet {
     @apply space-x-1;
   }
@@ -522,7 +522,7 @@
   .header-desktop-optimized {
     @apply px-6 py-4;
   }
-  
+
   .nav-desktop {
     @apply space-x-2;
   }
@@ -607,49 +607,49 @@
   .section-container {
     @apply px-4;
   }
-  
+
   .section-padding {
     @apply py-8;
   }
-  
+
   .grid-responsive {
     @apply grid-cols-1 gap-4;
   }
-  
+
   .grid-responsive-2 {
     @apply grid-cols-1 gap-4;
   }
-  
+
   .grid-responsive-3 {
     @apply grid-cols-1 gap-4;
   }
-  
+
   .text-responsive-xl {
     @apply text-xl;
   }
-  
+
   .text-responsive-2xl {
     @apply text-2xl;
   }
-  
+
   .text-responsive-3xl {
     @apply text-3xl;
   }
-  
+
   /* Mobile Calculator Cards */
   .calculator-card {
     @apply p-4;
   }
-  
+
   .category-card {
     @apply p-4;
   }
-  
+
   /* Mobile Forms */
   .form-input {
     @apply text-base; /* Prevent zoom on iOS */
   }
-  
+
   /* Mobile Navigation */
   .nav-tab {
     @apply px-2 py-1 text-sm;
@@ -661,23 +661,23 @@
   .grid-responsive {
     @apply grid-cols-2 gap-6;
   }
-  
+
   .grid-responsive-2 {
     @apply grid-cols-2 gap-6;
   }
-  
+
   .grid-responsive-3 {
     @apply grid-cols-2 gap-6;
   }
-  
+
   .text-responsive-xl {
     @apply text-2xl;
   }
-  
+
   .text-responsive-2xl {
     @apply text-3xl;
   }
-  
+
   .text-responsive-3xl {
     @apply text-4xl;
   }
@@ -688,23 +688,23 @@
   .grid-responsive {
     @apply grid-cols-4 gap-8;
   }
-  
+
   .grid-responsive-2 {
     @apply grid-cols-2 gap-8;
   }
-  
+
   .grid-responsive-3 {
     @apply grid-cols-3 gap-8;
   }
-  
+
   .text-responsive-xl {
     @apply text-3xl;
   }
-  
+
   .text-responsive-2xl {
     @apply text-4xl;
   }
-  
+
   .text-responsive-3xl {
     @apply text-5xl;
   }
@@ -715,15 +715,15 @@
   .grid-responsive {
     @apply grid-cols-5 gap-10;
   }
-  
+
   .text-responsive-xl {
     @apply text-4xl;
   }
-  
+
   .text-responsive-2xl {
     @apply text-5xl;
   }
-  
+
   .text-responsive-3xl {
     @apply text-6xl;
   }
@@ -734,11 +734,11 @@
   .touch-target {
     @apply min-h-[44px] min-w-[44px];
   }
-  
+
   button, .button, [role="button"] {
     @apply min-h-[44px] touch-manipulation;
   }
-  
+
   /* Improved tap highlighting */
   * {
     -webkit-tap-highlight-color: rgba(59, 130, 246, 0.1);
@@ -776,11 +776,11 @@
   .no-print {
     display: none !important;
   }
-  
+
   .print-friendly {
     @apply text-black bg-white;
   }
-  
+
   .calculator-card,
   .category-card {
     @apply border border-gray-300 break-inside-avoid;
@@ -902,4 +902,38 @@
 .mobile-menu-exit-active {
   transform: translateX(100%);
   transition: transform 300ms ease-in-out;
+}
+
+/* Enhanced Components */
+.category-card {
+  @apply bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border-2 border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-600 hover:shadow-xl transition-all duration-500 cursor-pointer;
+}
+
+/* Footer Animations */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+  }
+}
+
+.animate-slide-in-up {
+  animation: slideInUp 0.6s ease-out forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s infinite;
 }
