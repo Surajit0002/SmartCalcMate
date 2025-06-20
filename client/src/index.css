@@ -425,6 +425,109 @@
   }
 }
 
+@keyframes slideInFromTop {
+  0% {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-slide-in {
+  animation: slideInFromTop 0.5s ease-out;
+}
+
+.animate-bounce-in {
+  animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Dynamic Header Responsive Utilities */
+.header-responsive {
+  @apply transition-all duration-300 ease-in-out;
+}
+
+.nav-item-responsive {
+  @apply transform transition-all duration-300 hover:scale-105 active:scale-95;
+}
+
+.search-responsive {
+  @apply transition-all duration-500 ease-out;
+  @apply w-48 sm:w-56 md:w-64 lg:w-72 xl:w-80;
+  @apply focus:w-56 sm:focus:w-64 md:focus:w-72 lg:focus:w-80 xl:focus:w-96;
+}
+
+/* Mobile Header Optimizations */
+@media (max-width: 640px) {
+  .header-mobile-optimized {
+    @apply px-3 py-2;
+  }
+  
+  .nav-mobile {
+    @apply space-x-0.5;
+  }
+  
+  .search-mobile {
+    @apply w-32 focus:w-40;
+  }
+}
+
+/* Tablet Header Optimizations */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .header-tablet-optimized {
+    @apply px-4 py-3;
+  }
+  
+  .nav-tablet {
+    @apply space-x-1;
+  }
+}
+
+/* Desktop Header Optimizations */
+@media (min-width: 1025px) {
+  .header-desktop-optimized {
+    @apply px-6 py-4;
+  }
+  
+  .nav-desktop {
+    @apply space-x-2;
+  }
+}
+
 @keyframes float {
   0%, 100% {
     transform: translateY(0px);

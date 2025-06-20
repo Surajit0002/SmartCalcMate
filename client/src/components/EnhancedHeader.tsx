@@ -112,28 +112,68 @@ export default function EnhancedHeader() {
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-1">
-              {navigationItems.map((item) => {
+            <nav className="hidden lg:flex items-center space-x-1">
+              {navigationItems.map((item, index) => {
                 const Icon = item.icon;
                 const isActive = location === item.href;
                 return (
                   <Link key={item.href} href={item.href}>
                     <Button
                       variant={isActive ? "default" : "ghost"}
-                      className={`relative ${isActive ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}`}
+                      className={`relative group transition-all duration-300 transform hover:scale-105 ${
+                        isActive 
+                          ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg hover:shadow-xl' 
+                          : 'hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-gray-800 dark:hover:to-gray-700 hover:shadow-md'
+                      }`}
+                      style={{ animationDelay: `${index * 100}ms` }}
                     >
-                      <Icon className="h-4 w-4 mr-2" />
-                      {item.label}
+                      <Icon className={`h-4 w-4 mr-2 transition-transform duration-300 ${isActive ? 'animate-pulse' : 'group-hover:scale-110'}`} />
+                      <span className="font-medium">{item.label}</span>
                       {item.badge && (
                         <Badge 
                           variant={item.hot ? "destructive" : "secondary"} 
-                          className={`ml-2 px-1.5 py-0.5 text-xs ${item.hot ? 'animate-pulse bg-gradient-to-r from-red-500 to-pink-500' : ''}`}
+                          className={`ml-2 px-2 py-0.5 text-xs font-bold shadow-sm ${
+                            item.hot 
+                              ? 'animate-bounce bg-gradient-to-r from-red-500 via-pink-500 to-red-600 text-white border-0' 
+                              : 'bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600'
+                          }`}
                         >
                           {item.badge}
                         </Badge>
                       )}
                       {item.hot && !item.badge && (
-                        <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-ping"></div>
+                        <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-red-500 to-pink-500 rounded-full animate-ping shadow-lg">
+                          <div className="absolute inset-0 bg-red-400 rounded-full animate-pulse"></div>
+                        </div>
+                      )}
+                      
+                      {/* Hover effect overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-md"></div>
+                    </Button>
+                  </Link>
+                );
+              })}
+            </nav>
+
+            {/* Tablet Navigation */}
+            <nav className="hidden md:flex lg:hidden items-center space-x-1">
+              {navigationItems.slice(0, 3).map((item, index) => {
+                const Icon = item.icon;
+                const isActive = location === item.href;
+                return (
+                  <Link key={item.href} href={item.href}>
+                    <Button
+                      variant={isActive ? "default" : "ghost"}
+                      size="sm"
+                      className={`relative group ${
+                        isActive 
+                          ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white' 
+                          : 'hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-gray-800 dark:hover:to-gray-700'
+                      }`}
+                    >
+                      <Icon className="h-4 w-4" />
+                      {item.badge && (
+                        <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></div>
                       )}
                     </Button>
                   </Link>
@@ -143,28 +183,48 @@ export default function EnhancedHeader() {
 
             {/* Search and Actions */}
             <div className="flex items-center space-x-2">
-              {/* Search */}
-              <div className="relative hidden sm:block">
+              {/* Enhanced Search */}
+              <div className="relative hidden sm:block group">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground transition-colors duration-300 group-focus-within:text-blue-500" />
                   <Input
                     placeholder="Search calculators..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onFocus={() => setShowSearch(true)}
                     onBlur={() => setTimeout(() => setShowSearch(false), 200)}
-                    className="pl-10 w-64 transition-all duration-300 focus:w-80"
+                    className="pl-10 w-48 sm:w-56 lg:w-64 xl:w-72 transition-all duration-500 ease-out focus:w-56 sm:focus:w-64 lg:focus:w-80 xl:focus:w-96 focus:shadow-lg focus:ring-2 focus:ring-blue-500/20 bg-gray-50/80 dark:bg-gray-800/80 backdrop-blur-sm border-gray-200/50 dark:border-gray-700/50 hover:bg-white dark:hover:bg-gray-800 hover:border-blue-300 dark:hover:border-blue-600"
                   />
+                  {searchQuery && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 hover:bg-gray-200 dark:hover:bg-gray-700"
+                      onClick={() => setSearchQuery('')}
+                    >
+                      <X className="h-3 w-3" />
+                    </Button>
+                  )}
                 </div>
                 {showSearch && searchResults.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-800 border rounded-lg shadow-lg z-50">
-                    {searchResults.map((calc) => (
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white/95 dark:bg-gray-800/95 backdrop-blur-lg border border-gray-200/50 dark:border-gray-700/50 rounded-xl shadow-2xl z-50 overflow-hidden animate-in slide-in-from-top-2 duration-300">
+                    {searchResults.map((calc, index) => (
                       <Link key={calc.id} href={`/calculator/${calc.id}`}>
-                        <div className="flex items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
-                          <div className="text-2xl mr-3">{calc.icon}</div>
-                          <div>
-                            <div className="font-medium">{calc.name}</div>
-                            <div className="text-sm text-muted-foreground">{calc.description}</div>
+                        <div 
+                          className="flex items-center p-4 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-gray-700/50 dark:hover:to-gray-600/50 cursor-pointer transition-all duration-300 border-b border-gray-100 dark:border-gray-700/50 last:border-b-0 group"
+                          style={{ animationDelay: `${index * 50}ms` }}
+                        >
+                          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white text-lg mr-4 shadow-md group-hover:scale-110 transition-transform duration-300">
+                            {calc.icon}
+                          </div>
+                          <div className="flex-1">
+                            <div className="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">{calc.name}</div>
+                            <div className="text-sm text-muted-foreground mt-1">{calc.description}</div>
+                          </div>
+                          <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                              <span className="text-white text-xs">→</span>
+                            </div>
                           </div>
                         </div>
                       </Link>
@@ -175,21 +235,32 @@ export default function EnhancedHeader() {
 
               {/* Quick Actions */}
               <div className="hidden lg:flex items-center space-x-1">
-                <Button variant="ghost" size="icon" className="relative">
-                  <Bell className="h-5 w-5" />
-                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full" />
+                <Button variant="ghost" size="icon" className="relative group hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-gray-800 dark:hover:to-gray-700 transition-all duration-300 hover:scale-110">
+                  <Bell className="h-5 w-5 transition-transform duration-300 group-hover:animate-pulse" />
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-red-500 to-pink-500 rounded-full animate-ping shadow-lg">
+                    <div className="absolute inset-0 bg-red-400 rounded-full"></div>
+                  </div>
                 </Button>
-                <Button variant="ghost" size="icon">
-                  <Bookmark className="h-5 w-5" />
+                <Button variant="ghost" size="icon" className="group hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-gray-800 dark:hover:to-gray-700 transition-all duration-300 hover:scale-110">
+                  <Bookmark className="h-5 w-5 transition-transform duration-300 group-hover:rotate-12" />
+                </Button>
+              </div>
+
+              {/* Mobile Quick Actions */}
+              <div className="flex lg:hidden items-center space-x-1">
+                <Button variant="ghost" size="icon" className="relative hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-gray-800 dark:hover:to-gray-700">
+                  <Bell className="h-4 w-4" />
+                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></div>
                 </Button>
               </div>
 
               {/* Settings */}
               <SettingsDialog />
 
-              {/* User Avatar */}
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <User className="h-5 w-5" />
+              {/* Enhanced User Avatar */}
+              <Button variant="ghost" size="icon" className="rounded-full relative group hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-gray-800 dark:hover:to-gray-700 transition-all duration-300 hover:scale-110 border-2 border-transparent hover:border-blue-200 dark:hover:border-blue-800">
+                <User className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
+                <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-900 animate-pulse"></div>
               </Button>
 
               {/* Mobile Menu Toggle */}
