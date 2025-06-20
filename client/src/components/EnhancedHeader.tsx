@@ -16,7 +16,10 @@ import {
   Zap,
   Star,
   Bell,
-  User
+  User,
+  Home,
+  Grid3X3,
+  Clock
 } from 'lucide-react';
 import { useI18n } from '@/hooks/useI18n';
 import { useTheme } from '@/hooks/useTheme';
@@ -55,10 +58,11 @@ export default function EnhancedHeader() {
   }, [searchQuery]);
 
   const navigationItems = [
-    { href: '/', label: t.navigation.home, icon: Calculator },
-    { href: '/categories', label: t.navigation.categories, icon: TrendingUp },
+    { href: '/', label: t.navigation.home, icon: Home },
+    { href: '/categories', label: t.navigation.categories, icon: Grid3X3 },
     { href: '/favorites', label: t.navigation.favorites, icon: Heart, badge: 3 },
-    { href: '/history', label: t.navigation.history, icon: History },
+    { href: '/history', label: t.navigation.history, icon: Clock },
+    { href: '/profile', label: 'Profile', icon: User },
   ];
 
   return (

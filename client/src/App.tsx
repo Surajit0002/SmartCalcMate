@@ -9,6 +9,10 @@ import EnhancedHeader from "@/components/EnhancedHeader";
 import EnhancedFooter from "@/components/EnhancedFooter";
 import FloatingActionButton from "@/components/FloatingActionButton";
 import Home from "@/pages/Home";
+import Categories from "@/pages/Categories";
+import Favorites from "@/pages/Favorites";
+import History from "@/pages/History";
+import Profile from "@/pages/Profile";
 import CategoryView from "@/pages/CategoryView";
 import CalculatorView from "@/pages/CalculatorView";
 
@@ -19,6 +23,10 @@ function Router() {
       <main className="relative">
         <Switch>
           <Route path="/" component={Home} />
+          <Route path="/categories" component={Categories} />
+          <Route path="/favorites" component={Favorites} />
+          <Route path="/history" component={History} />
+          <Route path="/profile" component={Profile} />
           <Route path="/category/:category" component={CategoryView} />
           <Route path="/calculator/:calculator" component={CalculatorView} />
           <Route component={Home} />
