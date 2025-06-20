@@ -11,7 +11,7 @@ import {
   Search, Filter, Grid3X3, List, ArrowRight, TrendingUp, Star, Zap,
   Calculator, Heart, Activity, DollarSign, FileText, Image, Video,
   Music, Code, Globe, Cpu, Palette, Shield, Sparkles, Crown,
-  BarChart3, Clock, Users, Target, Rocket, Brain, Magic, 
+  BarChart3, Clock, Users, Target, Rocket, Brain, Wand2, 
   Layers, Settings, Play, Download, Upload, Share2, Eye
 } from 'lucide-react';
 import { categories, calculators } from '@/lib/calculatorData';
@@ -393,88 +393,62 @@ export default function Categories() {
             </TabsList>
           </Tabs>
 
-          {/* Tools Grid */}
-          <div className={`grid gap-6 ${
+          {/* Ultra-Compact Tools Grid */}
+          <div className={`grid gap-1.5 ${
             viewMode === 'grid' 
-              ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6' 
+              ? 'grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 xl:grid-cols-16 2xl:grid-cols-20' 
               : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
           }`}>
             {filteredTools.map((tool, index) => (
               <Link key={tool.id} href={`/calculator/${tool.id}`}>
-                <Card className={`group cursor-pointer h-full transition-all duration-500 hover:scale-105 hover:shadow-2xl border-0 overflow-hidden ${
-                  viewMode === 'list' ? 'flex items-center' : ''
+                <Card className={`group cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border-0 overflow-hidden ${
+                  viewMode === 'list' ? 'flex items-center h-14' : 'h-16'
                 }`}>
-                  {/* Header with gradient */}
-                  <div className={`bg-gradient-to-br ${getToolGradient(tool.categoryId)} p-4 text-white relative ${
-                    viewMode === 'list' ? 'flex-shrink-0 w-32' : ''
-                  }`}>
-                    {/* Status badges */}
-                    <div className="absolute top-2 right-2 flex gap-1">
-                      {tool.isNew && (
-                        <Badge className="bg-green-400 text-green-900 text-xs font-bold px-2 py-1 animate-pulse">
-                          NEW
-                        </Badge>
-                      )}
-                      {tool.isPro && (
-                        <Badge className="bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1">
-                          <Crown className="w-3 h-3 mr-1" />
-                          AI
-                        </Badge>
-                      )}
-                      {tool.isPopular && (
-                        <Badge className="bg-orange-400 text-orange-900 text-xs font-bold px-2 py-1">
-                          🔥
-                        </Badge>
-                      )}
-                    </div>
-                    
-                    {/* Icon */}
-                    <div className={`${viewMode === 'list' ? 'mb-2' : 'mb-4'} flex items-center justify-center`}>
-                      <div className="bg-white/20 backdrop-blur-sm rounded-xl p-3 group-hover:scale-110 transition-transform duration-300">
-                        <i className={`fas ${tool.icon} text-2xl text-white`}></i>
+                  {viewMode === 'grid' ? (
+                    <div className={`bg-gradient-to-br ${getToolGradient(tool.categoryId)} p-1.5 text-white relative h-full flex flex-col`}>
+                      <div className="absolute top-0.5 right-0.5 flex gap-0.5">
+                        {tool.isNew && <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>}
+                        {tool.isPro && <div className="w-1.5 h-1.5 bg-yellow-400 rounded-full"></div>}
+                        {tool.isPopular && <div className="w-1.5 h-1.5 bg-orange-400 rounded-full"></div>}
                       </div>
-                    </div>
-                    
-                    {viewMode === 'grid' && (
-                      <h3 className="font-bold text-sm leading-tight line-clamp-2 min-h-[2.5rem]">
-                        {tool.name}
-                      </h3>
-                    )}
-                  </div>
-                  
-                  {/* Content */}
-                  <CardContent className={`bg-white dark:bg-gray-800 ${
-                    viewMode === 'list' ? 'flex-1 flex items-center justify-between p-4' : 'p-4'
-                  }`}>
-                    {viewMode === 'list' && (
-                      <div className="flex-1">
-                        <h3 className="font-bold text-lg mb-1">{tool.name}</h3>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{tool.description}</p>
-                        <Badge variant="outline" className="text-xs">
-                          {tool.categoryName}
-                        </Badge>
-                      </div>
-                    )}
-                    
-                    {viewMode === 'grid' && (
-                      <>
-                        <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2 mb-3 min-h-[2rem]">
-                          {tool.description}
-                        </p>
-                        
-                        <div className="flex items-center justify-between">
-                          <Badge variant="outline" className="text-xs">
-                            {tool.categoryName}
-                          </Badge>
-                          <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all duration-300" />
+                      
+                      <div className="flex-1 flex items-center justify-center">
+                        <div className="bg-white/20 backdrop-blur-sm rounded p-1 group-hover:scale-110 transition-transform duration-200">
+                          <i className={`fas ${tool.icon} text-sm text-white`}></i>
                         </div>
-                      </>
-                    )}
-                    
-                    {viewMode === 'list' && (
-                      <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all duration-300" />
-                    )}
-                  </CardContent>
+                      </div>
+                      
+                      <div className="text-center mt-1">
+                        <h3 className="font-medium text-[9px] leading-tight line-clamp-2 max-h-[18px]">
+                          {tool.name}
+                        </h3>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div className={`bg-gradient-to-br ${getToolGradient(tool.categoryId)} p-2 text-white flex-shrink-0 w-12 relative`}>
+                        <div className="absolute top-0.5 right-0.5 flex gap-0.5">
+                          {tool.isNew && <div className="w-1 h-1 bg-green-400 rounded-full"></div>}
+                          {tool.isPro && <div className="w-1 h-1 bg-yellow-400 rounded-full"></div>}
+                          {tool.isPopular && <div className="w-1 h-1 bg-orange-400 rounded-full"></div>}
+                        </div>
+                        
+                        <div className="flex items-center justify-center h-full">
+                          <div className="bg-white/20 backdrop-blur-sm rounded p-1">
+                            <i className={`fas ${tool.icon} text-xs text-white`}></i>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="flex-1 bg-white dark:bg-gray-800 p-2 flex items-center justify-between">
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-xs mb-0.5 truncate">{tool.name}</h3>
+                          <p className="text-[10px] text-gray-600 dark:text-gray-400 line-clamp-1">{tool.description}</p>
+                        </div>
+                        <ArrowRight className="h-3 w-3 text-gray-400 ml-2 flex-shrink-0" />
+                      </div>
+                    </>
+                  )}
                 </Card>
               </Link>
             ))}
