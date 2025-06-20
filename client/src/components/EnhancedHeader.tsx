@@ -379,144 +379,73 @@ export default function EnhancedHeader() {
           </div>
         </div>
 
-        {/* Ultra-Enhanced Featured Calculators Bar */}
-        <div className="border-t border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-blue-50/80 via-indigo-50/80 via-purple-50/80 to-pink-50/80 dark:from-gray-800/90 dark:via-gray-850/90 dark:to-gray-900/90 relative overflow-hidden backdrop-blur-sm">
-          {/* Multi-layer Animated Background */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent dark:via-white/10 animate-pulse"></div>
-          <div className="absolute inset-0 bg-gradient-to-l from-blue-100/20 via-transparent to-purple-100/20 dark:from-blue-900/20 dark:to-purple-900/20 animate-pulse" style={{ animationDelay: '1s' }}></div>
-          
-          <div className="container-responsive relative">
-            <div className="flex items-center py-6 gap-6 overflow-x-auto scrollbar-hide">
-              {/* Ultra-Enhanced Label */}
-              <div className="flex items-center gap-3 text-sm font-bold whitespace-nowrap bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 px-6 py-3 rounded-2xl shadow-2xl flex-shrink-0 border-2 border-white/20 backdrop-blur-lg relative overflow-hidden">
-                {/* Animated Background */}
-                <div className="absolute inset-0 bg-gradient-to-r from-yellow-300/50 to-orange-300/50 animate-pulse"></div>
-                
-                <div className="relative flex items-center gap-3">
-                  <div className="relative">
-                    <Zap className="h-5 w-5 text-white animate-bounce" />
-                    <div className="absolute inset-0 bg-white/30 rounded-full blur-sm animate-pulse"></div>
-                  </div>
-                  <span className="text-white font-black text-base tracking-wide">FEATURED</span>
-                  <TrendingUp className="h-4 w-4 text-white animate-pulse" />
-                </div>
-                
-                {/* Glow Effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-2xl blur-xl opacity-50 -z-10 animate-pulse"></div>
+        {/* Compact Featured Calculators Bar */}
+        <div className="border-t border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-gray-800/80 dark:to-gray-900/80 backdrop-blur-sm">
+          <div className="container-responsive">
+            <div className="flex items-center py-3 gap-3 overflow-x-auto scrollbar-hide">
+              {/* Compact Label */}
+              <div className="flex items-center gap-2 text-xs font-bold whitespace-nowrap bg-gradient-to-r from-orange-400 to-red-500 px-3 py-1.5 rounded-lg shadow-lg flex-shrink-0">
+                <Zap className="h-3 w-3 text-white" />
+                <span className="text-white">FEATURED</span>
               </div>
               
-              {/* Ultra-Dynamic Calculator Cards */}
-              <div className="flex items-center gap-4 overflow-x-auto scrollbar-hide">
-                {featuredCalculators.slice(0, 10).map((calc, index) => {
+              {/* Compact Calculator Cards */}
+              <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
+                {featuredCalculators.slice(0, 6).map((calc, index) => {
                   const IconComponent = getIconComponent(calc.icon);
                   return (
                     <Link key={calc.id} href={`/calculator/${calc.id}`}>
-                      <div className="group relative flex-shrink-0">
-                        <Button 
-                          variant="ghost" 
-                          className="whitespace-nowrap h-auto p-4 bg-white/95 dark:bg-gray-800/95 hover:bg-white dark:hover:bg-gray-700 border-2 border-gray-200/50 dark:border-gray-600/50 hover:border-blue-400 dark:hover:border-blue-500 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-110 hover:-translate-y-2 backdrop-blur-lg min-w-[160px] relative overflow-hidden"
-                          style={{ 
-                            animationDelay: `${index * 150}ms`,
-                            animationFillMode: 'both'
-                          }}
-                        >
-                          {/* Background Animation */}
-                          <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-indigo-50/50 to-purple-50/50 dark:from-blue-900/20 dark:via-indigo-900/20 dark:to-purple-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                          
-                          <div className="relative flex items-center gap-3">
-                            {/* Enhanced Icon Container */}
-                            <div className="relative">
-                              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white shadow-xl flex-shrink-0 transition-all duration-500 group-hover:scale-110 group-hover:rotate-6">
-                                <IconComponent className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
-                              </div>
-                              
-                              {/* Icon Glow */}
-                              <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-500 rounded-xl blur-lg opacity-0 group-hover:opacity-60 transition-opacity duration-500"></div>
-                            </div>
-                            
-                            {/* Enhanced Content */}
-                            <div className="flex flex-col items-start min-w-0">
-                              <span className="font-bold text-gray-900 dark:text-white text-sm leading-tight truncate max-w-[90px] transition-colors duration-300 group-hover:text-blue-600 dark:group-hover:text-blue-400">
-                                {calc.name}
-                              </span>
-                              
-                              {/* Enhanced Rating */}
-                              <div className="flex items-center gap-1 mt-1">
-                                {[...Array(5)].map((_, i) => (
-                                  <Star 
-                                    key={i} 
-                                    className="h-3 w-3 text-yellow-500 fill-current transition-transform duration-300 group-hover:scale-110" 
-                                    style={{ animationDelay: `${i * 100}ms` }}
-                                  />
-                                ))}
-                                <span className="text-xs text-muted-foreground ml-1 font-medium">5.0</span>
-                              </div>
-                              
-                              {/* Usage Counter */}
-                              <div className="text-xs text-muted-foreground mt-0.5 font-medium">
-                                {Math.floor(Math.random() * 1000) + 500}+ uses
-                              </div>
+                      <Button 
+                        variant="ghost" 
+                        className="whitespace-nowrap h-auto p-2 bg-white/90 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-700 border border-gray-200/50 dark:border-gray-600/50 hover:border-blue-400 dark:hover:border-blue-500 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 transform hover:scale-105 backdrop-blur-sm min-w-[100px] relative group"
+                      >
+                        <div className="flex items-center gap-2">
+                          <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-purple-600 rounded-md flex items-center justify-center text-white shadow-sm flex-shrink-0">
+                            <IconComponent className="h-3 w-3" />
+                          </div>
+                          <div className="flex flex-col items-start min-w-0">
+                            <span className="font-medium text-gray-900 dark:text-white text-xs leading-tight truncate max-w-[60px]">
+                              {calc.name}
+                            </span>
+                            <div className="flex items-center gap-1">
+                              <Star className="h-2 w-2 text-yellow-500 fill-current" />
+                              <span className="text-xs text-muted-foreground">5.0</span>
                             </div>
                           </div>
-                          
-                          {/* Advanced Hover Effects */}
-                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></div>
-                        </Button>
+                        </div>
                         
-                        {/* Enhanced Badges */}
+                        {/* Compact Badges */}
                         {index < 3 && (
-                          <div className="absolute -top-3 -right-3 bg-gradient-to-r from-red-500 via-pink-500 to-red-600 text-white text-xs px-3 py-1.5 rounded-full font-bold animate-pulse shadow-xl border-2 border-white dark:border-gray-800">
-                            🔥 HOT
+                          <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1 py-0.5 rounded-full font-bold text-[8px]">
+                            🔥
                           </div>
                         )}
                         
-                        {index >= 3 && index < 6 && (
-                          <div className="absolute -top-3 -right-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-xs px-3 py-1.5 rounded-full font-bold shadow-xl border-2 border-white dark:border-gray-800">
-                            ⭐ NEW
+                        {index >= 3 && (
+                          <div className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs px-1 py-0.5 rounded-full font-bold text-[8px]">
+                            ⭐
                           </div>
                         )}
-                        
-                        {/* Floating Elements */}
-                        <div className="absolute -top-1 -left-1 w-2 h-2 bg-blue-400 rounded-full opacity-60 group-hover:animate-bounce"></div>
-                        <div className="absolute -bottom-1 -right-1 w-1.5 h-1.5 bg-purple-400 rounded-full opacity-60 group-hover:animate-bounce" style={{ animationDelay: '0.5s' }}></div>
-                      </div>
+                      </Button>
                     </Link>
                   );
                 })}
               </div>
               
-              {/* Enhanced View All Button */}
+              {/* Compact View All Button */}
               <Link href="/categories" className="flex-shrink-0">
                 <Button 
                   variant="outline" 
-                  className="whitespace-nowrap bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white border-0 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:scale-110 hover:-translate-y-1 px-6 py-3 relative overflow-hidden group"
+                  size="sm"
+                  className="whitespace-nowrap bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0 hover:from-blue-700 hover:to-purple-700 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 px-3 py-1.5"
                 >
-                  {/* Background Animation */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/30 to-purple-500/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  
-                  <div className="relative flex items-center gap-2">
-                    <Grid3X3 className="h-5 w-5 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
-                    <span className="font-bold text-base">View All Tools</span>
-                    <div className="flex items-center gap-1">
-                      <span className="text-sm opacity-90">(100+)</span>
-                      <div className="w-2 h-2 bg-white/50 rounded-full animate-pulse"></div>
-                    </div>
-                  </div>
-                  
-                  {/* Glow Effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur-xl opacity-50 -z-10 group-hover:opacity-75 transition-opacity duration-500"></div>
+                  <Grid3X3 className="h-3 w-3 mr-1" />
+                  <span className="font-medium text-xs">All Tools</span>
+                  <span className="text-xs opacity-75 ml-1">(100+)</span>
                 </Button>
               </Link>
             </div>
           </div>
-          
-          {/* Enhanced Gradient Fade Edges */}
-          <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-blue-50/80 via-blue-50/40 to-transparent dark:from-gray-800/90 dark:via-gray-800/60 pointer-events-none z-10"></div>
-          <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-purple-50/80 via-purple-50/40 to-transparent dark:from-gray-900/90 dark:via-gray-900/60 pointer-events-none z-10"></div>
-          
-          {/* Floating Background Elements */}
-          <div className="absolute top-1/2 left-1/4 w-32 h-32 bg-blue-200/10 dark:bg-blue-800/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute top-1/3 right-1/4 w-24 h-24 bg-purple-200/10 dark:bg-purple-800/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
         </div>
       </header>
 
