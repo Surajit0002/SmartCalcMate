@@ -12,6 +12,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { 
   FileText, Upload, Download, FileImage, FileVideo, FileAudio, 
   FileSpreadsheet, FileCode, Zap, Settings, CheckCircle, AlertCircle,
@@ -357,7 +358,10 @@ export default function FileConverterHub() {
     satisfactionRate: 98.5
   });
   const [animationTrigger, setAnimationTrigger] = useState(0);
+  const [isConfigModalOpen, setIsConfigModalOpen] = useState(false);
+  const [modalFiles, setModalFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const modalFileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
   const currentCategory = categories.find(cat => cat.id === activeCategory);
@@ -514,6 +518,75 @@ export default function FileConverterHub() {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
+  const handleModalFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      handleModalFiles(Array.from(e.target.files));
+    }
+  };
+
+  const handleModalFiles = (newFiles: File[]) => {
+    if (!selectedConverter) return;
+
+    const validFiles = newFiles.filter(file => {
+      const extension = file.name.split('.').pop()?.toLowerCase();
+      return extension && selectedConverter.fromFormat.includes(extension);
+    });
+
+    if (validFiles.length !== newFiles.length) {
+      toast({
+        title: "⚠️ Some files were skipped",
+        description: `Only ${selectedConverter.fromFormat.join(', ')} files are supported for this converter.`,
+        variant: "destructive"
+      });
+    }
+
+    setModalFiles(prev => [...prev, ...validFiles]);
+  };
+
+  const handleModalDrag = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleModalDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleModalFiles(Array.from(e.dataTransfer.files));
+    }
+  };
+
+  const startModalConversion = () => {
+    if (!selectedConverter || modalFiles.length === 0) {
+      toast({
+        title: "❌ Missing requirements",
+        description: "Please upload files to convert.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    modalFiles.forEach(file => simulateConversion(file));
+    setModalFiles([]);
+    setIsConfigModalOpen(false);
+    
+    toast({
+      title: "🚀 Conversion started",
+      description: `Processing ${modalFiles.length} file(s) with ${selectedConverter.name}`,
+    });
+  };
+
+  const removeModalFile = (index: number) => {
+    setModalFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const openConfigModal = (converter: FileConverter) => {
+    setSelectedConverter(converter);
+    setIsConfigModalOpen(true);
+    setModalFiles([]);
+  };
+
   return (
     <div className="max-w-7xl mx-auto p-4 space-y-8 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-blue-900/20 dark:to-indigo-900/20 min-h-screen">
       {/* Header Section */}
@@ -593,7 +666,7 @@ export default function FileConverterHub() {
                           ? `bg-gradient-to-br ${converter.gradient} text-white shadow-2xl scale-105`
                           : 'bg-white hover:bg-gradient-to-br hover:from-white hover:to-gray-50 border-gray-200'
                       }`}
-                      onClick={() => setSelectedConverter(converter)}
+                      onClick={() => openConfigModal(converter)}
                     >
                       {/* Status Badges */}
                       <div className="absolute top-3 right-3 flex gap-2">
@@ -1002,6 +1075,311 @@ export default function FileConverterHub() {
           </TabsContent>
         ))}
       </Tabs>
+
+      {/* Enhanced Configuration Modal */}
+      <Dialog open={isConfigModalOpen} onOpenChange={setIsConfigModalOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-white via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-blue-900/20 dark:to-indigo-900/20">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-3 text-2xl">
+              {selectedConverter && (
+                <>
+                  <div className={`p-3 rounded-xl bg-gradient-to-br ${selectedConverter.gradient}`}>
+                    <div className="text-white">
+                      {selectedConverter.icon}
+                    </div>
+                  </div>
+                  <div>
+                    <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                      {selectedConverter.name}
+                    </span>
+                    <div className="flex items-center gap-2 mt-1">
+                      {selectedConverter.isNew && (
+                        <Badge className="bg-green-500 text-white text-xs animate-pulse">NEW</Badge>
+                      )}
+                      {selectedConverter.isPro && (
+                        <Badge className="bg-purple-500 text-white text-xs">PRO</Badge>
+                      )}
+                      {selectedConverter.isPopular && (
+                        <Badge className="bg-orange-500 text-white text-xs">🔥 POPULAR</Badge>
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
+            </DialogTitle>
+            <DialogDescription className="text-base">
+              {selectedConverter?.description}
+            </DialogDescription>
+          </DialogHeader>
+
+          {selectedConverter && (
+            <div className="space-y-6 mt-6">
+              {/* Converter Details */}
+              <Card className="bg-white/50 backdrop-blur-sm border-0 shadow-lg">
+                <CardHeader className={`bg-gradient-to-r ${selectedConverter.gradient} text-white rounded-t-lg`}>
+                  <CardTitle className="text-lg">Converter Specifications</CardTitle>
+                </CardHeader>
+                <CardContent className="p-6">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg">
+                      <FileType className="w-6 h-6 mx-auto mb-2 text-blue-600" />
+                      <div className="text-sm font-medium">Input Formats</div>
+                      <div className="text-xs text-muted-foreground mt-1">
+                        {selectedConverter.fromFormat.join(', ').toUpperCase()}
+                      </div>
+                    </div>
+                    <div className="text-center p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg">
+                      <HardDrive className="w-6 h-6 mx-auto mb-2 text-green-600" />
+                      <div className="text-sm font-medium">Max Size</div>
+                      <div className="text-xs text-muted-foreground mt-1">
+                        {selectedConverter.maxFileSize}
+                      </div>
+                    </div>
+                    <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg">
+                      <Clock className="w-6 h-6 mx-auto mb-2 text-purple-600" />
+                      <div className="text-sm font-medium">Processing Time</div>
+                      <div className="text-xs text-muted-foreground mt-1">
+                        {selectedConverter.processingTime}
+                      </div>
+                    </div>
+                    <div className="text-center p-4 bg-gradient-to-br from-orange-50 to-red-50 rounded-lg">
+                      <Star className="w-6 h-6 mx-auto mb-2 text-orange-600" />
+                      <div className="text-sm font-medium">Quality</div>
+                      <div className="text-xs text-muted-foreground mt-1">
+                        {selectedConverter.quality.toUpperCase()}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Features */}
+                  <div className="mt-6">
+                    <Label className="text-base font-semibold mb-3 block">Key Features</Label>
+                    <div className="grid grid-cols-2 gap-3">
+                      {selectedConverter.features.map((feature, idx) => (
+                        <div key={idx} className="flex items-center gap-2 p-2 bg-gradient-to-r from-gray-50 to-blue-50 rounded-lg">
+                          <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                          <span className="text-sm">{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* File Upload Section */}
+              <Card className="bg-white/50 backdrop-blur-sm border-0 shadow-lg">
+                <CardHeader className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-t-lg">
+                  <CardTitle className="flex items-center gap-3">
+                    <Upload className="w-5 h-5" />
+                    Upload Files
+                    <Badge variant="secondary" className="bg-white/20 text-white ml-auto">
+                      {selectedConverter.fromFormat.join(', ')} only
+                    </Badge>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-6">
+                  {/* Upload Zone */}
+                  <div
+                    className="relative border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-300 hover:border-blue-400 hover:bg-gradient-to-br hover:from-blue-50 hover:to-indigo-50"
+                    onDragEnter={handleModalDrag}
+                    onDragLeave={handleModalDrag}
+                    onDragOver={handleModalDrag}
+                    onDrop={handleModalDrop}
+                  >
+                    <div className="space-y-4">
+                      <div className={`w-16 h-16 mx-auto rounded-full bg-gradient-to-br ${selectedConverter.gradient} flex items-center justify-center`}>
+                        <Upload className="w-8 h-8 text-white" />
+                      </div>
+                      <div>
+                        <p className="text-lg font-semibold mb-2">Drop files here or click to browse</p>
+                        <p className="text-sm text-muted-foreground">
+                          Supports: {selectedConverter.fromFormat.map(f => f.toUpperCase()).join(', ')} • Max: {selectedConverter.maxFileSize}
+                        </p>
+                      </div>
+                      <Button
+                        onClick={() => modalFileInputRef.current?.click()}
+                        className={`bg-gradient-to-r ${selectedConverter.gradient} hover:shadow-lg transition-all duration-300`}
+                      >
+                        <Upload className="w-4 h-4 mr-2" />
+                        Browse Files
+                      </Button>
+                    </div>
+                  </div>
+
+                  <input
+                    ref={modalFileInputRef}
+                    type="file"
+                    multiple
+                    accept={selectedConverter.fromFormat.map(f => `.${f}`).join(',')}
+                    onChange={handleModalFileInput}
+                    className="hidden"
+                  />
+
+                  {/* Selected Files */}
+                  {modalFiles.length > 0 && (
+                    <div className="mt-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <Label className="font-semibold">Selected Files ({modalFiles.length})</Label>
+                        <div className="text-sm text-muted-foreground">
+                          Total: {formatFileSize(modalFiles.reduce((acc, file) => acc + file.size, 0))}
+                        </div>
+                      </div>
+                      <div className="space-y-3 max-h-40 overflow-y-auto">
+                        {modalFiles.map((file, index) => (
+                          <div key={index} className="flex items-center justify-between p-3 bg-white rounded-lg shadow-sm border">
+                            <div className="flex items-center gap-3">
+                              <div className={`p-2 rounded-lg bg-gradient-to-br ${selectedConverter.gradient}`}>
+                                <FileText className="w-4 h-4 text-white" />
+                              </div>
+                              <div>
+                                <span className="font-medium text-sm">{file.name}</span>
+                                <div className="flex items-center gap-4 text-xs text-muted-foreground mt-1">
+                                  <Badge variant="secondary">{formatFileSize(file.size)}</Badge>
+                                  <span>{file.type || 'Unknown'}</span>
+                                </div>
+                              </div>
+                            </div>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => removeModalFile(index)}
+                              className="text-red-500 hover:text-red-700"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Advanced Settings */}
+              <Card className="bg-white/50 backdrop-blur-sm border-0 shadow-lg">
+                <CardHeader className="bg-gradient-to-r from-violet-500 to-purple-500 text-white rounded-t-lg">
+                  <CardTitle className="flex items-center gap-3">
+                    <Settings className="w-5 h-5" />
+                    Conversion Settings
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Quality Settings */}
+                    <div className="space-y-4">
+                      <Label className="text-base font-semibold">Quality Settings</Label>
+                      <div className="space-y-4">
+                        <div>
+                          <Label className="text-sm font-medium">Output Quality: {conversionSettings.quality}%</Label>
+                          <Slider
+                            value={[conversionSettings.quality]}
+                            onValueChange={(value) => setConversionSettings(prev => ({ ...prev, quality: value[0] }))}
+                            max={100}
+                            min={10}
+                            step={5}
+                            className="mt-2"
+                          />
+                          <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                            <span>Faster</span>
+                            <span>Better Quality</span>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <Label className="text-sm font-medium">Compression: {conversionSettings.compression}%</Label>
+                          <Slider
+                            value={[conversionSettings.compression]}
+                            onValueChange={(value) => setConversionSettings(prev => ({ ...prev, compression: value[0] }))}
+                            max={95}
+                            min={0}
+                            step={5}
+                            className="mt-2"
+                          />
+                          <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                            <span>Larger File</span>
+                            <span>Smaller File</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Advanced Options */}
+                    <div className="space-y-4">
+                      <Label className="text-base font-semibold">Advanced Options</Label>
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between p-3 bg-gradient-to-r from-gray-50 to-blue-50 rounded-lg">
+                          <div>
+                            <Label className="text-sm font-medium">Preserve Metadata</Label>
+                            <p className="text-xs text-muted-foreground">Keep original file information</p>
+                          </div>
+                          <Switch
+                            checked={conversionSettings.preserveMetadata}
+                            onCheckedChange={(checked) => setConversionSettings(prev => ({ ...prev, preserveMetadata: checked }))}
+                          />
+                        </div>
+                        
+                        <div className="flex items-center justify-between p-3 bg-gradient-to-r from-gray-50 to-green-50 rounded-lg">
+                          <div>
+                            <Label className="text-sm font-medium">Optimize Size</Label>
+                            <p className="text-xs text-muted-foreground">Reduce file size automatically</p>
+                          </div>
+                          <Switch
+                            checked={conversionSettings.optimizeSize}
+                            onCheckedChange={(checked) => setConversionSettings(prev => ({ ...prev, optimizeSize: checked }))}
+                          />
+                        </div>
+                        
+                        <div className="flex items-center justify-between p-3 bg-gradient-to-r from-gray-50 to-purple-50 rounded-lg">
+                          <div>
+                            <Label className="text-sm font-medium">Enhance Quality</Label>
+                            <p className="text-xs text-muted-foreground">AI-powered quality enhancement</p>
+                          </div>
+                          <Switch
+                            checked={conversionSettings.enhanceQuality}
+                            onCheckedChange={(checked) => setConversionSettings(prev => ({ ...prev, enhanceQuality: checked }))}
+                          />
+                        </div>
+
+                        {selectedConverter.isPro && (
+                          <div className="flex items-center justify-between p-3 bg-gradient-to-r from-gray-50 to-pink-50 rounded-lg">
+                            <div>
+                              <Label className="text-sm font-medium">Add Watermark</Label>
+                              <p className="text-xs text-muted-foreground">Professional watermarking</p>
+                            </div>
+                            <Switch
+                              checked={conversionSettings.watermark}
+                              onCheckedChange={(checked) => setConversionSettings(prev => ({ ...prev, watermark: checked }))}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Action Buttons */}
+              <div className="flex gap-4 pt-4">
+                <Button
+                  variant="outline"
+                  onClick={() => setIsConfigModalOpen(false)}
+                  className="flex-1"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={startModalConversion}
+                  disabled={modalFiles.length === 0}
+                  className={`flex-1 bg-gradient-to-r ${selectedConverter.gradient} hover:shadow-lg transition-all duration-300 disabled:opacity-50`}
+                >
+                  <Zap className="w-4 h-4 mr-2" />
+                  Convert {modalFiles.length} File{modalFiles.length !== 1 ? 's' : ''}
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
