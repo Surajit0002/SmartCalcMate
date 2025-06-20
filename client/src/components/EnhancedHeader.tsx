@@ -112,7 +112,7 @@ export default function EnhancedHeader() {
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center space-x-1">
+            <nav className="hidden lg:flex items-center gap-2">
               {navigationItems.map((item, index) => {
                 const Icon = item.icon;
                 const isActive = location === item.href;
@@ -120,7 +120,7 @@ export default function EnhancedHeader() {
                   <Link key={item.href} href={item.href}>
                     <Button
                       variant={isActive ? "default" : "ghost"}
-                      className={`relative group transition-all duration-300 transform hover:scale-105 ${
+                      className={`relative group transition-all duration-300 transform hover:scale-105 px-4 py-2 ${
                         isActive 
                           ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg hover:shadow-xl' 
                           : 'hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-gray-800 dark:hover:to-gray-700 hover:shadow-md'
@@ -128,7 +128,7 @@ export default function EnhancedHeader() {
                       style={{ animationDelay: `${index * 100}ms` }}
                     >
                       <Icon className={`h-4 w-4 mr-2 transition-transform duration-300 ${isActive ? 'animate-pulse' : 'group-hover:scale-110'}`} />
-                      <span className="font-medium">{item.label}</span>
+                      <span className="font-medium whitespace-nowrap">{item.label}</span>
                       {item.badge && (
                         <Badge 
                           variant={item.hot ? "destructive" : "secondary"} 
@@ -193,13 +193,13 @@ export default function EnhancedHeader() {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onFocus={() => setShowSearch(true)}
                     onBlur={() => setTimeout(() => setShowSearch(false), 200)}
-                    className="pl-10 w-48 sm:w-56 lg:w-64 xl:w-72 transition-all duration-500 ease-out focus:w-56 sm:focus:w-64 lg:focus:w-80 xl:focus:w-96 focus:shadow-lg focus:ring-2 focus:ring-blue-500/20 bg-gray-50/80 dark:bg-gray-800/80 backdrop-blur-sm border-gray-200/50 dark:border-gray-700/50 hover:bg-white dark:hover:bg-gray-800 hover:border-blue-300 dark:hover:border-blue-600"
+                    className="pl-10 pr-10 w-48 sm:w-56 lg:w-64 xl:w-72 transition-all duration-500 ease-out focus:w-56 sm:focus:w-64 lg:focus:w-80 xl:focus:w-96 focus:shadow-lg focus:ring-2 focus:ring-blue-500/20 bg-gray-50/80 dark:bg-gray-800/80 backdrop-blur-sm border-gray-200/50 dark:border-gray-700/50 hover:bg-white dark:hover:bg-gray-800 hover:border-blue-300 dark:hover:border-blue-600 rounded-lg"
                   />
                   {searchQuery && (
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 hover:bg-gray-200 dark:hover:bg-gray-700"
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full"
                       onClick={() => setSearchQuery('')}
                     >
                       <X className="h-3 w-3" />
@@ -282,68 +282,68 @@ export default function EnhancedHeader() {
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent dark:via-white/5 animate-pulse"></div>
           
           <div className="container-responsive relative">
-            <div className="flex items-center py-3 space-x-6 overflow-x-auto custom-scrollbar">
+            <div className="flex items-center py-4 gap-4 overflow-x-auto scrollbar-hide">
               {/* Enhanced label */}
-              <div className="flex items-center space-x-2 text-sm font-bold text-gray-700 dark:text-gray-300 whitespace-nowrap bg-gradient-to-r from-yellow-400 to-orange-400 px-3 py-1.5 rounded-full shadow-lg">
+              <div className="flex items-center gap-2 text-sm font-bold text-gray-700 dark:text-gray-300 whitespace-nowrap bg-gradient-to-r from-yellow-400 to-orange-400 px-4 py-2 rounded-full shadow-lg flex-shrink-0">
                 <Zap className="h-4 w-4 text-white animate-pulse" />
                 <span className="text-white font-bold">Featured</span>
                 <TrendingUp className="h-3 w-3 text-white" />
               </div>
               
               {/* Dynamic calculator cards */}
-              {featuredCalculators.slice(0, 8).map((calc, index) => {
-                const IconComponent = getIconComponent(calc.icon);
-                return (
-                  <Link key={calc.id} href={`/calculator/${calc.id}`}>
-                    <div className="group relative">
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="whitespace-nowrap h-auto p-3 bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-700 border border-gray-200/50 dark:border-gray-600/50 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 backdrop-blur-sm"
-                        style={{ animationDelay: `${index * 100}ms` }}
-                      >
-                        <div className="flex items-center space-x-2">
-                          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white shadow-lg">
-                            <IconComponent className="h-4 w-4" />
-                          </div>
-                          <div className="flex flex-col items-start">
-                            <span className="font-semibold text-gray-900 dark:text-white text-xs leading-tight">
-                              {calc.name}
-                            </span>
-                            <div className="flex items-center space-x-1">
-                              <Star className="h-2.5 w-2.5 text-yellow-500 fill-current" />
-                              <Star className="h-2.5 w-2.5 text-yellow-500 fill-current" />
-                              <Star className="h-2.5 w-2.5 text-yellow-500 fill-current" />
-                              <Star className="h-2.5 w-2.5 text-yellow-500 fill-current" />
-                              <Star className="h-2.5 w-2.5 text-yellow-500 fill-current" />
+              <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide">
+                {featuredCalculators.slice(0, 8).map((calc, index) => {
+                  const IconComponent = getIconComponent(calc.icon);
+                  return (
+                    <Link key={calc.id} href={`/calculator/${calc.id}`}>
+                      <div className="group relative flex-shrink-0">
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="whitespace-nowrap h-auto p-3 bg-white/90 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-700 border border-gray-200/50 dark:border-gray-600/50 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 backdrop-blur-sm min-w-[140px]"
+                          style={{ animationDelay: `${index * 100}ms` }}
+                        >
+                          <div className="flex items-center gap-2.5">
+                            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white shadow-lg flex-shrink-0">
+                              <IconComponent className="h-4 w-4" />
+                            </div>
+                            <div className="flex flex-col items-start min-w-0">
+                              <span className="font-semibold text-gray-900 dark:text-white text-xs leading-tight truncate max-w-[80px]">
+                                {calc.name}
+                              </span>
+                              <div className="flex items-center gap-0.5 mt-0.5">
+                                {[...Array(5)].map((_, i) => (
+                                  <Star key={i} className="h-2.5 w-2.5 text-yellow-500 fill-current" />
+                                ))}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </Button>
-                      
-                      {/* Hover effect overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-                      
-                      {/* Popular badge for first few items */}
-                      {index < 3 && (
-                        <div className="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs px-1.5 py-0.5 rounded-full font-bold animate-pulse">
-                          HOT
-                        </div>
-                      )}
-                    </div>
-                  </Link>
-                );
-              })}
+                        </Button>
+                        
+                        {/* Hover effect overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                        
+                        {/* Popular badge for first few items */}
+                        {index < 3 && (
+                          <div className="absolute -top-2 -right-2 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs px-2 py-1 rounded-full font-bold animate-pulse shadow-lg">
+                            HOT
+                          </div>
+                        )}
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
               
               {/* View All button */}
-              <Link href="/categories">
+              <Link href="/categories" className="flex-shrink-0">
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className="whitespace-nowrap bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0 hover:from-blue-700 hover:to-purple-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                  className="whitespace-nowrap bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0 hover:from-blue-700 hover:to-purple-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 px-4 py-2"
                 >
                   <Grid3X3 className="h-4 w-4 mr-2" />
-                  View All
+                  <span className="font-semibold">View All</span>
                   <span className="ml-1 text-xs opacity-75">(15+)</span>
                 </Button>
               </Link>
@@ -351,8 +351,8 @@ export default function EnhancedHeader() {
           </div>
           
           {/* Gradient fade edges for better scrolling indication */}
-          <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-blue-50 to-transparent dark:from-gray-800 pointer-events-none"></div>
-          <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-purple-50 to-transparent dark:from-gray-900 pointer-events-none"></div>
+          <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-blue-50 to-transparent dark:from-gray-800 pointer-events-none z-10"></div>
+          <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-purple-50 to-transparent dark:from-gray-900 pointer-events-none z-10"></div>
         </div>
       </header>
 
