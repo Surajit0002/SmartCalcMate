@@ -18,9 +18,9 @@ import InvestmentCalculator from "@/components/calculators/InvestmentCalculator"
 import LoanComparison from "@/components/calculators/LoanComparison";
 import CurrencyConverter from "@/components/calculators/CurrencyConverter";
 import AdvancedUnitConverter from "@/components/calculators/AdvancedUnitConverter";
-import FileConverterHub from "@/components/calculators/FileConverterHub";
-import TextCodeConverterHub from "@/components/calculators/TextCodeConverterHub";
-import MediaConverterHub from "@/components/calculators/MediaConverterHub";
+import ComprehensiveUnitConverter from "@/components/calculators/ComprehensiveUnitConverter";
+import AdvancedTextConverters from "@/components/calculators/AdvancedTextConverters";
+import ComprehensiveFinancialSuite from "@/components/calculators/ComprehensiveFinancialSuite";
 import AIConverterHub from "@/components/calculators/AIConverterHub";
 
 interface CalculatorViewProps {
@@ -47,190 +47,115 @@ export default function CalculatorView({ params }: CalculatorViewProps) {
   };
 
   const renderCalculator = () => {
+    // Financial Tools - Use comprehensive suite for financial calculators
+    const financialTools = [
+      'emi', 'sip', 'compound-interest', 'mortgage', 'investment', 
+      'loan-comparison', 'loan-interest', 'discount-calculator',
+      'currency-converter', 'crypto-converter', 'currency-rate-history', 'gold-silver-rate'
+    ];
+
+    // Unit Converters - Use comprehensive converter
+    const unitConverters = [
+      'length-converter', 'weight-converter', 'temperature-converter', 'time-converter',
+      'speed-converter', 'area-converter', 'volume-converter', 'data-size-converter',
+      'power-converter', 'pressure-converter'
+    ];
+
+    // Text & Code Tools
+    const textTools = [
+      'text-case-converter', 'text-reverser', 'remove-duplicate-lines', 'slug-generator',
+      'text-capitalizer', 'binary-text', 'unicode-ascii', 'rot13-base64',
+      'html-markdown', 'html-css-js-beautifier', 'sql-formatter', 'json-formatter',
+      'javascript-obfuscator', 'regex-tester', 'text-diff-checker', 'uuid-generator',
+      'qr-generator', 'qr-reader', 'color-picker', 'url-shortener', 'metadata-extractor'
+    ];
+
+    // AI-Powered Tools
+    const aiTools = [
+      'ocr', 'speech-to-text', 'text-to-speech', 'ai-translator', 'text-translator',
+      'language-detector', 'code-explainer', 'document-summarizer', 'audio-transcriber'
+    ];
+
+    // Route to appropriate component based on category
+    if (financialTools.includes(params.calculator)) {
+      return <ComprehensiveFinancialSuite />;
+    }
+
+    if (unitConverters.includes(params.calculator)) {
+      return <ComprehensiveUnitConverter />;
+    }
+
+    if (textTools.includes(params.calculator)) {
+      return <AdvancedTextConverters />;
+    }
+
+    if (aiTools.includes(params.calculator)) {
+      return <AIConverterHub />;
+    }
+
+    // Individual calculator components for specific tools
     switch (params.calculator) {
-      // Original Calculators
-      case 'emi':
-        return <EMICalculator />;
-      case 'bmi':
-        return <BMICalculator />;
-      case 'percentage':
-        return <PercentageCalculator />;
-      case 'tip':
-        return <TipCalculator />;
-      case 'sip':
-        return <SIPCalculator />;
-      case 'compound-interest':
-        return <CompoundInterestCalculator />;
-      case 'scientific':
-        return <ScientificCalculator />;
-      case 'bmr':
-        return <BMRCalculator />;
-      case 'age':
-        return <AgeCalculator />;
-      case 'unit-converter':
-        return <UnitConverter />;
-      case 'mortgage':
-        return <MortgageCalculator />;
-      case 'investment':
-        return <InvestmentCalculator />;
-      case 'loan-comparison':
-        return <LoanComparison />;
-      case 'currency-converter':
-        return <CurrencyConverter />;
-
-      // Advanced Unit Converters
-      case 'length-converter':
-      case 'weight-converter':
-      case 'temperature-converter':
-      case 'time-converter':
-      case 'speed-converter':
-      case 'area-converter':
-      case 'volume-converter':
-      case 'data-converter':
-      case 'power-converter':
-      case 'pressure-converter':
-        return <AdvancedUnitConverter />;
-
-      // File Converters
-      case 'pdf-to-word':
-      case 'word-to-pdf':
-      case 'pdf-to-excel':
-      case 'pdf-to-image':
-      case 'image-to-pdf':
-      case 'text-to-pdf':
-      case 'csv-to-excel':
-      case 'csv-to-json':
-      case 'json-to-csv':
-      case 'csv-to-xml':
-      case 'docx-to-odt':
-      case 'merge-pdf':
-      case 'split-pdf':
-      case 'compress-pdf':
-      case 'remove-pdf-password':
-        return <FileConverterHub />;
-
-      // Media Converters
-      case 'video-to-mp3':
-      case 'audio-converter':
-      case 'video-converter':
-      case 'audio-compressor':
-      case 'video-compressor':
-      case 'mp4-to-gif':
-      case 'gif-to-mp4':
-      case 'youtube-to-mp3':
-      case 'youtube-thumbnail':
-        return <MediaConverterHub />;
-
-      // Text & Code Converters
-      case 'text-case':
-      case 'binary-text':
-      case 'text-reverser':
-      case 'slug-generator':
-      case 'text-capitalizer':
-      case 'remove-lines':
-      case 'text-encryptor':
-      case 'json-xml':
-      case 'json-csv':
-      case 'html-markdown':
-      case 'code-beautifier':
-      case 'sql-formatter':
-      case 'js-obfuscator':
-      case 'qr-generator':
-      case 'qr-scanner':
-      case 'regex-tester':
-      case 'uuid-generator':
-      case 'unicode-converter':
-        return <TextCodeConverterHub />;
-
-      // AI-Powered Converters
-      case 'ocr':
-      case 'speech-to-text':
-      case 'text-to-speech':
-      case 'ai-translator':
-      case 'code-explainer':
-      case 'pdf-summarizer':
-      case 'audio-transcriber':
-        return <AIConverterHub />;
-
-      // Cryptocurrency & Currency
-      case 'crypto-converter':
-      case 'currency-history':
-      case 'gold-converter':
-        return <CurrencyConverter />;
-
-      // Mathematical Converters
-      case 'roman-decimal':
-      case 'binary-decimal':
-        return <ScientificCalculator />;
-
-      // Finance Tools
-      case 'interest-calculator':
-      case 'discount-calculator':
-        return <EMICalculator />;
-
-      // Misc Converters
-      case 'ico-to-png':
-      case 'png-to-ico':
-      case 'vcf-to-csv':
-      case 'metadata-extractor':
-      case 'favicon-generator':
-      case 'youtube-timestamp-link':
-      case 'link-shortener':
-      case 'text-diff-checker':
-        return <TextCodeConverterHub />;
-
+      case 'bmi': return <BMICalculator />;
+      case 'bmr': return <BMRCalculator />;
+      case 'age': return <AgeCalculator />;
+      case 'scientific': return <ScientificCalculator />;
+      case 'percentage': return <PercentageCalculator />;
+      case 'tip': return <TipCalculator />;
+      case 'unit-converter': return <UnitConverter />;
       default:
-        return (
-          <div className="text-center py-12 space-y-4">
-            <div className="w-16 h-16 mx-auto bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 rounded-full flex items-center justify-center">
-              <Zap className="w-8 h-8 text-blue-600" />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Tool Coming Soon</h3>
-            <p className="text-gray-600 dark:text-gray-300 max-w-md mx-auto">
-              This advanced tool is currently being developed and will be available soon with powerful features and intuitive interface.
-            </p>
-            <Badge variant="outline" className="bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30">
-              <Crown className="w-3 h-3 mr-1" />
-              Premium Feature
-            </Badge>
-          </div>
-        );
+        return <div className="text-center py-12">
+          <h2 className="text-2xl font-bold mb-4">Calculator Coming Soon</h2>
+          <p className="text-muted-foreground">This advanced calculator is being developed and will be available soon.</p>
+        </div>;
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="mb-8">
-        <Button
-          variant="ghost"
-          onClick={handleBack}
-          className="text-primary hover:text-primary/80 mb-4 p-0"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to {calculator.category.charAt(0).toUpperCase() + calculator.category.slice(1)}
-        </Button>
-        <div className="flex items-center gap-3 mb-4">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white">{calculator.name}</h2>
-          {calculator.isNew && (
-            <Badge variant="outline" className="bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900/30 dark:to-blue-900/30 text-green-700 dark:text-green-300">
-              <Star className="w-3 h-3 mr-1" />
-              NEW
-            </Badge>
-          )}
-          {calculator.isPro && (
-            <Badge variant="outline" className="bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 text-purple-700 dark:text-purple-300">
-              <Crown className="w-3 h-3 mr-1" />
-              PRO
-            </Badge>
-          )}
-        </div>
-        
-        <p className="text-gray-600 dark:text-gray-300">
-          {calculator.function || calculator.description}
-        </p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className="container mx-auto px-4 py-8">
+        <div className="mb-8">
+          <div className="flex items-center gap-4 mb-6">
+            <Button variant="outline" onClick={handleBack} className="gap-2">
+              <ArrowLeft className="w-4 h-4" />
+              Back to Category
+            </Button>
+            
+            <div className="flex items-center gap-2">
+              {calculator.isPro && (
+                <Badge variant="secondary" className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+                  <Crown className="w-3 h-3 mr-1" />
+                  Pro
+                </Badge>
+              )}
+              {calculator.isNew && (
+                <Badge variant="secondary" className="bg-gradient-to-r from-green-500 to-blue-500 text-white">
+                  <Zap className="w-3 h-3 mr-1" />
+                  New
+                </Badge>
+              )}
+              {calculator.featured && (
+                <Badge variant="secondary" className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white">
+                  <Star className="w-3 h-3 mr-1" />
+                  Featured
+                </Badge>
+              )}
+            </div>
+          </div>
 
-      {renderCalculator()}
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent mb-4">
+              {calculator.name}
+            </h1>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+              {calculator.description}
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/20 p-6">
+          {renderCalculator()}
+        </div>
+      </div>
     </div>
   );
 }
