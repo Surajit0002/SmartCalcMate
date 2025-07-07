@@ -5,32 +5,110 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Card, CardContent } from '@/components/ui/card';
 import { 
   Calculator, 
   Menu, 
   X, 
   Search, 
-  Heart, 
-  History, 
   Bookmark,
   Bell,
   User,
   Home,
   Grid3X3,
-  Clock,
-  Settings
+  Settings,
+  ChevronLeft,
+  ChevronRight,
+  Star,
+  Trash2,
+  Download,
+  Edit,
+  Eye,
+  Shield,
+  CreditCard,
+  LogOut,
+  DollarSign,
+  TrendingUp,
+  Percent,
+  Building,
+  PiggyBank
 } from 'lucide-react';
 import { useTheme } from '@/hooks/useTheme';
 import SettingsDialog from './SettingsDialog';
 import { calculators } from '@/lib/calculatorData';
+
+// Mock data for notifications
+const mockNotifications = [
+  {
+    id: 1,
+    title: 'New Calculator Added',
+    message: 'Investment ROI Calculator is now available',
+    time: '2 minutes ago',
+    type: 'update',
+    unread: true
+  },
+  {
+    id: 2,
+    title: 'Feature Update',
+    message: 'Currency converter now supports 50+ currencies',
+    time: '1 hour ago',
+    type: 'feature',
+    unread: true
+  },
+  {
+    id: 3,
+    title: 'Calculation Saved',
+    message: 'Your EMI calculation has been saved',
+    time: '3 hours ago',
+    type: 'save',
+    unread: false
+  },
+  {
+    id: 4,
+    title: 'Profile Updated',
+    message: 'Your profile settings have been updated',
+    time: '1 day ago',
+    type: 'profile',
+    unread: false
+  }
+];
+
+// Mock saved tools
+const mockSavedTools = [
+  { id: 'emi', name: 'EMI Calculator', category: 'Finance', lastUsed: '2 hours ago' },
+  { id: 'bmi', name: 'BMI Calculator', category: 'Health', lastUsed: '1 day ago' },
+  { id: 'currency', name: 'Currency Converter', category: 'Finance', lastUsed: '3 days ago' },
+  { id: 'unit', name: 'Unit Converter', category: 'Daily', lastUsed: '1 week ago' }
+];
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [showSearch, setShowSearch] = useState(false);
+  const [notificationOpen, setNotificationOpen] = useState(false);
+  const [savedToolsOpen, setSavedToolsOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [location] = useLocation();
   const { theme } = useTheme();
+
+  // Featured tools for slider
+  const featuredTools = [
+    { id: 'emi', name: 'EMI Calculator', icon: <DollarSign className="h-4 w-4" /> },
+    { id: 'investment', name: 'Investment Calculator', icon: <TrendingUp className="h-4 w-4" /> },
+    { id: 'mortgage', name: 'Mortgage Calculator', icon: <Building className="h-4 w-4" /> },
+    { id: 'compound', name: 'Compound Interest', icon: <Percent className="h-4 w-4" /> },
+    { id: 'sip', name: 'SIP Calculator', icon: <PiggyBank className="h-4 w-4" /> },
+    { id: 'currency', name: 'Currency Converter', icon: <DollarSign className="h-4 w-4" /> },
+    { id: 'bmi', name: 'BMI Calculator', icon: <Calculator className="h-4 w-4" /> },
+    { id: 'unit', name: 'Unit Converter', icon: <Calculator className="h-4 w-4" /> }
+  ];
+
+  const toolsPerSlide = 4;
+  const totalSlides = Math.ceil(featuredTools.length / toolsPerSlide);
 
   useEffect(() => {
     if (searchQuery.length > 0) {
@@ -46,16 +124,25 @@ export default function Header() {
   }, [searchQuery]);
 
   const navigationItems = [
-    { href: '/', label: 'Home', icon: Home, badge: null },
-    { href: '/categories', label: 'Categories', icon: Grid3X3, badge: '15+' },
-    { href: '/favorites', label: 'Favorites', icon: Heart, badge: '3' },
-    { href: '/history', label: 'History', icon: Clock, badge: null },
-    { href: '/profile', label: 'Profile', icon: User, badge: 'New' },
+    { href: '/', label: 'Home', icon: Home },
+    { href: '/categories', label: 'Categories', icon: Grid3X3 },
+    { href: '/financial-suite', label: 'Financial Suite', icon: DollarSign },
+    { href: '/all-tools', label: 'All Tools', icon: Calculator }
   ];
 
   const isActive = (path: string) => {
     return location === path || (path !== '/' && location.startsWith(path));
   };
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % totalSlides);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
+  };
+
+  const unreadCount = mockNotifications.filter(n => n.unread).length;
 
   return (
     <>
@@ -103,14 +190,6 @@ export default function Header() {
                     >
                       <Icon className="h-4 w-4 mr-2" />
                       {item.label}
-                      {item.badge && (
-                        <Badge 
-                          variant="secondary" 
-                          className="ml-2 px-1.5 py-0.5 text-xs bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
-                        >
-                          {item.badge}
-                        </Badge>
-                      )}
                     </Button>
                   </Link>
                 );
@@ -166,22 +245,132 @@ export default function Header() {
 
               {/* Action Buttons */}
               <div className="hidden lg:flex items-center space-x-1">
-                <Button variant="ghost" size="icon" className="relative">
-                  <Bell className="h-5 w-5" />
-                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></div>
-                </Button>
-                <Button variant="ghost" size="icon">
-                  <Bookmark className="h-5 w-5" />
-                </Button>
+                
+                {/* Notifications */}
+                <Dialog open={notificationOpen} onOpenChange={setNotificationOpen}>
+                  <DialogTrigger asChild>
+                    <Button variant="ghost" size="icon" className="relative">
+                      <Bell className="h-5 w-5" />
+                      {unreadCount > 0 && (
+                        <Badge className="absolute -top-1 -right-1 px-1 min-w-[18px] h-5 text-xs bg-red-500 text-white">
+                          {unreadCount}
+                        </Badge>
+                      )}
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-md">
+                    <DialogHeader>
+                      <DialogTitle>Notifications</DialogTitle>
+                    </DialogHeader>
+                    <ScrollArea className="h-80">
+                      <div className="space-y-3">
+                        {mockNotifications.map((notification) => (
+                          <Card key={notification.id} className={`p-3 ${notification.unread ? 'bg-blue-50 dark:bg-blue-950' : ''}`}>
+                            <div className="flex items-start space-x-3">
+                              <div className={`w-2 h-2 rounded-full mt-2 ${notification.unread ? 'bg-blue-600' : 'bg-gray-300'}`} />
+                              <div className="flex-1">
+                                <h4 className="font-medium text-sm">{notification.title}</h4>
+                                <p className="text-sm text-muted-foreground">{notification.message}</p>
+                                <p className="text-xs text-muted-foreground mt-1">{notification.time}</p>
+                              </div>
+                            </div>
+                          </Card>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  </DialogContent>
+                </Dialog>
+
+                {/* Saved Tools */}
+                <Dialog open={savedToolsOpen} onOpenChange={setSavedToolsOpen}>
+                  <DialogTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                      <Bookmark className="h-5 w-5" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-md">
+                    <DialogHeader>
+                      <DialogTitle>Saved Tools</DialogTitle>
+                    </DialogHeader>
+                    <ScrollArea className="h-80">
+                      <div className="space-y-3">
+                        {mockSavedTools.map((tool) => (
+                          <Card key={tool.id} className="p-3">
+                            <div className="flex items-center justify-between">
+                              <div className="flex-1">
+                                <h4 className="font-medium text-sm">{tool.name}</h4>
+                                <p className="text-xs text-muted-foreground">{tool.category} • {tool.lastUsed}</p>
+                              </div>
+                              <div className="flex items-center space-x-1">
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Eye className="h-4 w-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </div>
+                          </Card>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  </DialogContent>
+                </Dialog>
               </div>
 
               {/* Settings */}
               <SettingsDialog />
 
-              {/* User Avatar */}
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <User className="h-5 w-5" />
-              </Button>
+              {/* Profile */}
+              <Dialog open={profileOpen} onOpenChange={setProfileOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="ghost" size="icon" className="rounded-full">
+                    <User className="h-5 w-5" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>Profile</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    {/* Profile Header */}
+                    <div className="flex items-center space-x-4 p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950 rounded-lg">
+                      <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                        JD
+                      </div>
+                      <div>
+                        <h3 className="font-semibold">John Doe</h3>
+                        <p className="text-sm text-muted-foreground">john.doe@example.com</p>
+                      </div>
+                    </div>
+
+                    {/* Profile Actions */}
+                    <div className="space-y-2">
+                      <Button variant="ghost" className="w-full justify-start">
+                        <Edit className="h-4 w-4 mr-3" />
+                        Edit Profile
+                      </Button>
+                      <Button variant="ghost" className="w-full justify-start">
+                        <Shield className="h-4 w-4 mr-3" />
+                        Privacy & Security
+                      </Button>
+                      <Button variant="ghost" className="w-full justify-start">
+                        <CreditCard className="h-4 w-4 mr-3" />
+                        Billing & Subscription
+                      </Button>
+                      <Button variant="ghost" className="w-full justify-start">
+                        <Download className="h-4 w-4 mr-3" />
+                        Export Data
+                      </Button>
+                      <Separator />
+                      <Button variant="ghost" className="w-full justify-start text-red-600 hover:text-red-700">
+                        <LogOut className="h-4 w-4 mr-3" />
+                        Sign Out
+                      </Button>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
 
               {/* Mobile Menu Toggle */}
               <Button
@@ -196,26 +385,76 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Featured Tools Bar */}
+        {/* Featured Tools Slider */}
         <div className="border-t border-gray-200/50 dark:border-gray-700/50 bg-gray-50/50 dark:bg-gray-800/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center py-2 gap-3 overflow-x-auto scrollbar-hide">
-              <div className="flex items-center gap-2 text-sm font-semibold text-blue-600 dark:text-blue-400 whitespace-nowrap">
+            <div className="flex items-center py-3">
+              <div className="flex items-center gap-2 text-sm font-semibold text-blue-600 dark:text-blue-400 whitespace-nowrap mr-4">
                 <Calculator className="h-4 w-4" />
                 <span>Featured Tools:</span>
               </div>
               
-              <div className="flex items-center gap-2">
-                {['EMI Calculator', 'Currency Converter', 'BMI Calculator', 'Unit Converter', 'Tip Calculator'].map((tool, index) => (
-                  <Button 
-                    key={tool}
-                    variant="outline" 
-                    size="sm"
-                    className="whitespace-nowrap text-xs bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 hover:bg-blue-50 dark:hover:bg-gray-700 h-7"
+              <div className="flex-1 relative">
+                <div className="flex items-center">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 mr-2"
+                    onClick={prevSlide}
+                    disabled={currentSlide === 0}
                   >
-                    {tool}
+                    <ChevronLeft className="h-4 w-4" />
                   </Button>
-                ))}
+                  
+                  <div className="flex-1 overflow-hidden">
+                    <div 
+                      className="flex transition-transform duration-300 ease-in-out gap-2"
+                      style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+                    >
+                      {Array.from({ length: totalSlides }, (_, slideIndex) => (
+                        <div key={slideIndex} className="flex gap-2 min-w-full">
+                          {featuredTools
+                            .slice(slideIndex * toolsPerSlide, (slideIndex + 1) * toolsPerSlide)
+                            .map((tool) => (
+                              <Link key={tool.id} href={`/calculator/${tool.id}`} className="flex-1">
+                                <Button 
+                                  variant="outline" 
+                                  size="sm"
+                                  className="w-full text-xs bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 hover:bg-blue-50 dark:hover:bg-gray-700 h-8"
+                                >
+                                  {tool.icon}
+                                  <span className="ml-2 truncate">{tool.name}</span>
+                                </Button>
+                              </Link>
+                            ))}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 ml-2"
+                    onClick={nextSlide}
+                    disabled={currentSlide === totalSlides - 1}
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </div>
+                
+                {/* Slider Indicators */}
+                <div className="flex justify-center mt-2 space-x-1">
+                  {Array.from({ length: totalSlides }, (_, index) => (
+                    <button
+                      key={index}
+                      className={`w-2 h-2 rounded-full transition-colors ${
+                        index === currentSlide ? 'bg-blue-600' : 'bg-gray-300'
+                      }`}
+                      onClick={() => setCurrentSlide(index)}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -273,11 +512,6 @@ export default function Header() {
                     >
                       <Icon className="h-4 w-4 mr-3" />
                       {item.label}
-                      {item.badge && (
-                        <Badge variant="secondary" className="ml-auto">
-                          {item.badge}
-                        </Badge>
-                      )}
                     </Button>
                   </Link>
                 );
@@ -285,14 +519,20 @@ export default function Header() {
               
               <Separator className="my-4" />
               
-              <Button variant="ghost" className="w-full justify-start">
+              <Button variant="ghost" className="w-full justify-start" onClick={() => {setNotificationOpen(true); setMobileMenuOpen(false);}}>
                 <Bell className="h-4 w-4 mr-3" />
                 Notifications
-                <Badge variant="destructive" className="ml-auto">2</Badge>
+                {unreadCount > 0 && (
+                  <Badge variant="destructive" className="ml-auto">{unreadCount}</Badge>
+                )}
               </Button>
-              <Button variant="ghost" className="w-full justify-start">
+              <Button variant="ghost" className="w-full justify-start" onClick={() => {setSavedToolsOpen(true); setMobileMenuOpen(false);}}>
                 <Bookmark className="h-4 w-4 mr-3" />
-                Bookmarks
+                Saved Tools
+              </Button>
+              <Button variant="ghost" className="w-full justify-start" onClick={() => {setProfileOpen(true); setMobileMenuOpen(false);}}>
+                <User className="h-4 w-4 mr-3" />
+                Profile
               </Button>
             </div>
           </div>
