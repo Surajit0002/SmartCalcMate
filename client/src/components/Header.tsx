@@ -388,72 +388,93 @@ export default function Header() {
         {/* Featured Tools Slider */}
         <div className="border-t border-gray-200/50 dark:border-gray-700/50 bg-gray-50/50 dark:bg-gray-800/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center py-3">
-              <div className="flex items-center gap-2 text-sm font-semibold text-blue-600 dark:text-blue-400 whitespace-nowrap mr-4">
-                <Calculator className="h-4 w-4" />
+            <div className="py-2">
+              <div className="flex items-center gap-2 text-xs font-medium text-blue-600 dark:text-blue-400 mb-2">
+                <Calculator className="h-3 w-3" />
                 <span>Featured Tools:</span>
               </div>
               
-              <div className="flex-1 relative">
-                <div className="flex items-center">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 mr-2"
-                    onClick={prevSlide}
-                    disabled={currentSlide === 0}
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                  </Button>
-                  
-                  <div className="flex-1 overflow-hidden">
-                    <div 
-                      className="flex transition-transform duration-300 ease-in-out gap-2"
-                      style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+              <div className="relative">
+                {/* Mobile View - Horizontal Scroll */}
+                <div className="md:hidden">
+                  <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
+                    {featuredTools.map((tool) => (
+                      <Link key={tool.id} href={`/calculator/${tool.id}`} className="flex-shrink-0">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          className="text-xs bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 hover:bg-blue-50 dark:hover:bg-gray-700 h-7 px-3 whitespace-nowrap"
+                        >
+                          {tool.icon}
+                          <span className="ml-1">{tool.name.split(' ')[0]}</span>
+                        </Button>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Desktop View - Controlled Slider */}
+                <div className="hidden md:block">
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-6 w-6 flex-shrink-0"
+                      onClick={prevSlide}
+                      disabled={currentSlide === 0}
                     >
-                      {Array.from({ length: totalSlides }, (_, slideIndex) => (
-                        <div key={slideIndex} className="flex gap-2 min-w-full">
-                          {featuredTools
-                            .slice(slideIndex * toolsPerSlide, (slideIndex + 1) * toolsPerSlide)
-                            .map((tool) => (
-                              <Link key={tool.id} href={`/calculator/${tool.id}`} className="flex-1">
-                                <Button 
-                                  variant="outline" 
-                                  size="sm"
-                                  className="w-full text-xs bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 hover:bg-blue-50 dark:hover:bg-gray-700 h-8"
-                                >
-                                  {tool.icon}
-                                  <span className="ml-2 truncate">{tool.name}</span>
-                                </Button>
-                              </Link>
-                            ))}
-                        </div>
-                      ))}
+                      <ChevronLeft className="h-3 w-3" />
+                    </Button>
+                    
+                    <div className="flex-1 overflow-hidden">
+                      <div 
+                        className="flex transition-transform duration-300 ease-in-out gap-2"
+                        style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+                      >
+                        {Array.from({ length: totalSlides }, (_, slideIndex) => (
+                          <div key={slideIndex} className="flex gap-2 min-w-full">
+                            {featuredTools
+                              .slice(slideIndex * toolsPerSlide, (slideIndex + 1) * toolsPerSlide)
+                              .map((tool) => (
+                                <Link key={tool.id} href={`/calculator/${tool.id}`} className="flex-1">
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    className="w-full text-xs bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 hover:bg-blue-50 dark:hover:bg-gray-700 h-7"
+                                  >
+                                    {tool.icon}
+                                    <span className="ml-1 truncate text-[10px]">{tool.name}</span>
+                                  </Button>
+                                </Link>
+                              ))}
+                          </div>
+                        ))}
+                      </div>
                     </div>
+                    
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-6 w-6 flex-shrink-0"
+                      onClick={nextSlide}
+                      disabled={currentSlide === totalSlides - 1}
+                    >
+                      <ChevronRight className="h-3 w-3" />
+                    </Button>
                   </div>
                   
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 ml-2"
-                    onClick={nextSlide}
-                    disabled={currentSlide === totalSlides - 1}
-                  >
-                    <ChevronRight className="h-4 w-4" />
-                  </Button>
-                </div>
-                
-                {/* Slider Indicators */}
-                <div className="flex justify-center mt-2 space-x-1">
-                  {Array.from({ length: totalSlides }, (_, index) => (
-                    <button
-                      key={index}
-                      className={`w-2 h-2 rounded-full transition-colors ${
-                        index === currentSlide ? 'bg-blue-600' : 'bg-gray-300'
-                      }`}
-                      onClick={() => setCurrentSlide(index)}
-                    />
-                  ))}
+                  {/* Slider Indicators */}
+                  <div className="flex justify-center mt-1 space-x-1">
+                    {Array.from({ length: totalSlides }, (_, index) => (
+                      <button
+                        key={index}
+                        className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                          index === currentSlide ? 'bg-blue-600' : 'bg-gray-300'
+                        }`}
+                        onClick={() => setCurrentSlide(index)}
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>

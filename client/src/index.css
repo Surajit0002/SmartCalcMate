@@ -74,6 +74,17 @@
   top: 0;
   left: 0;
   width: 100%;
+
+/* Hide scrollbar for mobile horizontal scroll */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}
+
   height: 100%;
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
   animation: shimmer 2s infinite;

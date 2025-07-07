@@ -9,13 +9,16 @@ import Header from "@/components/Header";
 import EnhancedFooter from "@/components/EnhancedFooter";
 import FloatingActionButton from "@/components/FloatingActionButton";
 import TrendingBanner from "@/components/TrendingBanner";
-import Home from "@/pages/Home";
-import Categories from "@/pages/Categories";
-import Favorites from "@/pages/Favorites";
-import History from "@/pages/History";
-import Profile from "@/pages/Profile";
-import CategoryView from "@/pages/CategoryView";
-import CalculatorView from "@/pages/CalculatorView";
+import Home from '@/pages/Home';
+import Categories from '@/pages/Categories';
+import CalculatorView from '@/pages/CalculatorView';
+import CategoryView from '@/pages/CategoryView';
+import Favorites from '@/pages/Favorites';
+import History from '@/pages/History';
+import Profile from '@/pages/Profile';
+import FinancialSuite from '@/pages/FinancialSuite';
+import AllTools from '@/pages/AllTools';
+import NotFound from '@/pages/not-found';
 
 function Router() {
   return (
@@ -27,12 +30,14 @@ function Router() {
           <Switch>
             <Route path="/" component={Home} />
             <Route path="/categories" component={Categories} />
+            <Route path="/calculator/:id" component={CalculatorView} />
+            <Route path="/category/:id" component={CategoryView} />
             <Route path="/favorites" component={Favorites} />
             <Route path="/history" component={History} />
             <Route path="/profile" component={Profile} />
-            <Route path="/category/:category" component={CategoryView} />
-            <Route path="/calculator/:calculator" component={CalculatorView} />
-            <Route component={Home} />
+            <Route path="/financial-suite" component={FinancialSuite} />
+            <Route path="/all-tools" component={AllTools} />
+            <Route component={NotFound} />
           </Switch>
         </main>
         <EnhancedFooter />
