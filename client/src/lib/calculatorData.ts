@@ -102,18 +102,14 @@ export const calculators: Calculator[] = [
   { id: 'json-formatter', name: 'JSON Formatter', description: 'Format and validate JSON', category: 'text-converters', icon: 'fa-code' },
   { id: 'javascript-obfuscator', name: 'JavaScript Obfuscator', description: 'Obfuscate JS code', category: 'text-converters', icon: 'fa-shield', isPro: true },
   { id: 'regex-tester', name: 'Regex Tester', description: 'Test regular expressions', category: 'text-converters', icon: 'fa-search' },
-  { id: 'text-diff-checker', name: 'Text Diff Checker', description: 'Compare text differences', category: 'text-converters', icon: 'fa-not-equal' },
   { id: 'uuid-generator', name: 'UUID Generator', description: 'Generate unique identifiers', category: 'text-converters', icon: 'fa-fingerprint' },
   { id: 'qr-generator', name: 'QR Code Generator', description: 'Create QR codes', category: 'text-converters', icon: 'fa-qrcode' },
   { id: 'qr-reader', name: 'QR Code Reader', description: 'Decode QR codes', category: 'text-converters', icon: 'fa-camera' },
   { id: 'color-picker', name: 'Color Picker & Palette', description: 'Color tools and palettes', category: 'text-converters', icon: 'fa-palette' },
   { id: 'url-shortener', name: 'URL Shortener', description: 'Create short URLs', category: 'text-converters', icon: 'fa-compress' },
-  { id: 'metadata-extractor', name: 'Metadata Extractor', description: 'Extract file metadata', category: 'text-converters', icon: 'fa-info-circle' },
 
   // Specialized Tools
   { id: 'ico-converter', name: 'ICO to PNG / PNG to ICO', description: 'Icon format conversion', category: 'specialized', icon: 'fa-image' },
-  { id: 'favicon-generator', name: 'Favicon Generator', description: 'Create website favicons', category: 'specialized', icon: 'fa-star' },
-  { id: 'vcf-to-csv', name: 'VCF to CSV', description: 'Convert contact files', category: 'specialized', icon: 'fa-address-book' },
   { id: 'youtube-timestamp', name: 'YouTube Timestamp Link', description: 'Create timestamped links', category: 'specialized', icon: 'fa-clock' },
   { id: 'font-style-converter', name: 'Font Style Converter', description: 'Unicode text styling', category: 'specialized', icon: 'fa-font' },
   { id: 'script-converter', name: 'Script Converter', description: 'Convert writing scripts', category: 'specialized', icon: 'fa-language' },

@@ -21,6 +21,7 @@ import AdvancedUnitConverter from "@/components/calculators/AdvancedUnitConverte
 import ComprehensiveUnitConverter from "@/components/calculators/ComprehensiveUnitConverter";
 import AdvancedTextConverters from "@/components/calculators/AdvancedTextConverters";
 import ComprehensiveFinancialSuite from "@/components/calculators/ComprehensiveFinancialSuite";
+import AdvancedMathematicalSuite from "@/components/calculators/AdvancedMathematicalSuite";
 import AIConverterHub from "@/components/calculators/AIConverterHub";
 import FileConverterHub from "@/components/calculators/FileConverterHub";
 import MediaConverterHub from "@/components/calculators/MediaConverterHub";
@@ -128,8 +129,11 @@ export default function CalculatorView({ params }: CalculatorViewProps) {
       case 'bmi': return <BMICalculator />;
       case 'bmr': return <BMRCalculator />;
       case 'age': return <AgeCalculator />;
-      case 'scientific': return <ScientificCalculator />;
-      case 'percentage': return <PercentageCalculator />;
+      case 'scientific': 
+      case 'percentage':
+      case 'binary-decimal-hex':
+      case 'roman-decimal':
+        return <AdvancedMathematicalSuite />;
       case 'tip': return <TipCalculator />;
       case 'unit-converter': return <UnitConverter />;
       case 'currency-converter': return <CurrencyConverter />;
@@ -141,6 +145,8 @@ export default function CalculatorView({ params }: CalculatorViewProps) {
             case 'language-converters':
             case 'specialized':
               return <TextCodeConverterHub />;
+            case 'mathematical':
+              return <AdvancedMathematicalSuite />;
             default:
               return <div className="text-center py-12">
                 <h2 className="text-2xl font-bold mb-4">Tool Available in Hub</h2>
