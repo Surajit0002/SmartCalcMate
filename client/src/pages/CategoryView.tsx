@@ -3,7 +3,7 @@ import { useLocation } from "wouter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { getCategoryById } from "@/lib/calculatorData";
+import { categories, calculators } from "@/lib/calculatorData";
 import { ArrowLeft, Calculator, TrendingUp, Zap, Clock } from "lucide-react";
 
 interface CategoryViewProps {
@@ -14,7 +14,10 @@ interface CategoryViewProps {
 
 export default function CategoryView({ params }: CategoryViewProps) {
   const [, setLocation] = useLocation();
-  const category = getCategoryById(params.id);
+  const category = categories.find(c => c.id === params.id);
+  
+  // Get calculators for this category
+  const categoryCalculators = calculators.filter(calc => calc.category === params.id);
 
   if (!category) {
     return (
@@ -90,7 +93,7 @@ export default function CategoryView({ params }: CategoryViewProps) {
             
             <div className="space-y-4">
               <Badge className={`bg-gradient-to-r ${getCategoryGradient(category.id)} text-white px-4 py-2 text-sm font-medium`}>
-                {category.calculators.length} Professional Tools
+                {categoryCalculators.length} Professional Tools
               </Badge>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 dark:from-white dark:via-blue-200 dark:to-purple-200 bg-clip-text text-transparent">
                 {category.name}
@@ -98,10 +101,7 @@ export default function CategoryView({ params }: CategoryViewProps) {
             </div>
             
             <p className="max-w-3xl mx-auto text-lg sm:text-xl text-gray-600 dark:text-gray-400 leading-relaxed">
-              {category.id === 'finance' && 'Make informed financial decisions with our comprehensive suite of calculators. From loans and investments to mortgages and portfolio planning.'}
-              {category.id === 'health' && 'Monitor and optimize your health with scientifically-backed calculators. Track fitness goals, nutrition, and wellness metrics.'}
-              {category.id === 'math' && 'Solve complex mathematical problems with advanced computational tools. Perfect for students, professionals, and researchers.'}
-              {category.id === 'daily' && 'Streamline everyday calculations with intuitive, time-saving utilities. From tips and conversions to age and unit calculations.'}
+              {category?.description || 'Professional calculators and converters for your needs.'}
             </p>
           </div>
         </div>
@@ -110,7 +110,7 @@ export default function CategoryView({ params }: CategoryViewProps) {
       {/* Calculators Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
-          {category.calculators.map((calculator, index) => (
+          {categoryCalculators.map((calculator, index) => (
             <Card 
               key={calculator.id}
               className="group relative overflow-hidden cursor-pointer transform transition-all duration-500 hover:scale-105 hover:shadow-2xl border-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm animate-fade-in"
