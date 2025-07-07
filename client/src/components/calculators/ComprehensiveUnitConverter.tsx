@@ -7,12 +7,15 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { 
   Ruler, Scale, Thermometer, Clock, Gauge, Expand, 
   Droplets, HardDrive, Zap, Activity, Copy, RotateCw,
-  Star, TrendingUp, Calculator, Sparkles
+  Star, TrendingUp, Calculator, Sparkles, Menu, X,
+  ChevronDown, ChevronRight, History, Info
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface Unit {
   name: string;
@@ -34,7 +37,7 @@ const unitCategories: UnitCategory[] = [
   {
     id: 'length',
     name: 'Length',
-    icon: <Ruler className="w-5 h-5" />,
+    icon: <Ruler className="w-4 h-4" />,
     color: 'blue',
     gradient: 'from-blue-500 via-cyan-500 to-teal-500',
     units: [
@@ -55,7 +58,7 @@ const unitCategories: UnitCategory[] = [
   {
     id: 'weight',
     name: 'Weight & Mass',
-    icon: <Scale className="w-5 h-5" />,
+    icon: <Scale className="w-4 h-4" />,
     color: 'green',
     gradient: 'from-green-500 via-emerald-500 to-lime-500',
     units: [
@@ -76,7 +79,7 @@ const unitCategories: UnitCategory[] = [
   {
     id: 'temperature',
     name: 'Temperature',
-    icon: <Thermometer className="w-5 h-5" />,
+    icon: <Thermometer className="w-4 h-4" />,
     color: 'red',
     gradient: 'from-red-500 via-orange-500 to-yellow-500',
     units: [
@@ -90,7 +93,7 @@ const unitCategories: UnitCategory[] = [
   {
     id: 'time',
     name: 'Time',
-    icon: <Clock className="w-5 h-5" />,
+    icon: <Clock className="w-4 h-4" />,
     color: 'purple',
     gradient: 'from-purple-500 via-violet-500 to-indigo-500',
     units: [
@@ -111,7 +114,7 @@ const unitCategories: UnitCategory[] = [
   {
     id: 'speed',
     name: 'Speed & Velocity',
-    icon: <Gauge className="w-5 h-5" />,
+    icon: <Gauge className="w-4 h-4" />,
     color: 'orange',
     gradient: 'from-orange-500 via-amber-500 to-yellow-500',
     units: [
@@ -128,7 +131,7 @@ const unitCategories: UnitCategory[] = [
   {
     id: 'area',
     name: 'Area',
-    icon: <Expand className="w-5 h-5" />,
+    icon: <Expand className="w-4 h-4" />,
     color: 'teal',
     gradient: 'from-teal-500 via-cyan-500 to-blue-500',
     units: [
@@ -147,7 +150,7 @@ const unitCategories: UnitCategory[] = [
   {
     id: 'volume',
     name: 'Volume & Capacity',
-    icon: <Droplets className="w-5 h-5" />,
+    icon: <Droplets className="w-4 h-4" />,
     color: 'cyan',
     gradient: 'from-cyan-500 via-blue-500 to-indigo-500',
     units: [
@@ -171,7 +174,7 @@ const unitCategories: UnitCategory[] = [
   {
     id: 'data',
     name: 'Data Size',
-    icon: <HardDrive className="w-5 h-5" />,
+    icon: <HardDrive className="w-4 h-4" />,
     color: 'indigo',
     gradient: 'from-indigo-500 via-purple-500 to-pink-500',
     units: [
@@ -192,7 +195,7 @@ const unitCategories: UnitCategory[] = [
   {
     id: 'power',
     name: 'Power & Energy',
-    icon: <Zap className="w-5 h-5" />,
+    icon: <Zap className="w-4 h-4" />,
     color: 'yellow',
     gradient: 'from-yellow-500 via-orange-500 to-red-500',
     units: [
@@ -210,7 +213,7 @@ const unitCategories: UnitCategory[] = [
   {
     id: 'pressure',
     name: 'Pressure',
-    icon: <Activity className="w-5 h-5" />,
+    icon: <Activity className="w-4 h-4" />,
     color: 'pink',
     gradient: 'from-pink-500 via-rose-500 to-red-500',
     units: [
@@ -236,6 +239,9 @@ export default function ComprehensiveUnitConverter() {
   const [result, setResult] = useState('');
   const [conversionHistory, setConversionHistory] = useState<any[]>([]);
   const [isConverting, setIsConverting] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
+  const isMobile = useIsMobile();
   const { toast } = useToast();
 
   const currentCategory = unitCategories.find(cat => cat.id === activeCategory);
@@ -255,18 +261,15 @@ export default function ComprehensiveUnitConverter() {
 
     if (!fromUnitData || !toUnitData) return 0;
 
-    // Special handling for temperature
     if (category.id === 'temperature') {
       return convertTemperature(value, fromUnitData, toUnitData);
     }
 
-    // Standard conversion through base unit
     const baseValue = value * fromUnitData.factor;
     return baseValue / toUnitData.factor;
   };
 
   const convertTemperature = (value: number, fromUnit: Unit, toUnit: Unit) => {
-    // Convert to Celsius first
     let celsius = value;
     
     if (fromUnit.symbol === '°F') {
@@ -279,7 +282,6 @@ export default function ComprehensiveUnitConverter() {
       celsius = value * 5/4;
     }
 
-    // Convert from Celsius to target
     if (toUnit.symbol === '°C') {
       return celsius;
     } else if (toUnit.symbol === '°F') {
@@ -308,7 +310,6 @@ export default function ComprehensiveUnitConverter() {
       setResult(formattedResult);
       setIsConverting(false);
 
-      // Add to history
       const historyItem = {
         id: Date.now(),
         category: currentCategory.name,
@@ -364,26 +365,27 @@ export default function ComprehensiveUnitConverter() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-purple-900">
-      <div className="max-w-7xl mx-auto p-6 space-y-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 space-y-6 sm:space-y-8">
+        
         {/* Hero Section */}
-        <div className="text-center space-y-6 py-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="p-3 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl shadow-lg">
-              <Calculator className="w-8 h-8 text-white" />
+        <div className="text-center space-y-4 sm:space-y-6 py-6 sm:py-12">
+          <div className="flex items-center justify-center gap-2 sm:gap-3 mb-4">
+            <div className="p-2 sm:p-3 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl sm:rounded-2xl shadow-lg">
+              <Calculator className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
             </div>
-            <Sparkles className="w-6 h-6 text-yellow-500 animate-pulse" />
+            <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-500 animate-pulse" />
           </div>
           
-          <h1 className="text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-fade-in">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent leading-tight">
             Comprehensive Unit Converter
           </h1>
           
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4">
             Convert between <span className="font-semibold text-blue-600">120+ units</span> across 
             <span className="font-semibold text-purple-600"> 10 categories</span> with precision and style
           </p>
           
-          <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-green-500" />
               <span>Instant Conversion</span>
@@ -399,62 +401,114 @@ export default function ComprehensiveUnitConverter() {
           </div>
         </div>
 
-        <Tabs value={activeCategory} onValueChange={setActiveCategory} className="space-y-8">
-          {/* Category Tabs */}
-          <div className="flex justify-center">
-            <TabsList className="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-10 w-full max-w-6xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border shadow-lg">
-              {unitCategories.map(category => (
-                <TabsTrigger 
-                  key={category.id} 
-                  value={category.id} 
-                  className="flex items-center gap-2 px-3 py-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-white data-[state=active]:to-gray-50 data-[state=active]:shadow-md transition-all duration-200 hover:scale-105"
-                >
-                  <div className={`p-1 rounded-lg bg-gradient-to-br ${category.gradient}`}>
-                    {category.icon}
+        <Tabs value={activeCategory} onValueChange={setActiveCategory} className="space-y-6 sm:space-y-8">
+          
+          {/* Mobile Category Selector */}
+          {isMobile && (
+            <div className="sm:hidden">
+              <Button 
+                onClick={() => setShowMobileMenu(!showMobileMenu)}
+                variant="outline" 
+                className="w-full h-12 flex items-center justify-between bg-white/80 backdrop-blur-sm border-2"
+              >
+                <div className="flex items-center gap-2">
+                  <div className={`p-1 rounded-lg bg-gradient-to-br ${currentCategory?.gradient}`}>
+                    {currentCategory?.icon}
                   </div>
-                  <span className="hidden sm:inline font-medium">{category.name}</span>
-                </TabsTrigger>
-              ))}
-            </TabsList>
+                  <span className="font-medium">{currentCategory?.name}</span>
+                </div>
+                {showMobileMenu ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
+              </Button>
+              
+              {showMobileMenu && (
+                <Card className="mt-2 border-2 shadow-lg">
+                  <CardContent className="p-2">
+                    <div className="grid grid-cols-2 gap-2">
+                      {unitCategories.map(category => (
+                        <Button
+                          key={category.id}
+                          variant={activeCategory === category.id ? "default" : "ghost"}
+                          onClick={() => {
+                            setActiveCategory(category.id);
+                            setShowMobileMenu(false);
+                          }}
+                          className="h-12 flex items-center gap-2 justify-start"
+                        >
+                          <div className={`p-1 rounded-lg bg-gradient-to-br ${category.gradient}`}>
+                            {category.icon}
+                          </div>
+                          <span className="text-xs font-medium">{category.name}</span>
+                        </Button>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          )}
+
+          {/* Desktop Category Tabs */}
+          <div className="hidden sm:flex justify-center">
+            <ScrollArea className="w-full max-w-6xl">
+              <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-10 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border shadow-lg p-1">
+                {unitCategories.map(category => (
+                  <TabsTrigger 
+                    key={category.id} 
+                    value={category.id} 
+                    className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-white data-[state=active]:to-gray-50 data-[state=active]:shadow-md transition-all duration-200 hover:scale-105 text-xs sm:text-sm"
+                  >
+                    <div className={`p-1 rounded-lg bg-gradient-to-br ${category.gradient}`}>
+                      {category.icon}
+                    </div>
+                    <span className="hidden md:inline font-medium">{category.name}</span>
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </ScrollArea>
           </div>
 
           {unitCategories.map(category => (
-            <TabsContent key={category.id} value={category.id} className="space-y-8">
-              <div className="grid lg:grid-cols-3 gap-8">
+            <TabsContent key={category.id} value={category.id} className="space-y-6 sm:space-y-8">
+              <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 sm:gap-8">
+                
                 {/* Main Converter */}
-                <div className="lg:col-span-2">
-                  <Card className="shadow-2xl border-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+                <div className="xl:col-span-2">
+                  <Card className="shadow-2xl border-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
                     <CardHeader className={`bg-gradient-to-r ${category.gradient} text-white rounded-t-lg`}>
-                      <CardTitle className="flex items-center gap-3 text-2xl">
-                        <div className="p-2 bg-white/20 rounded-lg">
+                      <CardTitle className="flex items-center gap-2 sm:gap-3 text-lg sm:text-xl md:text-2xl">
+                        <div className="p-1 sm:p-2 bg-white/20 rounded-lg">
                           {category.icon}
                         </div>
-                        {category.name} Converter
+                        <span className="truncate">{category.name} Converter</span>
                       </CardTitle>
-                      <CardDescription className="text-white/90 text-lg">
-                        Convert between {category.units.length} different {category.name.toLowerCase()} units with precision
+                      <CardDescription className="text-white/90 text-sm sm:text-base md:text-lg">
+                        Convert between {category.units.length} different {category.name.toLowerCase()} units
                       </CardDescription>
                     </CardHeader>
-                    <CardContent className="p-8 space-y-8">
+                    <CardContent className="p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8">
+                      
                       {/* From Unit */}
                       <div className="space-y-3">
-                        <Label className="text-lg font-semibold">From</Label>
-                        <div className="flex gap-3">
+                        <Label className="text-base sm:text-lg font-semibold">From</Label>
+                        <div className="flex flex-col sm:flex-row gap-3">
                           <Input
                             type="number"
                             placeholder="Enter value"
                             value={inputValue}
                             onChange={(e) => setInputValue(e.target.value)}
-                            className="flex-1 text-lg h-14 border-2 focus:border-blue-500 transition-colors"
+                            className="flex-1 text-base sm:text-lg h-12 sm:h-14 border-2 focus:border-blue-500 transition-colors"
                           />
                           <Select value={fromUnit} onValueChange={setFromUnit}>
-                            <SelectTrigger className="w-48 h-14 border-2">
+                            <SelectTrigger className="w-full sm:w-48 h-12 sm:h-14 border-2">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
                               {category.units.map(unit => (
                                 <SelectItem key={unit.symbol} value={unit.symbol}>
-                                  {unit.name} ({unit.symbol})
+                                  <div className="flex items-center gap-2">
+                                    <span className="font-medium">{unit.name}</span>
+                                    <span className="text-muted-foreground">({unit.symbol})</span>
+                                  </div>
                                 </SelectItem>
                               ))}
                             </SelectContent>
@@ -475,14 +529,14 @@ export default function ComprehensiveUnitConverter() {
 
                       {/* To Unit */}
                       <div className="space-y-3">
-                        <Label className="text-lg font-semibold">To</Label>
-                        <div className="flex gap-3">
+                        <Label className="text-base sm:text-lg font-semibold">To</Label>
+                        <div className="flex flex-col sm:flex-row gap-3">
                           <div className="relative flex-1">
                             <Input
                               type="text"
                               value={result}
                               readOnly
-                              className="flex-1 font-mono text-lg h-14 border-2 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600"
+                              className="flex-1 font-mono text-base sm:text-lg h-12 sm:h-14 border-2 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600"
                               placeholder="Result will appear here"
                             />
                             {isConverting && (
@@ -492,13 +546,16 @@ export default function ComprehensiveUnitConverter() {
                             )}
                           </div>
                           <Select value={toUnit} onValueChange={setToUnit}>
-                            <SelectTrigger className="w-48 h-14 border-2">
+                            <SelectTrigger className="w-full sm:w-48 h-12 sm:h-14 border-2">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
                               {category.units.map(unit => (
                                 <SelectItem key={unit.symbol} value={unit.symbol}>
-                                  {unit.name} ({unit.symbol})
+                                  <div className="flex items-center gap-2">
+                                    <span className="font-medium">{unit.name}</span>
+                                    <span className="text-muted-foreground">({unit.symbol})</span>
+                                  </div>
                                 </SelectItem>
                               ))}
                             </SelectContent>
@@ -507,26 +564,37 @@ export default function ComprehensiveUnitConverter() {
                       </div>
 
                       {result && (
-                        <Button 
-                          onClick={copyResult} 
-                          className={`w-full h-12 bg-gradient-to-r ${category.gradient} hover:shadow-lg transition-all duration-200 text-lg font-semibold`}
-                        >
-                          <Copy className="w-5 h-5 mr-2" />
-                          Copy Result
-                        </Button>
+                        <div className="flex flex-col sm:flex-row gap-3">
+                          <Button 
+                            onClick={copyResult} 
+                            className={`flex-1 h-12 bg-gradient-to-r ${category.gradient} hover:shadow-lg transition-all duration-200 text-base sm:text-lg font-semibold`}
+                          >
+                            <Copy className="w-5 h-5 mr-2" />
+                            Copy Result
+                          </Button>
+                          {isMobile && (
+                            <Button 
+                              onClick={() => setShowHistory(!showHistory)}
+                              variant="outline"
+                              className="h-12 px-4"
+                            >
+                              <History className="w-5 h-5" />
+                            </Button>
+                          )}
+                        </div>
                       )}
 
                       {/* Quick Values */}
                       <div className="space-y-3">
                         <Label className="text-sm font-medium text-muted-foreground">Quick Values</Label>
-                        <div className="grid grid-cols-4 gap-2">
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                           {['1', '10', '100', '1000'].map(val => (
                             <Button
                               key={val}
                               variant="outline"
                               size="sm"
                               onClick={() => setInputValue(val)}
-                              className="hover:scale-105 transition-transform"
+                              className="h-10 hover:scale-105 transition-transform"
                             >
                               {val}
                             </Button>
@@ -537,41 +605,55 @@ export default function ComprehensiveUnitConverter() {
                   </Card>
                 </div>
 
-                {/* Sidebar */}
-                <div className="space-y-6">
+                {/* Sidebar - Hidden on mobile by default */}
+                <div className={`space-y-6 ${isMobile && !showHistory ? 'hidden' : ''}`}>
                   {/* Conversion History */}
-                  <Card className="shadow-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <Clock className="w-5 h-5" />
+                  <Card className="shadow-xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
+                    <CardHeader className="flex flex-row items-center justify-between pb-3">
+                      <CardTitle className="flex items-center gap-2 text-lg">
+                        <History className="w-5 h-5" />
                         Recent Conversions
                       </CardTitle>
+                      {isMobile && (
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          onClick={() => setShowHistory(false)}
+                        >
+                          <X className="w-4 h-4" />
+                        </Button>
+                      )}
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="pt-0">
                       {conversionHistory.length === 0 ? (
-                        <p className="text-muted-foreground text-sm text-center py-8">
-                          No conversions yet
-                        </p>
-                      ) : (
-                        <div className="space-y-3">
-                          {conversionHistory.map(item => (
-                            <div key={item.id} className="p-3 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 rounded-lg border hover:shadow-md transition-shadow">
-                              <div className="font-medium text-sm">{item.from} → {item.to}</div>
-                              <div className="text-xs text-muted-foreground flex items-center gap-2">
-                                <Badge variant="secondary" className="text-xs">{item.category}</Badge>
-                                <span>{item.timestamp}</span>
-                              </div>
-                            </div>
-                          ))}
+                        <div className="text-center py-8">
+                          <History className="w-12 h-12 mx-auto text-muted-foreground mb-3" />
+                          <p className="text-muted-foreground text-sm">
+                            No conversions yet
+                          </p>
                         </div>
+                      ) : (
+                        <ScrollArea className="h-64 sm:h-80">
+                          <div className="space-y-3">
+                            {conversionHistory.map(item => (
+                              <div key={item.id} className="p-3 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 rounded-lg border hover:shadow-md transition-shadow">
+                                <div className="font-medium text-sm break-all">{item.from} → {item.to}</div>
+                                <div className="text-xs text-muted-foreground flex flex-wrap items-center gap-2 mt-1">
+                                  <Badge variant="secondary" className="text-xs">{item.category}</Badge>
+                                  <span>{item.timestamp}</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </ScrollArea>
                       )}
                     </CardContent>
                   </Card>
 
                   {/* Popular Conversions */}
-                  <Card className="shadow-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+                  <Card className="shadow-xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
                     <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
+                      <CardTitle className="flex items-center gap-2 text-lg">
                         <TrendingUp className="w-5 h-5" />
                         Popular {category.name} Conversions
                       </CardTitle>
@@ -583,15 +665,15 @@ export default function ComprehensiveUnitConverter() {
                             key={index}
                             variant="ghost"
                             size="sm"
-                            className="w-full justify-start text-left hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-200 transition-all"
+                            className="w-full justify-start text-left hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-200 transition-all h-auto py-2"
                             onClick={() => {
                               setFromUnit(conv.from);
                               setToUnit(conv.to);
                               setInputValue('1');
                             }}
                           >
-                            <Star className="w-3 h-3 mr-2 text-yellow-500" />
-                            {conv.name}
+                            <Star className="w-3 h-3 mr-2 text-yellow-500 flex-shrink-0" />
+                            <span className="text-sm">{conv.name}</span>
                           </Button>
                         ))}
                       </div>
@@ -599,10 +681,10 @@ export default function ComprehensiveUnitConverter() {
                   </Card>
 
                   {/* Category Stats */}
-                  <Card className="shadow-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+                  <Card className="shadow-xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
                     <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <Activity className="w-5 h-5" />
+                      <CardTitle className="flex items-center gap-2 text-lg">
+                        <Info className="w-5 h-5" />
                         Category Info
                       </CardTitle>
                     </CardHeader>
@@ -636,18 +718,18 @@ export default function ComprehensiveUnitConverter() {
         </Tabs>
 
         {/* Footer Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-          <Card className="text-center p-6 bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-xl">
-            <div className="text-3xl font-bold">{unitCategories.reduce((acc, cat) => acc + cat.units.length, 0)}+</div>
-            <div className="text-blue-100">Total Units</div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mt-8 sm:mt-12">
+          <Card className="text-center p-4 sm:p-6 bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-xl">
+            <div className="text-2xl sm:text-3xl font-bold">{unitCategories.reduce((acc, cat) => acc + cat.units.length, 0)}+</div>
+            <div className="text-blue-100 text-sm sm:text-base">Total Units</div>
           </Card>
-          <Card className="text-center p-6 bg-gradient-to-br from-green-500 to-teal-600 text-white shadow-xl">
-            <div className="text-3xl font-bold">{unitCategories.length}</div>
-            <div className="text-green-100">Categories</div>
+          <Card className="text-center p-4 sm:p-6 bg-gradient-to-br from-green-500 to-teal-600 text-white shadow-xl">
+            <div className="text-2xl sm:text-3xl font-bold">{unitCategories.length}</div>
+            <div className="text-green-100 text-sm sm:text-base">Categories</div>
           </Card>
-          <Card className="text-center p-6 bg-gradient-to-br from-purple-500 to-pink-600 text-white shadow-xl">
-            <div className="text-3xl font-bold">∞</div>
-            <div className="text-purple-100">Precision</div>
+          <Card className="text-center p-4 sm:p-6 bg-gradient-to-br from-purple-500 to-pink-600 text-white shadow-xl">
+            <div className="text-2xl sm:text-3xl font-bold">∞</div>
+            <div className="text-purple-100 text-sm sm:text-base">Precision</div>
           </Card>
         </div>
       </div>
