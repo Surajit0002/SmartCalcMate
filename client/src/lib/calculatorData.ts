@@ -131,43 +131,6 @@ export const calculators: Calculator[] = [
 
   // Daily Utilities
   { id: 'tip', name: 'Tip Calculator', description: 'Calculate tips and splits', category: 'utility', icon: 'fa-receipt' },
-  { id: 'weight-converter', name: 'Weight Converter', description: 'Convert kg/lb and other weights', category: 'unit-converters', icon: 'fa-weight', function: 'Convert weight units', isNew: true },
-  { id: 'temperature-converter', name: 'Temperature Converter', description: 'Convert C/F/K temperatures', category: 'unit-converters', icon: 'fa-thermometer', function: 'Convert temperature units', isNew: true },
-  { id: 'time-converter', name: 'Time Converter', description: 'Convert s/min/h/d time units', category: 'unit-converters', icon: 'fa-clock', function: 'Convert time units', isNew: true },
-  { id: 'speed-converter', name: 'Speed Converter', description: 'Convert km/h to mph and more', category: 'unit-converters', icon: 'fa-tachometer', function: 'Convert speed units', isNew: true },
-  { id: 'area-converter', name: 'Area Converter', description: 'Convert sqm to acres and more', category: 'unit-converters', icon: 'fa-expand', function: 'Convert area units', isNew: true },
-  { id: 'volume-converter', name: 'Volume Converter', description: 'Convert L, gal, m³ volumes', category: 'unit-converters', icon: 'fa-cube', function: 'Convert volume units', isNew: true },
-  { id: 'data-converter', name: 'Data Size Converter', description: 'Convert KB/MB/GB sizes', category: 'unit-converters', icon: 'fa-database', function: 'Convert data sizes', isNew: true },
-  { id: 'power-converter', name: 'Power Converter', description: 'Convert W/kW/HP power units', category: 'unit-converters', icon: 'fa-bolt', function: 'Convert power units', isNew: true },
-  { id: 'pressure-converter', name: 'Pressure Converter', description: 'Convert Pa/bar/atm pressures', category: 'unit-converters', icon: 'fa-gauge', function: 'Convert pressure units', isNew: true },
-
-  // File Converters
-  { id: 'pdf-to-word', name: 'PDF to Word', description: 'Converts PDF files to editable DOCX', category: 'file-converters', icon: 'fa-file-pdf', function: 'Converts PDF files to editable DOCX', isNew: true },
-  { id: 'word-to-pdf', name: 'Word to PDF', description: 'Converts Word files to PDF', category: 'file-converters', icon: 'fa-file-word', function: 'Converts Word files to PDF', isNew: true },
-  { id: 'pdf-to-excel', name: 'PDF to Excel', description: 'Extracts tabular data from PDF', category: 'file-converters', icon: 'fa-file-excel', function: 'Extracts tabular data from PDF', isNew: true },
-  { id: 'pdf-to-image', name: 'PDF to Image', description: 'Converts PDF pages into PNG/JPG', category: 'file-converters', icon: 'fa-image', function: 'Converts PDF pages into PNG/JPG', isNew: true },
-  { id: 'image-to-pdf', name: 'Image to PDF', description: 'Combines images into a PDF', category: 'file-converters', icon: 'fa-images', function: 'Combines images into a PDF', isNew: true },
-  { id: 'text-to-pdf', name: 'Text to PDF', description: 'Converts text files to PDF format', category: 'file-converters', icon: 'fa-file-alt', function: 'Converts text files to PDF format', isNew: true },
-  { id: 'csv-to-excel', name: 'CSV to Excel', description: 'Converts CSV to .xlsx', category: 'file-converters', icon: 'fa-table', function: 'Converts CSV to .xlsx', isNew: true },
-  { id: 'csv-to-json', name: 'CSV to JSON', description: 'Converts CSV to JSON', category: 'file-converters', icon: 'fa-code', function: 'Converts CSV to JSON', isNew: true },
-  { id: 'json-to-csv', name: 'JSON to CSV', description: 'Converts JSON to tabular data', category: 'file-converters', icon: 'fa-table', function: 'Converts JSON to tabular data', isNew: true },
-  { id: 'csv-to-xml', name: 'CSV to XML', description: 'Converts CSV to XML format', category: 'file-converters', icon: 'fa-code', function: 'Converts CSV to XML format', isNew: true },
-  { id: 'docx-to-odt', name: 'DOCX to ODT', description: 'Converts Word to OpenDocument', category: 'file-converters', icon: 'fa-file', function: 'Converts Word to OpenDocument', isNew: true },
-  { id: 'merge-pdf', name: 'Merge PDFs', description: 'Combines multiple PDFs', category: 'file-converters', icon: 'fa-compress', function: 'Combines multiple PDFs', isNew: true },
-  { id: 'split-pdf', name: 'Split PDFs', description: 'Splits PDF pages', category: 'file-converters', icon: 'fa-expand', function: 'Splits PDF pages', isNew: true },
-  { id: 'compress-pdf', name: 'Compress PDF', description: 'Reduces PDF file size', category: 'file-converters', icon: 'fa-compress-alt', function: 'Reduces PDF file size', isNew: true },
-  { id: 'remove-pdf-password', name: 'Remove PDF Password', description: 'Unlocks protected PDFs', category: 'file-converters', icon: 'fa-unlock', function: 'Unlocks protected PDFs', isNew: true },
-
-  // Media Converters
-  { id: 'video-to-mp3', name: 'Video to MP3', description: 'Extracts audio from video', category: 'media-converters', icon: 'fa-video', function: 'Extracts audio from video', isNew: true },
-  { id: 'audio-converter', name: 'Audio to MP3/WAV', description: 'Converts between audio formats', category: 'media-converters', icon: 'fa-music', function: 'Converts between audio formats', isNew: true },
-  { id: 'video-converter', name: 'Video Converter', description: 'MP4, AVI, MKV format conversion', category: 'media-converters', icon: 'fa-film', function: 'MP4, AVI, MKV format conversion', isNew: true },
-  { id: 'audio-compressor', name: 'Audio Compressor', description: 'Reduces audio file size', category: 'media-converters', icon: 'fa-compress', function: 'Reduces audio file size', isNew: true },
-  { id: 'video-compressor', name: 'Video Compressor', description: 'Compresses video files', category: 'media-converters', icon: 'fa-compress-alt', function: 'Compresses video files', isNew: true },
-  { id: 'mp4-to-gif', name: 'MP4 to GIF', description: 'Converts video to animated GIF', category: 'media-converters', icon: 'fa-gif', function: 'Converts video to animated GIF', isNew: true },
-  { id: 'gif-to-mp4', name: 'GIF to MP4', description: 'Converts GIF to MP4', category: 'media-converters', icon: 'fa-video', function: 'Converts GIF to MP4', isNew: true },
-  { id: 'youtube-to-mp3', name: 'YouTube to MP3', description: 'Downloads and extracts audio', category: 'media-converters', icon: 'fa-youtube', function: 'Downloads and extracts audio', isNew: true, isPro: true },
-  { id: 'youtube-thumbnail', name: 'YouTube Thumbnail Downloader', description: 'Grabs video thumbnails', category: 'media-converters', icon: 'fa-image', function: 'Grabs video thumbnails', isNew: true },
 
   // Currency & Crypto
   { id: 'crypto-converter', name: 'Crypto Converter (BTC/ETH)', description: 'Convert cryptocurrencies', category: 'currency-crypto', icon: 'fa-bitcoin', function: 'Convert cryptocurrencies', isNew: true },

@@ -96,13 +96,24 @@ export default function CalculatorView({ params }: CalculatorViewProps) {
       return <AIConverterHub />;
     }
 
-    // File conversion tools
-    if (['pdf-word', 'word-pdf', 'pdf-excel', 'pdf-image', 'pdf-merge', 'pdf-split', 'image-converter', 'csv-excel', 'excel-csv', 'json-csv'].includes(params.calculator)) {
+    // File conversion tools - Enhanced list
+    const fileTools = [
+      'pdf-to-word', 'word-to-pdf', 'pdf-to-excel', 'pdf-to-image', 'image-to-pdf', 
+      'text-to-pdf', 'csv-to-excel', 'excel-to-csv', 'csv-to-json', 'json-to-csv', 
+      'csv-to-xml', 'docx-to-odt', 'merge-pdf', 'split-pdf', 'compress-pdf', 'remove-pdf-password'
+    ];
+    
+    if (fileTools.includes(params.calculator)) {
       return <FileConverterHub />;
     }
 
-    // Media conversion tools
-    if (['video-converter', 'video-compressor', 'audio-converter', 'audio-compressor', 'image-compressor', 'video-audio-extractor'].includes(params.calculator)) {
+    // Media conversion tools - Enhanced list  
+    const mediaTools = [
+      'video-to-mp3', 'audio-converter', 'video-converter', 'audio-compressor', 
+      'video-compressor', 'mp4-to-gif', 'gif-to-mp4', 'youtube-to-mp3', 'youtube-thumbnail'
+    ];
+    
+    if (mediaTools.includes(params.calculator)) {
       return <MediaConverterHub />;
     }
 
@@ -123,6 +134,20 @@ export default function CalculatorView({ params }: CalculatorViewProps) {
       case 'unit-converter': return <UnitConverter />;
       case 'currency-converter': return <CurrencyConverter />;
       default:
+        // Route based on calculator category if available
+        if (calculator?.category) {
+          switch (calculator.category) {
+            case 'currency-crypto':
+            case 'language-converters':
+            case 'specialized':
+              return <TextCodeConverterHub />;
+            default:
+              return <div className="text-center py-12">
+                <h2 className="text-2xl font-bold mb-4">Tool Available in Hub</h2>
+                <p className="text-muted-foreground">This tool is available through our advanced converter hubs with enhanced features and batch processing.</p>
+              </div>;
+          }
+        }
         return <div className="text-center py-12">
           <h2 className="text-2xl font-bold mb-4">Calculator Coming Soon</h2>
           <p className="text-muted-foreground">This advanced calculator is being developed and will be available soon.</p>
