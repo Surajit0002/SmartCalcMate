@@ -22,6 +22,9 @@ import ComprehensiveUnitConverter from "@/components/calculators/ComprehensiveUn
 import AdvancedTextConverters from "@/components/calculators/AdvancedTextConverters";
 import ComprehensiveFinancialSuite from "@/components/calculators/ComprehensiveFinancialSuite";
 import AIConverterHub from "@/components/calculators/AIConverterHub";
+import FileConverterHub from "@/components/calculators/FileConverterHub";
+import MediaConverterHub from "@/components/calculators/MediaConverterHub";
+import TextCodeConverterHub from "@/components/calculators/TextCodeConverterHub";
 
 interface CalculatorViewProps {
   params: {
@@ -86,15 +89,31 @@ export default function CalculatorView({ params }: CalculatorViewProps) {
     }
 
     if (textTools.includes(params.calculator)) {
-      return <AdvancedTextConverters />;
+      return <TextCodeConverterHub />;
     }
 
     if (aiTools.includes(params.calculator)) {
       return <AIConverterHub />;
     }
 
+    // File conversion tools
+    if (['pdf-word', 'word-pdf', 'pdf-excel', 'pdf-image', 'pdf-merge', 'pdf-split', 'image-converter', 'csv-excel', 'excel-csv', 'json-csv'].includes(params.calculator)) {
+      return <FileConverterHub />;
+    }
+
+    // Media conversion tools
+    if (['video-converter', 'video-compressor', 'audio-converter', 'audio-compressor', 'image-compressor', 'video-audio-extractor'].includes(params.calculator)) {
+      return <MediaConverterHub />;
+    }
+
     // Individual calculator components for specific tools
     switch (params.calculator) {
+      case 'emi': return <EMICalculator />;
+      case 'sip': return <SIPCalculator />;
+      case 'mortgage': return <MortgageCalculator />;
+      case 'investment': return <InvestmentCalculator />;
+      case 'loan-comparison': return <LoanComparison />;
+      case 'compound-interest': return <CompoundInterestCalculator />;
       case 'bmi': return <BMICalculator />;
       case 'bmr': return <BMRCalculator />;
       case 'age': return <AgeCalculator />;
@@ -102,6 +121,7 @@ export default function CalculatorView({ params }: CalculatorViewProps) {
       case 'percentage': return <PercentageCalculator />;
       case 'tip': return <TipCalculator />;
       case 'unit-converter': return <UnitConverter />;
+      case 'currency-converter': return <CurrencyConverter />;
       default:
         return <div className="text-center py-12">
           <h2 className="text-2xl font-bold mb-4">Calculator Coming Soon</h2>

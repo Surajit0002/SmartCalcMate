@@ -1,328 +1,386 @@
-
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Slider } from "@/components/ui/slider";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
-import { Copy, Share2, TrendingUp, DollarSign, Target } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { Bar, Line } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area } from 'recharts';
+import { TrendingUp, Target, DollarSign, Percent, BarChart3 } from 'lucide-react';
 
 export default function InvestmentCalculator() {
-  const [initialAmount, setInitialAmount] = useState("10000");
-  const [monthlyContribution, setMonthlyContribution] = useState("500");
-  const [annualReturn, setAnnualReturn] = useState("8");
-  const [investmentPeriod, setInvestmentPeriod] = useState("20");
-  const [riskTolerance, setRiskTolerance] = useState("moderate");
-  const [inflationRate, setInflationRate] = useState("3");
-  const { toast } = useToast();
+  const [initialAmount, setInitialAmount] = useState('10000');
+  const [monthlyContribution, setMonthlyContribution] = useState('500');
+  const [expectedReturn, setExpectedReturn] = useState('10');
+  const [timePeriod, setTimePeriod] = useState('20');
+  const [compoundFrequency, setCompoundFrequency] = useState('12');
+  const [inflationRate, setInflationRate] = useState('3');
+  const [results, setResults] = useState<any>(null);
 
   const calculateInvestment = () => {
     const principal = parseFloat(initialAmount);
     const monthly = parseFloat(monthlyContribution);
-    const rate = parseFloat(annualReturn) / 100 / 12;
-    const months = parseFloat(investmentPeriod) * 12;
+    const annualRate = parseFloat(expectedReturn) / 100;
+    const years = parseFloat(timePeriod);
+    const frequency = parseFloat(compoundFrequency);
     const inflation = parseFloat(inflationRate) / 100;
 
-    // Future value calculation
-    const futureValuePrincipal = principal * Math.pow(1 + rate, months);
-    const futureValueAnnuity = monthly * ((Math.pow(1 + rate, months) - 1) / rate);
-    const totalFutureValue = futureValuePrincipal + futureValueAnnuity;
-    
-    const totalContributions = principal + (monthly * months);
-    const totalGains = totalFutureValue - totalContributions;
-    
-    // Inflation adjusted value
-    const realValue = totalFutureValue / Math.pow(1 + inflation, parseFloat(investmentPeriod));
-
-    return {
-      futureValue: totalFutureValue.toFixed(2),
-      totalContributions: totalContributions.toFixed(2),
-      totalGains: totalGains.toFixed(2),
-      realValue: realValue.toFixed(2),
-      monthlyGrowth: ((totalFutureValue - totalContributions) / months).toFixed(2)
-    };
-  };
-
-  const result = calculateInvestment();
-
-  const generateYearlyData = () => {
-    const years = parseInt(investmentPeriod);
-    const data = [];
-    const principal = parseFloat(initialAmount);
-    const monthly = parseFloat(monthlyContribution);
-    const rate = parseFloat(annualReturn) / 100 / 12;
-
-    for (let year = 1; year <= years; year++) {
-      const months = year * 12;
-      const futureValuePrincipal = principal * Math.pow(1 + rate, months);
-      const futureValueAnnuity = monthly * ((Math.pow(1 + rate, months) - 1) / rate);
-      const totalValue = futureValuePrincipal + futureValueAnnuity;
-      const contributions = principal + (monthly * months);
+    if (principal >= 0 && monthly >= 0 && annualRate && years && frequency) {
+      const periodicRate = annualRate / frequency;
+      const totalPeriods = years * frequency;
       
-      data.push({
-        year,
-        totalValue: totalValue.toFixed(0),
-        contributions: contributions.toFixed(0),
-        gains: (totalValue - contributions).toFixed(0)
+      // Future value of initial investment
+      const futureValuePrincipal = principal * Math.pow(1 + periodicRate, totalPeriods);
+      
+      // Future value of regular contributions (annuity)
+      const periodicContribution = monthly * (12 / frequency);
+      const futureValueAnnuity = periodicContribution * 
+        ((Math.pow(1 + periodicRate, totalPeriods) - 1) / periodicRate);
+      
+      const totalFutureValue = futureValuePrincipal + futureValueAnnuity;
+      const totalContributions = principal + (monthly * 12 * years);
+      const totalReturns = totalFutureValue - totalContributions;
+      
+      // Inflation-adjusted value
+      const realValue = totalFutureValue / Math.pow(1 + inflation, years);
+      
+      // Year-by-year breakdown
+      const yearlyData = [];
+      let currentValue = principal;
+      let totalInvested = principal;
+      
+      for (let year = 1; year <= years; year++) {
+        // Compound the existing value
+        currentValue = currentValue * Math.pow(1 + periodicRate, frequency);
+        
+        // Add monthly contributions for the year
+        const yearlyContributions = monthly * 12;
+        totalInvested += yearlyContributions;
+        
+        // Future value of this year's contributions
+        const contributionValue = yearlyContributions * 
+          ((Math.pow(1 + periodicRate, frequency) - 1) / periodicRate) * 
+          (frequency / 12);
+        
+        currentValue += contributionValue;
+        
+        const gains = currentValue - totalInvested;
+        const realValueYear = currentValue / Math.pow(1 + inflation, year);
+        
+        yearlyData.push({
+          year,
+          invested: Math.round(totalInvested),
+          gains: Math.round(gains),
+          total: Math.round(currentValue),
+          realValue: Math.round(realValueYear)
+        });
+      }
+
+      // Calculate different scenarios
+      const scenarios = [
+        { name: 'Conservative (6%)', rate: 0.06 },
+        { name: 'Moderate (8%)', rate: 0.08 },
+        { name: 'Current (' + expectedReturn + '%)', rate: annualRate },
+        { name: 'Aggressive (12%)', rate: 0.12 }
+      ].map(scenario => {
+        const scenarioRate = scenario.rate / frequency;
+        const scenarioFVPrincipal = principal * Math.pow(1 + scenarioRate, totalPeriods);
+        const scenarioFVAnnuity = periodicContribution * 
+          ((Math.pow(1 + scenarioRate, totalPeriods) - 1) / scenarioRate);
+        return {
+          ...scenario,
+          value: Math.round(scenarioFVPrincipal + scenarioFVAnnuity)
+        };
+      });
+
+      setResults({
+        futureValue: Math.round(totalFutureValue),
+        totalContributions: Math.round(totalContributions),
+        totalReturns: Math.round(totalReturns),
+        realValue: Math.round(realValue),
+        yearlyData,
+        scenarios,
+        annualizedReturn: ((totalFutureValue / totalContributions) ** (1 / years) - 1) * 100,
+        monthlyReturnNeeded: (Math.pow(totalFutureValue / totalContributions, 1 / (years * 12)) - 1) * 100
       });
     }
-    return data;
   };
 
-  const yearlyData = generateYearlyData();
-
-  const chartData = {
-    labels: yearlyData.map(d => `Year ${d.year}`),
-    datasets: [
-      {
-        label: 'Total Contributions',
-        data: yearlyData.map(d => d.contributions),
-        backgroundColor: 'rgba(59, 130, 246, 0.8)',
-        borderColor: 'rgba(59, 130, 246, 1)',
-        borderWidth: 1,
-      },
-      {
-        label: 'Investment Gains',
-        data: yearlyData.map(d => d.gains),
-        backgroundColor: 'rgba(16, 185, 129, 0.8)',
-        borderColor: 'rgba(16, 185, 129, 1)',
-        borderWidth: 1,
-      }
-    ]
-  };
-
-  const lineChartData = {
-    labels: yearlyData.map(d => `Year ${d.year}`),
-    datasets: [
-      {
-        label: 'Portfolio Value',
-        data: yearlyData.map(d => d.totalValue),
-        borderColor: 'rgba(139, 92, 246, 1)',
-        backgroundColor: 'rgba(139, 92, 246, 0.1)',
-        tension: 0.4,
-        fill: true
-      }
-    ]
-  };
-
-  const getRiskProfile = () => {
-    switch(riskTolerance) {
-      case 'conservative': return { color: 'green', return: '4-6%', volatility: 'Low' };
-      case 'moderate': return { color: 'blue', return: '6-8%', volatility: 'Medium' };
-      case 'aggressive': return { color: 'red', return: '8-12%', volatility: 'High' };
-      default: return { color: 'blue', return: '6-8%', volatility: 'Medium' };
-    }
-  };
-
-  const riskProfile = getRiskProfile();
-
-  const handleCopy = () => {
-    const text = `Future Value: $${result.futureValue}\nTotal Gains: $${result.totalGains}\nReal Value: $${result.realValue}`;
-    navigator.clipboard.writeText(text);
-    toast({
-      title: "Copied to clipboard",
-      description: "Investment calculation results copied successfully",
-    });
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      maximumFractionDigits: 0
+    }).format(amount);
   };
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-2 bg-gradient-to-br from-purple-50 to-indigo-100 dark:from-purple-900/20 dark:to-indigo-900/20">
+    <div className="max-w-6xl mx-auto p-6 space-y-6">
+      <div className="text-center mb-8">
+        <h1 className="text-3xl font-bold mb-2 flex items-center justify-center gap-2">
+          <TrendingUp className="w-8 h-8" />
+          Investment Calculator
+        </h1>
+        <p className="text-muted-foreground">Plan your investment growth with detailed projections and scenarios</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Input Section */}
+        <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-purple-800 dark:text-purple-300">
+            <CardTitle className="flex items-center gap-2">
               <Target className="w-5 h-5" />
               Investment Parameters
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="initialAmount">Initial Investment ($)</Label>
-                <Input
-                  id="initialAmount"
-                  type="number"
-                  value={initialAmount}
-                  onChange={(e) => setInitialAmount(e.target.value)}
-                  className="mt-1"
-                />
-              </div>
-              <div>
-                <Label htmlFor="monthlyContribution">Monthly Contribution ($)</Label>
-                <Input
-                  id="monthlyContribution"
-                  type="number"
-                  value={monthlyContribution}
-                  onChange={(e) => setMonthlyContribution(e.target.value)}
-                  className="mt-1"
-                />
-              </div>
-            </div>
-
-            <div>
-              <Label>Expected Annual Return: {annualReturn}%</Label>
-              <Slider
-                value={[parseFloat(annualReturn)]}
-                onValueChange={(value) => setAnnualReturn(value[0].toString())}
-                max={15}
-                min={1}
-                step={0.5}
-                className="mt-2"
-              />
-            </div>
-
-            <div>
-              <Label>Investment Period: {investmentPeriod} years</Label>
-              <Slider
-                value={[parseFloat(investmentPeriod)]}
-                onValueChange={(value) => setInvestmentPeriod(value[0].toString())}
-                max={40}
-                min={1}
-                step={1}
-                className="mt-2"
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label>Risk Tolerance</Label>
-                <Select value={riskTolerance} onValueChange={setRiskTolerance}>
-                  <SelectTrigger className="mt-1">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="conservative">Conservative</SelectItem>
-                    <SelectItem value="moderate">Moderate</SelectItem>
-                    <SelectItem value="aggressive">Aggressive</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label>Inflation Rate: {inflationRate}%</Label>
-                <Slider
-                  value={[parseFloat(inflationRate)]}
-                  onValueChange={(value) => setInflationRate(value[0].toString())}
-                  max={10}
-                  min={0}
-                  step={0.1}
-                  className="mt-2"
-                />
-              </div>
-            </div>
-
-            <div className="p-4 bg-white dark:bg-gray-800 rounded-lg">
-              <div className="flex items-center justify-between">
-                <span>Risk Profile:</span>
-                <Badge variant="secondary" className={`bg-${riskProfile.color}-100 text-${riskProfile.color}-800`}>
-                  {riskTolerance.charAt(0).toUpperCase() + riskTolerance.slice(1)}
-                </Badge>
-              </div>
-              <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                Expected Return: {riskProfile.return} | Volatility: {riskProfile.volatility}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-900/20 dark:to-emerald-900/20">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-green-800 dark:text-green-300">
-              <DollarSign className="w-5 h-5" />
-              Projection Summary
-            </CardTitle>
-          </CardHeader>
           <CardContent className="space-y-4">
-            <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-              <div className="text-sm text-gray-600 dark:text-gray-400">Future Value</div>
-              <div className="text-2xl font-bold text-green-600">${result.futureValue}</div>
+            <div>
+              <Label htmlFor="initial">Initial Investment ($)</Label>
+              <Input
+                id="initial"
+                type="number"
+                value={initialAmount}
+                onChange={(e) => setInitialAmount(e.target.value)}
+                placeholder="10000"
+              />
             </div>
-            
-            <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-              <div className="text-sm text-gray-600 dark:text-gray-400">Total Gains</div>
-              <div className="text-xl font-bold text-blue-600">${result.totalGains}</div>
+            <div>
+              <Label htmlFor="monthly">Monthly Contribution ($)</Label>
+              <Input
+                id="monthly"
+                type="number"
+                value={monthlyContribution}
+                onChange={(e) => setMonthlyContribution(e.target.value)}
+                placeholder="500"
+              />
             </div>
-
-            <div className="space-y-3">
-              <div className="flex justify-between">
-                <span className="text-sm">Total Contributions</span>
-                <span className="font-medium">${result.totalContributions}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm">Real Value (Inflation Adj.)</span>
-                <span className="font-medium">${result.realValue}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm">Monthly Growth</span>
-                <span className="font-medium">${result.monthlyGrowth}</span>
-              </div>
+            <div>
+              <Label htmlFor="return">Expected Annual Return (%)</Label>
+              <Input
+                id="return"
+                type="number"
+                step="0.1"
+                value={expectedReturn}
+                onChange={(e) => setExpectedReturn(e.target.value)}
+                placeholder="10"
+              />
             </div>
-
-            <div className="flex gap-2">
-              <Button onClick={handleCopy} className="flex-1">
-                <Copy className="w-4 h-4 mr-2" />
-                Copy
-              </Button>
-              <Button variant="outline">
-                <Share2 className="w-4 h-4" />
-              </Button>
+            <div>
+              <Label htmlFor="period">Investment Period (Years)</Label>
+              <Input
+                id="period"
+                type="number"
+                value={timePeriod}
+                onChange={(e) => setTimePeriod(e.target.value)}
+                placeholder="20"
+              />
             </div>
+            <div>
+              <Label htmlFor="frequency">Compounding Frequency</Label>
+              <Select value={compoundFrequency} onValueChange={setCompoundFrequency}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1">Annually</SelectItem>
+                  <SelectItem value="2">Semi-annually</SelectItem>
+                  <SelectItem value="4">Quarterly</SelectItem>
+                  <SelectItem value="12">Monthly</SelectItem>
+                  <SelectItem value="365">Daily</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="inflation">Inflation Rate (%)</Label>
+              <Input
+                id="inflation"
+                type="number"
+                step="0.1"
+                value={inflationRate}
+                onChange={(e) => setInflationRate(e.target.value)}
+                placeholder="3"
+              />
+            </div>
+            <Button onClick={calculateInvestment} className="w-full">
+              Calculate Investment
+            </Button>
           </CardContent>
         </Card>
+
+        {/* Results Section */}
+        {results && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <DollarSign className="w-5 h-5" />
+                Investment Results
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                  <div className="text-2xl font-bold text-green-600">
+                    {formatCurrency(results.futureValue)}
+                  </div>
+                  <div className="text-sm text-muted-foreground">Future Value</div>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                    <div className="text-lg font-semibold text-blue-600">
+                      {formatCurrency(results.totalContributions)}
+                    </div>
+                    <div className="text-xs text-muted-foreground">Total Invested</div>
+                  </div>
+                  <div className="text-center p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                    <div className="text-lg font-semibold text-purple-600">
+                      {formatCurrency(results.totalReturns)}
+                    </div>
+                    <div className="text-xs text-muted-foreground">Total Returns</div>
+                  </div>
+                </div>
+
+                <div className="text-center p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
+                  <div className="text-lg font-semibold text-orange-600">
+                    {formatCurrency(results.realValue)}
+                  </div>
+                  <div className="text-xs text-muted-foreground">Inflation-Adjusted Value</div>
+                </div>
+
+                <div className="grid grid-cols-1 gap-2 text-sm">
+                  <div className="flex justify-between">
+                    <span>Annualized Return:</span>
+                    <span className="font-semibold">{results.annualizedReturn.toFixed(2)}%</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Return Multiple:</span>
+                    <span className="font-semibold">{(results.futureValue / results.totalContributions).toFixed(2)}x</span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <TrendingUp className="w-5 h-5" />
-            Investment Growth Analysis
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Tabs defaultValue="growth" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="growth">Growth Over Time</TabsTrigger>
-              <TabsTrigger value="breakdown">Yearly Breakdown</TabsTrigger>
-            </TabsList>
-            <TabsContent value="growth" className="mt-6">
-              <div className="h-80">
-                <Line data={lineChartData} options={{ maintainAspectRatio: false }} />
-              </div>
-            </TabsContent>
-            <TabsContent value="breakdown" className="mt-6">
-              <div className="h-80">
-                <Bar data={chartData} options={{ maintainAspectRatio: false, scales: { x: { stacked: true }, y: { stacked: true } } }} />
-              </div>
-            </TabsContent>
-          </Tabs>
-        </CardContent>
-      </Card>
+      {/* Tabs for detailed analysis */}
+      {results && (
+        <Tabs defaultValue="growth" className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="growth">Growth Chart</TabsTrigger>
+            <TabsTrigger value="scenarios">Scenarios</TabsTrigger>
+            <TabsTrigger value="breakdown">Year Breakdown</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="growth" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Investment Growth Over Time</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={400}>
+                  <AreaChart data={results.yearlyData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="year" />
+                    <YAxis tickFormatter={(value) => `$${(value / 1000).toFixed(0)}K`} />
+                    <Tooltip formatter={(value: any) => formatCurrency(value)} />
+                    <Legend />
+                    <Area 
+                      type="monotone" 
+                      dataKey="invested" 
+                      stackId="1"
+                      stroke="#3b82f6" 
+                      fill="#3b82f6" 
+                      name="Invested"
+                    />
+                    <Area 
+                      type="monotone" 
+                      dataKey="gains" 
+                      stackId="1"
+                      stroke="#10b981" 
+                      fill="#10b981" 
+                      name="Gains"
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="realValue" 
+                      stroke="#f59e0b" 
+                      strokeWidth={2}
+                      strokeDasharray="5 5"
+                      name="Real Value"
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="scenarios" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <BarChart3 className="w-5 h-5" />
+                  Different Return Scenarios
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {results.scenarios.map((scenario: any, index: number) => (
+                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                      <div>
+                        <div className="font-semibold">{scenario.name}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {(scenario.rate * 100).toFixed(1)}% annual return
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-lg font-bold">{formatCurrency(scenario.value)}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {((scenario.value / results.totalContributions).toFixed(2))}x multiple
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="breakdown" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Year-by-Year Investment Breakdown</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b">
+                        <th className="text-left p-2">Year</th>
+                        <th className="text-right p-2">Invested</th>
+                        <th className="text-right p-2">Gains</th>
+                        <th className="text-right p-2">Total Value</th>
+                        <th className="text-right p-2">Real Value</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {results.yearlyData.map((year: any) => (
+                        <tr key={year.year} className="border-b">
+                          <td className="p-2">{year.year}</td>
+                          <td className="text-right p-2">{formatCurrency(year.invested)}</td>
+                          <td className="text-right p-2 text-green-600">{formatCurrency(year.gains)}</td>
+                          <td className="text-right p-2 font-semibold">{formatCurrency(year.total)}</td>
+                          <td className="text-right p-2 text-orange-600">{formatCurrency(year.realValue)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      )}
     </div>
   );
 }

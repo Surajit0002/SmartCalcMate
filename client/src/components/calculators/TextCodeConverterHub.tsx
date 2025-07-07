@@ -2,141 +2,195 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Switch } from '@/components/ui/switch';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { 
-  Type, Code, FileText, Hash, Copy, RotateCcw, 
-  Eye, Download, Upload, Zap, Shield, Link,
-  ArrowUpDown, Binary, Globe, QrCode, Search
+  Type, Code, Hash, Copy, Download, Upload, 
+  RotateCcw, Check, AlertCircle, Zap, Crown,
+  FileText, Binary, Key, QrCode, Link, Shuffle
 } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
 
-interface TextConverter {
+interface TextTool {
   id: string;
   name: string;
   description: string;
   icon: React.ReactNode;
   category: string;
-  isPro?: boolean;
+  isPro: boolean;
+  isNew?: boolean;
+  inputPlaceholder: string;
+  features: string[];
 }
 
 interface ConversionResult {
-  original: string;
-  converted: string;
-  stats?: {
-    characters: number;
-    words: number;
-    lines: number;
-  };
+  toolId: string;
+  input: string;
+  output: string;
+  timestamp: Date;
+  inputLength: number;
+  outputLength: number;
 }
 
-const textConverters: TextConverter[] = [
-  // Text Case Converters
+const textTools: TextTool[] = [
+  // Text Case Tools
   {
-    id: 'text-case',
+    id: 'case-converter',
     name: 'Text Case Converter',
     description: 'Convert text between different cases',
     icon: <Type className="w-4 h-4" />,
-    category: 'text'
+    category: 'case',
+    isPro: false,
+    inputPlaceholder: 'Enter text to convert case...',
+    features: ['Uppercase', 'Lowercase', 'Title Case', 'Sentence case', 'camelCase', 'snake_case']
   },
   {
     id: 'text-reverser',
     name: 'Text Reverser',
-    description: 'Reverse text strings character by character',
+    description: 'Reverse text, words, or lines',
     icon: <RotateCcw className="w-4 h-4" />,
-    category: 'text'
+    category: 'text',
+    isPro: false,
+    inputPlaceholder: 'Enter text to reverse...',
+    features: ['Reverse characters', 'Reverse words', 'Reverse lines', 'Preserve formatting']
   },
   {
-    id: 'text-capitalizer',
-    name: 'Text Capitalizer',
-    description: 'Capitalize text with various options',
-    icon: <Type className="w-4 h-4" />,
-    category: 'text'
-  },
-  {
-    id: 'remove-lines',
-    name: 'Remove Duplicate Lines',
+    id: 'duplicate-remover',
+    name: 'Duplicate Line Remover',
     description: 'Remove duplicate lines from text',
     icon: <FileText className="w-4 h-4" />,
-    category: 'text'
+    category: 'text',
+    isPro: false,
+    inputPlaceholder: 'Enter text with potential duplicates...',
+    features: ['Remove exact duplicates', 'Case-insensitive option', 'Preserve order', 'Count duplicates']
   },
   {
     id: 'slug-generator',
-    name: 'Slug Generator',
+    name: 'URL Slug Generator',
     description: 'Generate URL-friendly slugs from text',
     icon: <Link className="w-4 h-4" />,
-    category: 'text'
+    category: 'text',
+    isPro: false,
+    inputPlaceholder: 'Enter text to create URL slug...',
+    features: ['URL-safe characters', 'Hyphen separation', 'Lowercase conversion', 'Special char handling']
   },
 
-  // Encoding/Encryption
+  // Encoding Tools
   {
-    id: 'binary-text',
-    name: 'Binary ↔ Text',
-    description: 'Convert between binary and text',
+    id: 'base64-encoder',
+    name: 'Base64 Encoder/Decoder',
+    description: 'Encode and decode Base64 text',
     icon: <Binary className="w-4 h-4" />,
-    category: 'encoding'
+    category: 'encoding',
+    isPro: false,
+    inputPlaceholder: 'Enter text or Base64 to encode/decode...',
+    features: ['Bidirectional conversion', 'Auto-detection', 'File encoding', 'URL-safe variant']
   },
   {
-    id: 'text-encryptor',
-    name: 'ROT13 / Base64 Encryptor',
-    description: 'Encrypt and decrypt text using various methods',
-    icon: <Shield className="w-4 h-4" />,
-    category: 'encoding'
+    id: 'url-encoder',
+    name: 'URL Encoder/Decoder',
+    description: 'Encode and decode URL parameters',
+    icon: <Link className="w-4 h-4" />,
+    category: 'encoding',
+    isPro: false,
+    inputPlaceholder: 'Enter URL or text to encode/decode...',
+    features: ['Percent encoding', 'Component encoding', 'Full URL encoding', 'Form data encoding']
   },
   {
-    id: 'unicode-converter',
-    name: 'Unicode ↔ ASCII',
-    description: 'Convert between Unicode and ASCII',
-    icon: <Globe className="w-4 h-4" />,
-    category: 'encoding'
+    id: 'html-encoder',
+    name: 'HTML Entity Encoder',
+    description: 'Encode/decode HTML entities and special characters',
+    icon: <Code className="w-4 h-4" />,
+    category: 'encoding',
+    isPro: false,
+    inputPlaceholder: 'Enter HTML text to encode/decode entities...',
+    features: ['Named entities', 'Numeric entities', 'Unicode support', 'Selective encoding']
+  },
+  {
+    id: 'binary-converter',
+    name: 'Binary Text Converter',
+    description: 'Convert text to binary and vice versa',
+    icon: <Binary className="w-4 h-4" />,
+    category: 'encoding',
+    isPro: true,
+    inputPlaceholder: 'Enter text or binary to convert...',
+    features: ['Text to binary', 'Binary to text', 'Different separators', 'ASCII/Unicode support']
+  },
+
+  // Hash & Crypto Tools
+  {
+    id: 'hash-generator',
+    name: 'Hash Generator',
+    description: 'Generate MD5, SHA1, SHA256 hashes',
+    icon: <Hash className="w-4 h-4" />,
+    category: 'crypto',
+    isPro: true,
+    inputPlaceholder: 'Enter text to generate hashes...',
+    features: ['MD5 hash', 'SHA1 hash', 'SHA256 hash', 'SHA512 hash', 'File hashing']
+  },
+  {
+    id: 'password-generator',
+    name: 'Password Generator',
+    description: 'Generate secure random passwords',
+    icon: <Key className="w-4 h-4" />,
+    category: 'crypto',
+    isPro: false,
+    isNew: true,
+    inputPlaceholder: 'Configure password options...',
+    features: ['Custom length', 'Character sets', 'Exclude similar', 'Multiple passwords']
+  },
+  {
+    id: 'rot13-cipher',
+    name: 'ROT13 Cipher',
+    description: 'Encode/decode text using ROT13 cipher',
+    icon: <Shuffle className="w-4 h-4" />,
+    category: 'crypto',
+    isPro: false,
+    inputPlaceholder: 'Enter text to encode/decode with ROT13...',
+    features: ['Bidirectional conversion', 'Preserve non-letters', 'Case sensitivity', 'Custom rotation']
   },
 
   // Code Tools
   {
-    id: 'json-xml',
-    name: 'JSON ↔ XML',
-    description: 'Convert between JSON and XML formats',
+    id: 'json-formatter',
+    name: 'JSON Formatter',
+    description: 'Format, validate, and minify JSON',
     icon: <Code className="w-4 h-4" />,
-    category: 'code'
+    category: 'code',
+    isPro: false,
+    inputPlaceholder: 'Enter JSON to format...',
+    features: ['Pretty print', 'Minify', 'Validation', 'Error highlighting', 'Tree view']
   },
   {
-    id: 'json-csv',
-    name: 'JSON ↔ CSV',
-    description: 'Convert between JSON and CSV formats',
+    id: 'xml-formatter',
+    name: 'XML Formatter',
+    description: 'Format and validate XML documents',
     icon: <Code className="w-4 h-4" />,
-    category: 'code'
+    category: 'code',
+    isPro: false,
+    inputPlaceholder: 'Enter XML to format...',
+    features: ['Pretty print', 'Minify', 'Validation', 'Syntax highlighting', 'Namespace support']
   },
   {
-    id: 'html-markdown',
-    name: 'HTML ↔ Markdown',
-    description: 'Convert between HTML and Markdown',
+    id: 'html-formatter',
+    name: 'HTML Formatter',
+    description: 'Format and beautify HTML code',
     icon: <Code className="w-4 h-4" />,
-    category: 'code'
+    category: 'code',
+    isPro: false,
+    inputPlaceholder: 'Enter HTML to format...',
+    features: ['Pretty print', 'Minify', 'Indentation', 'Tag validation', 'Attribute sorting']
   },
   {
-    id: 'code-beautifier',
-    name: 'Code Beautifier',
-    description: 'Format and beautify HTML/CSS/JS code',
+    id: 'css-formatter',
+    name: 'CSS Formatter',
+    description: 'Format and optimize CSS code',
     icon: <Code className="w-4 h-4" />,
-    category: 'code'
-  },
-  {
-    id: 'sql-formatter',
-    name: 'SQL Formatter',
-    description: 'Format and prettify SQL queries',
-    icon: <Code className="w-4 h-4" />,
-    category: 'code'
-  },
-  {
-    id: 'regex-tester',
-    name: 'Regex Tester',
-    description: 'Test and validate regular expressions',
-    icon: <Search className="w-4 h-4" />,
-    category: 'code'
+    category: 'code',
+    isPro: true,
+    inputPlaceholder: 'Enter CSS to format...',
+    features: ['Pretty print', 'Minify', 'Property sorting', 'Vendor prefixes', 'Optimization']
   },
 
   // Generators
@@ -145,649 +199,468 @@ const textConverters: TextConverter[] = [
     name: 'QR Code Generator',
     description: 'Generate QR codes from text',
     icon: <QrCode className="w-4 h-4" />,
-    category: 'generators'
+    category: 'generator',
+    isPro: false,
+    inputPlaceholder: 'Enter text, URL, or data for QR code...',
+    features: ['Custom sizes', 'Error correction', 'Different formats', 'Logo embedding']
   },
   {
     id: 'uuid-generator',
     name: 'UUID Generator',
-    description: 'Generate unique identifiers',
+    description: 'Generate various types of UUIDs',
     icon: <Hash className="w-4 h-4" />,
-    category: 'generators'
+    category: 'generator',
+    isPro: false,
+    inputPlaceholder: 'Generated UUIDs will appear here...',
+    features: ['UUID v1', 'UUID v4', 'Bulk generation', 'Timestamp-based', 'Random-based']
   },
-];
-
-const categories = [
-  { id: 'text', name: 'Text Tools', icon: <Type className="w-4 h-4" /> },
-  { id: 'encoding', name: 'Encoding/Crypto', icon: <Shield className="w-4 h-4" /> },
-  { id: 'code', name: 'Code Tools', icon: <Code className="w-4 h-4" /> },
-  { id: 'generators', name: 'Generators', icon: <Zap className="w-4 h-4" /> },
+  {
+    id: 'lorem-generator',
+    name: 'Lorem Ipsum Generator',
+    description: 'Generate placeholder text in various formats',
+    icon: <FileText className="w-4 h-4" />,
+    category: 'generator',
+    isPro: false,
+    inputPlaceholder: 'Generated lorem ipsum text...',
+    features: ['Paragraphs', 'Sentences', 'Words', 'Lists', 'HTML format']
+  }
 ];
 
 export default function TextCodeConverterHub() {
-  const [activeCategory, setActiveCategory] = useState('text');
-  const [selectedConverter, setSelectedConverter] = useState<TextConverter | null>(null);
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [selectedTool, setSelectedTool] = useState<TextTool | null>(null);
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
-  const [conversionOptions, setConversionOptions] = useState<Record<string, any>>({});
   const [conversionHistory, setConversionHistory] = useState<ConversionResult[]>([]);
-  const { toast } = useToast();
+  const [caseOption, setCaseOption] = useState('uppercase');
+  const [isProcessing, setIsProcessing] = useState(false);
 
-  const currentCategory = categories.find(cat => cat.id === activeCategory);
-  const categoryConverters = textConverters.filter(conv => conv.category === activeCategory);
+  const categories = ['all', 'case', 'text', 'encoding', 'crypto', 'code', 'generator'];
 
-  const performConversion = () => {
-    if (!selectedConverter || !inputText.trim()) {
-      toast({
-        title: "Missing input",
-        description: "Please select a converter and enter text to convert.",
-        variant: "destructive"
-      });
-      return;
+  const filteredTools = activeCategory === 'all' 
+    ? textTools 
+    : textTools.filter(tool => tool.category === activeCategory);
+
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      case 'case': return <Type className="w-4 h-4" />;
+      case 'text': return <FileText className="w-4 h-4" />;
+      case 'encoding': return <Binary className="w-4 h-4" />;
+      case 'crypto': return <Key className="w-4 h-4" />;
+      case 'code': return <Code className="w-4 h-4" />;
+      case 'generator': return <Zap className="w-4 h-4" />;
+      default: return <Type className="w-4 h-4" />;
     }
+  };
 
+  const processText = (toolId: string, input: string, option?: string) => {
+    setIsProcessing(true);
     let result = '';
-    const text = inputText.trim();
 
-    switch (selectedConverter.id) {
-      case 'text-case':
-        result = convertTextCase(text, conversionOptions.caseType || 'uppercase');
+    switch (toolId) {
+      case 'case-converter':
+        switch (option) {
+          case 'uppercase': result = input.toUpperCase(); break;
+          case 'lowercase': result = input.toLowerCase(); break;
+          case 'title': result = input.replace(/\w\S*/g, (txt) => 
+            txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()); break;
+          case 'sentence': result = input.charAt(0).toUpperCase() + input.slice(1).toLowerCase(); break;
+          case 'camel': result = input.replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => 
+            index === 0 ? word.toLowerCase() : word.toUpperCase()).replace(/\s+/g, ''); break;
+          case 'snake': result = input.toLowerCase().replace(/\s+/g, '_'); break;
+          default: result = input.toUpperCase();
+        }
         break;
       
       case 'text-reverser':
-        result = text.split('').reverse().join('');
+        result = input.split('').reverse().join('');
         break;
       
-      case 'text-capitalizer':
-        result = capitalizeText(text, conversionOptions.capitalizeType || 'sentence');
-        break;
-      
-      case 'remove-lines':
-        result = removeDuplicateLines(text);
+      case 'duplicate-remover':
+        const lines = input.split('\n');
+        const uniqueLines = [...new Set(lines)];
+        result = uniqueLines.join('\n');
         break;
       
       case 'slug-generator':
-        result = generateSlug(text);
+        result = input
+          .toLowerCase()
+          .replace(/[^\w\s-]/g, '')
+          .replace(/\s+/g, '-')
+          .replace(/-+/g, '-')
+          .trim();
         break;
       
-      case 'binary-text':
-        result = conversionOptions.direction === 'toBinary' 
-          ? textToBinary(text) 
-          : binaryToText(text);
+      case 'base64-encoder':
+        try {
+          if (input.match(/^[A-Za-z0-9+/]*={0,2}$/)) {
+            result = atob(input);
+          } else {
+            result = btoa(input);
+          }
+        } catch {
+          result = btoa(input);
+        }
         break;
       
-      case 'text-encryptor':
-        result = encryptText(text, conversionOptions.method || 'base64');
+      case 'url-encoder':
+        try {
+          if (input.includes('%')) {
+            result = decodeURIComponent(input);
+          } else {
+            result = encodeURIComponent(input);
+          }
+        } catch {
+          result = encodeURIComponent(input);
+        }
         break;
       
-      case 'unicode-converter':
-        result = conversionOptions.direction === 'toUnicode'
-          ? textToUnicode(text)
-          : unicodeToText(text);
+      case 'html-encoder':
+        if (input.includes('&')) {
+          result = input
+            .replace(/&amp;/g, '&')
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, "'");
+        } else {
+          result = input
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+        }
         break;
       
-      case 'json-xml':
-        result = conversionOptions.direction === 'toXML'
-          ? jsonToXml(text)
-          : xmlToJson(text);
+      case 'binary-converter':
+        if (input.match(/^[01\s]+$/)) {
+          result = input.split(' ').map(bin => 
+            String.fromCharCode(parseInt(bin, 2))
+          ).join('');
+        } else {
+          result = input.split('').map(char => 
+            char.charCodeAt(0).toString(2).padStart(8, '0')
+          ).join(' ');
+        }
         break;
       
-      case 'json-csv':
-        result = conversionOptions.direction === 'toCSV'
-          ? jsonToCsv(text)
-          : csvToJson(text);
+      case 'rot13-cipher':
+        result = input.replace(/[a-zA-Z]/g, (char) => {
+          const start = char <= 'Z' ? 65 : 97;
+          return String.fromCharCode(((char.charCodeAt(0) - start + 13) % 26) + start);
+        });
         break;
       
-      case 'html-markdown':
-        result = conversionOptions.direction === 'toMarkdown'
-          ? htmlToMarkdown(text)
-          : markdownToHtml(text);
-        break;
-      
-      case 'code-beautifier':
-        result = beautifyCode(text, conversionOptions.language || 'javascript');
-        break;
-      
-      case 'sql-formatter':
-        result = formatSql(text);
-        break;
-      
-      case 'regex-tester':
-        result = testRegex(text, conversionOptions.testString || '');
-        break;
-      
-      case 'qr-generator':
-        result = `QR Code generated for: "${text.slice(0, 50)}${text.length > 50 ? '...' : ''}"`;
+      case 'json-formatter':
+        try {
+          const parsed = JSON.parse(input);
+          result = JSON.stringify(parsed, null, 2);
+        } catch {
+          result = 'Invalid JSON format';
+        }
         break;
       
       case 'uuid-generator':
-        result = generateUUID();
+        result = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+          const r = Math.random() * 16 | 0;
+          const v = c === 'x' ? r : (r & 0x3 | 0x8);
+          return v.toString(16);
+        });
+        break;
+      
+      case 'lorem-generator':
+        const words = ['lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipiscing', 'elit'];
+        result = Array(50).fill(0).map(() => 
+          words[Math.floor(Math.random() * words.length)]
+        ).join(' ') + '.';
         break;
       
       default:
-        result = 'Conversion not implemented yet';
+        result = 'Conversion not implemented for this tool';
     }
 
-    setOutputText(result);
-    
-    const conversionResult: ConversionResult = {
-      original: text,
-      converted: result,
-      stats: {
-        characters: text.length,
-        words: text.split(/\s+/).filter(w => w.length > 0).length,
-        lines: text.split('\n').length
-      }
-    };
-    
-    setConversionHistory(prev => [conversionResult, ...prev.slice(0, 4)]);
-    
-    toast({
-      title: "Conversion completed",
-      description: `${selectedConverter.name} conversion successful`,
-    });
-  };
-
-  // Conversion functions
-  const convertTextCase = (text: string, type: string): string => {
-    switch (type) {
-      case 'uppercase': return text.toUpperCase();
-      case 'lowercase': return text.toLowerCase();
-      case 'capitalize': return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
-      case 'title': return text.replace(/\w\S*/g, (txt) => 
-        txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
-      case 'camel': return text.replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => 
-        index === 0 ? word.toLowerCase() : word.toUpperCase()).replace(/\s+/g, '');
-      case 'snake': return text.toLowerCase().replace(/\s+/g, '_');
-      case 'kebab': return text.toLowerCase().replace(/\s+/g, '-');
-      default: return text;
-    }
-  };
-
-  const capitalizeText = (text: string, type: string): string => {
-    switch (type) {
-      case 'sentence': return text.charAt(0).toUpperCase() + text.slice(1);
-      case 'word': return text.split(' ').map(word => 
-        word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-      case 'alternate': return text.split('').map((char, index) => 
-        index % 2 === 0 ? char.toUpperCase() : char.toLowerCase()).join('');
-      default: return text;
-    }
-  };
-
-  const removeDuplicateLines = (text: string): string => {
-    const lines = text.split('\n');
-    const uniqueLines = Array.from(new Set(lines));
-    return uniqueLines.join('\n');
-  };
-
-  const generateSlug = (text: string): string => {
-    return text
-      .toLowerCase()
-      .trim()
-      .replace(/[^\w\s-]/g, '')
-      .replace(/[\s_-]+/g, '-')
-      .replace(/^-+|-+$/g, '');
-  };
-
-  const textToBinary = (text: string): string => {
-    return text.split('').map(char => 
-      char.charCodeAt(0).toString(2).padStart(8, '0')).join(' ');
-  };
-
-  const binaryToText = (binary: string): string => {
-    try {
-      return binary.split(' ').map(bin => 
-        String.fromCharCode(parseInt(bin, 2))).join('');
-    } catch {
-      return 'Invalid binary format';
-    }
-  };
-
-  const encryptText = (text: string, method: string): string => {
-    switch (method) {
-      case 'base64':
-        return btoa(text);
-      case 'rot13':
-        return text.replace(/[a-zA-Z]/g, char => 
-          String.fromCharCode(((char.charCodeAt(0) - 65 + 13) % 26) + 65));
-      case 'reverse':
-        return text.split('').reverse().join('');
-      default:
-        return text;
-    }
-  };
-
-  const textToUnicode = (text: string): string => {
-    return text.split('').map(char => 
-      '\\u' + char.charCodeAt(0).toString(16).padStart(4, '0')).join('');
-  };
-
-  const unicodeToText = (unicode: string): string => {
-    try {
-      return unicode.replace(/\\u[\dA-F]{4}/gi, match => 
-        String.fromCharCode(parseInt(match.replace(/\\u/g, ''), 16)));
-    } catch {
-      return 'Invalid Unicode format';
-    }
-  };
-
-  const jsonToXml = (json: string): string => {
-    try {
-      const obj = JSON.parse(json);
-      return `<xml>${JSON.stringify(obj)}</xml>`;
-    } catch {
-      return 'Invalid JSON format';
-    }
-  };
-
-  const xmlToJson = (xml: string): string => {
-    return JSON.stringify({ xml: xml.trim() }, null, 2);
-  };
-
-  const jsonToCsv = (json: string): string => {
-    try {
-      const data = JSON.parse(json);
-      if (Array.isArray(data) && data.length > 0) {
-        const headers = Object.keys(data[0]);
-        const csv = [
-          headers.join(','),
-          ...data.map(row => headers.map(header => row[header]).join(','))
-        ];
-        return csv.join('\n');
-      }
-      return 'JSON must be an array of objects';
-    } catch {
-      return 'Invalid JSON format';
-    }
-  };
-
-  const csvToJson = (csv: string): string => {
-    const lines = csv.trim().split('\n');
-    if (lines.length < 2) return 'CSV must have header and data rows';
-    
-    const headers = lines[0].split(',');
-    const data = lines.slice(1).map(line => {
-      const values = line.split(',');
-      return headers.reduce((obj, header, index) => {
-        obj[header] = values[index] || '';
-        return obj;
-      }, {} as any);
-    });
-    
-    return JSON.stringify(data, null, 2);
-  };
-
-  const htmlToMarkdown = (html: string): string => {
-    return html
-      .replace(/<h([1-6])>(.*?)<\/h[1-6]>/g, (_, level, text) => '#'.repeat(parseInt(level)) + ' ' + text)
-      .replace(/<strong>(.*?)<\/strong>/g, '**$1**')
-      .replace(/<em>(.*?)<\/em>/g, '*$1*')
-      .replace(/<a href="(.*?)">(.*?)<\/a>/g, '[$2]($1)')
-      .replace(/<p>(.*?)<\/p>/g, '$1\n')
-      .replace(/<br\s*\/?>/g, '\n')
-      .replace(/<[^>]*>/g, '');
-  };
-
-  const markdownToHtml = (markdown: string): string => {
-    return markdown
-      .replace(/^#{6}\s(.+)/gm, '<h6>$1</h6>')
-      .replace(/^#{5}\s(.+)/gm, '<h5>$1</h5>')
-      .replace(/^#{4}\s(.+)/gm, '<h4>$1</h4>')
-      .replace(/^#{3}\s(.+)/gm, '<h3>$1</h3>')
-      .replace(/^#{2}\s(.+)/gm, '<h2>$1</h2>')
-      .replace(/^#{1}\s(.+)/gm, '<h1>$1</h1>')
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.*?)\*/g, '<em>$1</em>')
-      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
-      .replace(/\n/g, '<br>');
-  };
-
-  const beautifyCode = (code: string, language: string): string => {
-    // Simple code formatting
-    if (language === 'json') {
-      try {
-        return JSON.stringify(JSON.parse(code), null, 2);
-      } catch {
-        return 'Invalid JSON';
-      }
-    }
-    return code.replace(/;/g, ';\n').replace(/{/g, '{\n').replace(/}/g, '\n}');
-  };
-
-  const formatSql = (sql: string): string => {
-    return sql
-      .replace(/\b(SELECT|FROM|WHERE|ORDER BY|GROUP BY|HAVING|INSERT|UPDATE|DELETE)\b/gi, '\n$1')
-      .replace(/,/g, ',\n')
-      .trim();
-  };
-
-  const testRegex = (pattern: string, testString: string): string => {
-    try {
-      const regex = new RegExp(pattern, 'g');
-      const matches = testString.match(regex);
-      return matches ? `Matches found: ${matches.join(', ')}` : 'No matches found';
-    } catch {
-      return 'Invalid regex pattern';
-    }
-  };
-
-  const generateUUID = (): string => {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      const r = Math.random() * 16 | 0;
-      const v = c == 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
-    });
+    setTimeout(() => {
+      setOutputText(result);
+      setIsProcessing(false);
+      
+      const conversionResult: ConversionResult = {
+        toolId,
+        input,
+        output: result,
+        timestamp: new Date(),
+        inputLength: input.length,
+        outputLength: result.length
+      };
+      
+      setConversionHistory(prev => [conversionResult, ...prev.slice(0, 9)]);
+    }, 500);
   };
 
   const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text).then(() => {
-      toast({
-        title: "Copied to clipboard",
-        description: "Text has been copied successfully",
-      });
-    });
+    navigator.clipboard.writeText(text);
   };
 
   const clearAll = () => {
     setInputText('');
     setOutputText('');
-    setConversionHistory([]);
-  };
-
-  const renderConverterOptions = () => {
-    if (!selectedConverter) return null;
-
-    switch (selectedConverter.id) {
-      case 'text-case':
-        return (
-          <Select
-            value={conversionOptions.caseType || 'uppercase'}
-            onValueChange={(value) => setConversionOptions(prev => ({ ...prev, caseType: value }))}
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="uppercase">UPPERCASE</SelectItem>
-              <SelectItem value="lowercase">lowercase</SelectItem>
-              <SelectItem value="capitalize">Capitalize</SelectItem>
-              <SelectItem value="title">Title Case</SelectItem>
-              <SelectItem value="camel">camelCase</SelectItem>
-              <SelectItem value="snake">snake_case</SelectItem>
-              <SelectItem value="kebab">kebab-case</SelectItem>
-            </SelectContent>
-          </Select>
-        );
-
-      case 'text-capitalizer':
-        return (
-          <Select
-            value={conversionOptions.capitalizeType || 'sentence'}
-            onValueChange={(value) => setConversionOptions(prev => ({ ...prev, capitalizeType: value }))}
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="sentence">Sentence case</SelectItem>
-              <SelectItem value="word">Word Case</SelectItem>
-              <SelectItem value="alternate">aLtErNaTe CaSe</SelectItem>
-            </SelectContent>
-          </Select>
-        );
-
-      case 'binary-text':
-        return (
-          <Select
-            value={conversionOptions.direction || 'toBinary'}
-            onValueChange={(value) => setConversionOptions(prev => ({ ...prev, direction: value }))}
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="toBinary">Text to Binary</SelectItem>
-              <SelectItem value="toText">Binary to Text</SelectItem>
-            </SelectContent>
-          </Select>
-        );
-
-      case 'text-encryptor':
-        return (
-          <Select
-            value={conversionOptions.method || 'base64'}
-            onValueChange={(value) => setConversionOptions(prev => ({ ...prev, method: value }))}
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="base64">Base64 Encode</SelectItem>
-              <SelectItem value="rot13">ROT13</SelectItem>
-              <SelectItem value="reverse">Reverse Text</SelectItem>
-            </SelectContent>
-          </Select>
-        );
-
-      case 'regex-tester':
-        return (
-          <Input
-            placeholder="Test string"
-            value={conversionOptions.testString || ''}
-            onChange={(e) => setConversionOptions(prev => ({ ...prev, testString: e.target.value }))}
-          />
-        );
-
-      default:
-        return null;
-    }
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-4 space-y-6">
-      <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold flex items-center justify-center gap-2">
-          <Type className="w-8 h-8 text-blue-600" />
+    <div className="max-w-7xl mx-auto p-6 space-y-6">
+      <div className="text-center mb-8">
+        <h1 className="text-3xl font-bold mb-2 flex items-center justify-center gap-2">
+          <Type className="w-8 h-8" />
           Text & Code Converter Hub
         </h1>
-        <p className="text-muted-foreground">
-          Advanced text processing, encoding, and code formatting tools
-        </p>
+        <p className="text-muted-foreground">Professional text processing, encoding, and code formatting tools</p>
       </div>
 
-      <Tabs value={activeCategory} onValueChange={setActiveCategory} className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
-          {categories.map((category) => (
-            <TabsTrigger 
-              key={category.id} 
-              value={category.id}
-              className="flex items-center gap-2"
-            >
-              {category.icon}
-              {category.name}
-            </TabsTrigger>
-          ))}
+      <Tabs defaultValue="tools" className="w-full">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="tools">Converter Tools</TabsTrigger>
+          <TabsTrigger value="workspace">Workspace</TabsTrigger>
+          <TabsTrigger value="history">History ({conversionHistory.length})</TabsTrigger>
         </TabsList>
 
-        {categories.map((category) => (
-          <TabsContent key={category.id} value={category.id} className="space-y-6">
-            {/* Converter Selection */}
+        <TabsContent value="tools" className="space-y-6">
+          {/* Category Filter */}
+          <div className="flex flex-wrap gap-2">
+            {categories.map(category => (
+              <Button
+                key={category}
+                variant={activeCategory === category ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setActiveCategory(category)}
+                className="flex items-center gap-2"
+              >
+                {getCategoryIcon(category)}
+                {category.charAt(0).toUpperCase() + category.slice(1)}
+              </Button>
+            ))}
+          </div>
+
+          {/* Tools Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filteredTools.map(tool => (
+              <Card key={tool.id} className="group hover:shadow-lg transition-all duration-200">
+                <CardHeader className="pb-3">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-2">
+                      {tool.icon}
+                      <CardTitle className="text-lg">{tool.name}</CardTitle>
+                    </div>
+                    <div className="flex gap-1">
+                      {tool.isNew && <Badge variant="secondary" className="text-xs">New</Badge>}
+                      {tool.isPro && (
+                        <Badge variant="default" className="text-xs bg-gradient-to-r from-amber-500 to-orange-500">
+                          <Crown className="w-3 h-3 mr-1" />
+                          Pro
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+                  <p className="text-sm text-muted-foreground">{tool.description}</p>
+                </CardHeader>
+
+                <CardContent className="space-y-4">
+                  <div>
+                    <div className="text-xs text-muted-foreground mb-2">Features</div>
+                    <div className="flex flex-wrap gap-1">
+                      {tool.features.slice(0, 3).map(feature => (
+                        <Badge key={feature} variant="secondary" className="text-xs">
+                          {feature}
+                        </Badge>
+                      ))}
+                      {tool.features.length > 3 && (
+                        <Badge variant="outline" className="text-xs">
+                          +{tool.features.length - 3}
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+
+                  <Button 
+                    onClick={() => setSelectedTool(tool)}
+                    className="w-full"
+                    disabled={tool.isPro}
+                  >
+                    {tool.isPro ? 'Pro Feature' : 'Use Tool'}
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="workspace" className="space-y-6">
+          {selectedTool ? (
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  {category.icon}
-                  Choose Tool
+                  {selectedTool.icon}
+                  {selectedTool.name}
                 </CardTitle>
+                <p className="text-muted-foreground">{selectedTool.description}</p>
               </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {categoryConverters.map((converter) => (
-                    <div
-                      key={converter.id}
-                      className={`p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md ${
-                        selectedConverter?.id === converter.id
-                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                      onClick={() => setSelectedConverter(converter)}
-                    >
-                      <div className="flex items-start gap-3">
-                        <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded">
-                          {converter.icon}
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2">
-                            <h3 className="font-semibold text-sm">{converter.name}</h3>
-                            {converter.isPro && (
-                              <Badge variant="secondary" className="text-xs">PRO</Badge>
-                            )}
-                          </div>
-                          <p className="text-xs text-muted-foreground mt-1">
-                            {converter.description}
-                          </p>
-                        </div>
-                      </div>
+              <CardContent className="space-y-4">
+                {/* Tool-specific options */}
+                {selectedTool.id === 'case-converter' && (
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Case Type</label>
+                    <Select value={caseOption} onValueChange={setCaseOption}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="uppercase">UPPERCASE</SelectItem>
+                        <SelectItem value="lowercase">lowercase</SelectItem>
+                        <SelectItem value="title">Title Case</SelectItem>
+                        <SelectItem value="sentence">Sentence case</SelectItem>
+                        <SelectItem value="camel">camelCase</SelectItem>
+                        <SelectItem value="snake">snake_case</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Input</label>
+                    <Textarea
+                      value={inputText}
+                      onChange={(e) => setInputText(e.target.value)}
+                      placeholder={selectedTool.inputPlaceholder}
+                      className="min-h-[200px]"
+                    />
+                    <div className="text-xs text-muted-foreground mt-2">
+                      {inputText.length} characters
                     </div>
-                  ))}
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Output</label>
+                    <Textarea
+                      value={outputText}
+                      readOnly
+                      className="min-h-[200px] bg-muted"
+                    />
+                    <div className="text-xs text-muted-foreground mt-2">
+                      {outputText.length} characters
+                      {outputText && (
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => copyToClipboard(outputText)}
+                          className="ml-2 h-auto p-1"
+                        >
+                          <Copy className="w-3 h-3" />
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex gap-2">
+                  <Button 
+                    onClick={() => processText(selectedTool.id, inputText, caseOption)}
+                    disabled={!inputText || isProcessing}
+                    className="flex items-center gap-2"
+                  >
+                    {isProcessing ? (
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    ) : (
+                      <Zap className="w-4 h-4" />
+                    )}
+                    Convert
+                  </Button>
+                  <Button variant="outline" onClick={clearAll}>
+                    Clear All
+                  </Button>
+                  <Button variant="outline" onClick={() => setSelectedTool(null)}>
+                    Back to Tools
+                  </Button>
                 </div>
               </CardContent>
             </Card>
+          ) : (
+            <div className="text-center py-12">
+              <Type className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+              <h3 className="text-xl font-semibold mb-2">Select a Tool</h3>
+              <p className="text-muted-foreground">Choose a converter tool from the Tools tab to get started</p>
+            </div>
+          )}
+        </TabsContent>
 
-            {/* Conversion Interface */}
-            {selectedConverter && (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Input */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Upload className="w-5 h-5" />
-                      Input
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {renderConverterOptions()}
-                    
-                    <div className="space-y-2">
-                      <Label>Input Text</Label>
-                      <Textarea
-                        value={inputText}
-                        onChange={(e) => setInputText(e.target.value)}
-                        placeholder={`Enter text for ${selectedConverter.name}...`}
-                        className="min-h-[200px] font-mono text-sm"
-                      />
-                    </div>
-
-                    <div className="flex gap-2">
-                      <Button onClick={performConversion} className="flex-1">
-                        <Zap className="w-4 h-4 mr-2" />
-                        Convert
-                      </Button>
-                      <Button variant="outline" onClick={clearAll}>
-                        Clear
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Output */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <Download className="w-5 h-5" />
-                        Output
-                      </div>
-                      {outputText && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => copyToClipboard(outputText)}
-                        >
-                          <Copy className="w-4 h-4 mr-2" />
-                          Copy
-                        </Button>
-                      )}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="space-y-2">
-                      <Label>Converted Text</Label>
-                      <Textarea
-                        value={outputText}
-                        readOnly
-                        placeholder="Converted text will appear here..."
-                        className="min-h-[200px] font-mono text-sm bg-muted"
-                      />
-                    </div>
-
-                    {conversionHistory.length > 0 && conversionHistory[0].stats && (
-                      <div className="grid grid-cols-3 gap-4 text-center">
-                        <div className="p-2 bg-muted rounded">
-                          <div className="text-lg font-bold">{conversionHistory[0].stats.characters}</div>
-                          <div className="text-xs text-muted-foreground">Characters</div>
+        <TabsContent value="history" className="space-y-4">
+          {conversionHistory.length === 0 ? (
+            <div className="text-center py-12">
+              <FileText className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+              <h3 className="text-xl font-semibold mb-2">No conversion history</h3>
+              <p className="text-muted-foreground">Your conversion history will appear here</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {conversionHistory.map((result, index) => {
+                const tool = textTools.find(t => t.id === result.toolId);
+                return (
+                  <Card key={index}>
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-2">
+                          {tool?.icon}
+                          <div>
+                            <div className="font-medium">{tool?.name}</div>
+                            <div className="text-xs text-muted-foreground">
+                              {result.timestamp.toLocaleString()}
+                            </div>
+                          </div>
                         </div>
-                        <div className="p-2 bg-muted rounded">
-                          <div className="text-lg font-bold">{conversionHistory[0].stats.words}</div>
-                          <div className="text-xs text-muted-foreground">Words</div>
-                        </div>
-                        <div className="p-2 bg-muted rounded">
-                          <div className="text-lg font-bold">{conversionHistory[0].stats.lines}</div>
-                          <div className="text-xs text-muted-foreground">Lines</div>
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => copyToClipboard(result.output)}
+                          >
+                            <Copy className="w-3 h-3" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => {
+                              setSelectedTool(tool || null);
+                              setInputText(result.input);
+                              setOutputText(result.output);
+                            }}
+                          >
+                            Reopen
+                          </Button>
                         </div>
                       </div>
-                    )}
-                  </CardContent>
-                </Card>
-              </div>
-            )}
-
-            {/* Conversion History */}
-            {conversionHistory.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Eye className="w-5 h-5" />
-                    Recent Conversions
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {conversionHistory.map((result, index) => (
-                    <div key={index} className="p-3 border rounded-lg space-y-2">
-                      <div className="flex items-center justify-between">
-                        <Badge variant="outline" className="text-xs">
-                          Conversion #{conversionHistory.length - index}
-                        </Badge>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => copyToClipboard(result.converted)}
-                        >
-                          <Copy className="w-4 h-4" />
-                        </Button>
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                      
+                      <div className="grid grid-cols-2 gap-4 text-xs">
                         <div>
-                          <Label className="text-xs text-muted-foreground">Original</Label>
-                          <div className="p-2 bg-muted rounded font-mono text-xs max-h-20 overflow-y-auto">
-                            {result.original.slice(0, 100)}
-                            {result.original.length > 100 && '...'}
+                          <div className="text-muted-foreground mb-1">Input ({result.inputLength} chars)</div>
+                          <div className="bg-muted p-2 rounded text-xs max-h-20 overflow-auto">
+                            {result.input.substring(0, 100)}
+                            {result.input.length > 100 && '...'}
                           </div>
                         </div>
                         <div>
-                          <Label className="text-xs text-muted-foreground">Converted</Label>
-                          <div className="p-2 bg-muted rounded font-mono text-xs max-h-20 overflow-y-auto">
-                            {result.converted.slice(0, 100)}
-                            {result.converted.length > 100 && '...'}
+                          <div className="text-muted-foreground mb-1">Output ({result.outputLength} chars)</div>
+                          <div className="bg-muted p-2 rounded text-xs max-h-20 overflow-auto">
+                            {result.output.substring(0, 100)}
+                            {result.output.length > 100 && '...'}
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
-            )}
-          </TabsContent>
-        ))}
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          )}
+        </TabsContent>
       </Tabs>
     </div>
   );

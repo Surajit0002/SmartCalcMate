@@ -403,7 +403,7 @@ export default function Categories() {
               <Link key={tool.id} href={`/calculator/${tool.id}`}>
                 <Card className={`group cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-lg border-0 overflow-hidden ${
                   viewMode === 'list' ? 'flex items-center h-16' : 'h-32'
-                }`}></old_str>
+                }`}>
                   {viewMode === 'grid' ? (
                     <div className={`bg-gradient-to-br ${getToolGradient(tool.categoryId)} p-4 text-white relative h-full flex flex-col`}>
                       <div className="absolute top-2 right-2 flex gap-1">

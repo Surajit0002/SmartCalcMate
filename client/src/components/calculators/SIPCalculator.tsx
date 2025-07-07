@@ -1,245 +1,334 @@
-
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Copy, Share2, TrendingUp, PiggyBank } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area } from "recharts";
-
-interface SIPResult {
-  futureValue: number;
-  totalInvestment: number;
-  totalReturns: number;
-}
-
-function calculateSIP(monthlyAmount: number, annualRate: number, years: number): SIPResult {
-  const monthlyRate = annualRate / 100 / 12;
-  const totalMonths = years * 12;
-  const totalInvestment = monthlyAmount * totalMonths;
-  
-  const futureValue = monthlyAmount * (((1 + monthlyRate) ** totalMonths - 1) / monthlyRate) * (1 + monthlyRate);
-  const totalReturns = futureValue - totalInvestment;
-  
-  return {
-    futureValue: Math.round(futureValue),
-    totalInvestment: Math.round(totalInvestment),
-    totalReturns: Math.round(totalReturns)
-  };
-}
+import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area } from 'recharts';
+import { PiggyBank, TrendingUp, Target, DollarSign } from 'lucide-react';
 
 export default function SIPCalculator() {
-  const [monthlyAmount, setMonthlyAmount] = useState("5000");
-  const [expectedReturn, setExpectedReturn] = useState("12");
-  const [timePeriod, setTimePeriod] = useState("10");
-  const [result, setResult] = useState(calculateSIP(5000, 12, 10));
-  const { toast } = useToast();
+  const [monthlyAmount, setMonthlyAmount] = useState('5000');
+  const [expectedReturn, setExpectedReturn] = useState('12');
+  const [timePeriod, setTimePeriod] = useState('10');
+  const [frequency, setFrequency] = useState('monthly');
+  const [results, setResults] = useState<any>(null);
 
-  useEffect(() => {
-    const amount = parseFloat(monthlyAmount) || 0;
-    const rate = parseFloat(expectedReturn) || 0;
-    const years = parseFloat(timePeriod) || 0;
+  const calculateSIP = () => {
+    const P = parseFloat(monthlyAmount);
+    const annualRate = parseFloat(expectedReturn) / 100;
+    const years = parseFloat(timePeriod);
+    
+    let monthlyRate: number;
+    let totalMonths: number;
+    let investmentFrequency: number;
 
-    if (amount > 0 && rate > 0 && years > 0) {
-      setResult(calculateSIP(amount, rate, years));
+    switch (frequency) {
+      case 'weekly':
+        monthlyRate = annualRate / 52;
+        totalMonths = years * 52;
+        investmentFrequency = 52;
+        break;
+      case 'monthly':
+        monthlyRate = annualRate / 12;
+        totalMonths = years * 12;
+        investmentFrequency = 12;
+        break;
+      case 'quarterly':
+        monthlyRate = annualRate / 4;
+        totalMonths = years * 4;
+        investmentFrequency = 4;
+        break;
+      case 'yearly':
+        monthlyRate = annualRate;
+        totalMonths = years;
+        investmentFrequency = 1;
+        break;
+      default:
+        monthlyRate = annualRate / 12;
+        totalMonths = years * 12;
+        investmentFrequency = 12;
     }
-  }, [monthlyAmount, expectedReturn, timePeriod]);
 
-  const handleCopy = () => {
-    const text = `Future Value: ₹${result.futureValue.toLocaleString()}\nTotal Investment: ₹${result.totalInvestment.toLocaleString()}\nTotal Returns: ₹${result.totalReturns.toLocaleString()}`;
-    navigator.clipboard.writeText(text);
-    toast({
-      title: "Copied to clipboard",
-      description: "SIP calculation results copied successfully",
-    });
+    if (P && monthlyRate && totalMonths) {
+      // SIP Formula: M * [((1 + r)^n - 1) / r] * (1 + r)
+      const futureValue = P * (((Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate) * (1 + monthlyRate));
+      const totalInvestment = P * totalMonths;
+      const totalReturns = futureValue - totalInvestment;
+
+      // Year-wise breakdown
+      const yearlyData = [];
+      for (let year = 1; year <= years; year++) {
+        const periodsInYear = year * investmentFrequency;
+        const yearlyFutureValue = P * (((Math.pow(1 + monthlyRate, periodsInYear) - 1) / monthlyRate) * (1 + monthlyRate));
+        const yearlyInvestment = P * periodsInYear;
+        const yearlyReturns = yearlyFutureValue - yearlyInvestment;
+
+        yearlyData.push({
+          year,
+          investment: Math.round(yearlyInvestment),
+          returns: Math.round(yearlyReturns),
+          total: Math.round(yearlyFutureValue)
+        });
+      }
+
+      setResults({
+        futureValue: Math.round(futureValue),
+        totalInvestment: Math.round(totalInvestment),
+        totalReturns: Math.round(totalReturns),
+        yearlyData,
+        monthlyAmount: P,
+        years,
+        returnRate: parseFloat(expectedReturn)
+      });
+    }
   };
 
-  const pieData = [
-    { name: 'Total Investment', value: result.totalInvestment, fill: '#3b82f6' },
-    { name: 'Returns', value: result.totalReturns, fill: '#10b981' }
-  ];
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      maximumFractionDigits: 0
+    }).format(amount);
+  };
 
-  const yearlyData = Array.from({ length: parseInt(timePeriod) }, (_, i) => {
-    const year = i + 1;
-    const invested = parseFloat(monthlyAmount) * 12 * year;
-    const returns = calculateSIP(parseFloat(monthlyAmount), parseFloat(expectedReturn), year);
-    return {
-      year,
-      invested,
-      value: returns.futureValue,
-      returns: returns.totalReturns
-    };
-  });
-
-  const chartConfig = {
-    invested: { label: "Invested Amount", color: "#3b82f6" },
-    returns: { label: "Returns", color: "#10b981" },
-    value: { label: "Total Value", color: "#8b5cf6" }
+  const getFrequencyText = () => {
+    switch (frequency) {
+      case 'weekly': return 'Weekly';
+      case 'monthly': return 'Monthly';
+      case 'quarterly': return 'Quarterly';
+      case 'yearly': return 'Yearly';
+      default: return 'Monthly';
+    }
   };
 
   return (
-    <div className="space-y-6">
-      {/* Input Section */}
-      <Card className="shadow-lg border-0 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-gray-900 dark:to-gray-800">
-        <CardHeader className="pb-4">
-          <CardTitle className="flex items-center gap-2 text-2xl font-bold text-gray-900 dark:text-white">
-            <PiggyBank className="w-6 h-6 text-green-600" />
-            SIP Calculator
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="monthlyAmount" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Monthly Investment (₹)
-              </Label>
+    <div className="max-w-6xl mx-auto p-6 space-y-6">
+      <div className="text-center mb-8">
+        <h1 className="text-3xl font-bold mb-2 flex items-center justify-center gap-2">
+          <PiggyBank className="w-8 h-8" />
+          SIP Calculator
+        </h1>
+        <p className="text-muted-foreground">Plan your systematic investment with detailed projections</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Input Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Target className="w-5 h-5" />
+              Investment Details
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <Label htmlFor="amount">Investment Amount (₹)</Label>
               <Input
-                id="monthlyAmount"
+                id="amount"
                 type="number"
                 value={monthlyAmount}
                 onChange={(e) => setMonthlyAmount(e.target.value)}
-                className="text-lg font-semibold border-2 focus:border-green-500"
-                placeholder="Enter monthly amount"
+                placeholder="5000"
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="expectedReturn" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Expected Return (% per annum)
-              </Label>
+            <div>
+              <Label htmlFor="return">Expected Annual Return (%)</Label>
               <Input
-                id="expectedReturn"
+                id="return"
                 type="number"
                 step="0.1"
                 value={expectedReturn}
                 onChange={(e) => setExpectedReturn(e.target.value)}
-                className="text-lg font-semibold border-2 focus:border-green-500"
-                placeholder="Enter expected return"
+                placeholder="12"
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="timePeriod" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Investment Period (Years)
-              </Label>
+            <div>
+              <Label htmlFor="period">Investment Period (Years)</Label>
               <Input
-                id="timePeriod"
+                id="period"
                 type="number"
                 value={timePeriod}
                 onChange={(e) => setTimePeriod(e.target.value)}
-                className="text-lg font-semibold border-2 focus:border-green-500"
-                placeholder="Enter time period"
+                placeholder="10"
               />
             </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Results Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="shadow-lg border-0 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-gray-900 dark:to-gray-800">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-xl font-bold text-gray-900 dark:text-white">
-              <TrendingUp className="w-5 h-5 text-purple-600" />
-              Investment Results
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 gap-4">
-              <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border">
-                <p className="text-sm text-gray-600 dark:text-gray-300">Future Value</p>
-                <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">₹{result.futureValue.toLocaleString()}</p>
-              </div>
-              <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border">
-                <p className="text-sm text-gray-600 dark:text-gray-300">Total Investment</p>
-                <p className="text-xl font-semibold text-blue-600 dark:text-blue-400">₹{result.totalInvestment.toLocaleString()}</p>
-              </div>
-              <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border">
-                <p className="text-sm text-gray-600 dark:text-gray-300">Total Returns</p>
-                <p className="text-xl font-semibold text-green-600 dark:text-green-400">₹{result.totalReturns.toLocaleString()}</p>
-              </div>
+            <div>
+              <Label htmlFor="frequency">Investment Frequency</Label>
+              <Select value={frequency} onValueChange={setFrequency}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select frequency" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="weekly">Weekly</SelectItem>
+                  <SelectItem value="monthly">Monthly</SelectItem>
+                  <SelectItem value="quarterly">Quarterly</SelectItem>
+                  <SelectItem value="yearly">Yearly</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-            <div className="flex gap-2 pt-4">
-              <Button onClick={handleCopy} variant="outline" className="flex-1">
-                <Copy className="w-4 h-4 mr-2" />
-                Copy Results
-              </Button>
-              <Button variant="outline" className="flex-1">
-                <Share2 className="w-4 h-4 mr-2" />
-                Share
-              </Button>
-            </div>
+            <Button onClick={calculateSIP} className="w-full">
+              Calculate SIP
+            </Button>
           </CardContent>
         </Card>
 
-        {/* Pie Chart */}
-        <Card className="shadow-lg border-0">
-          <CardHeader>
-            <CardTitle className="text-xl font-bold text-gray-900 dark:text-white">
-              Investment vs Returns
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer config={chartConfig} className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={pieData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                  >
-                    {pieData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.fill} />
-                    ))}
-                  </Pie>
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                </PieChart>
-              </ResponsiveContainer>
-            </ChartContainer>
-          </CardContent>
-        </Card>
+        {/* Results Section */}
+        {results && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TrendingUp className="w-5 h-5" />
+                SIP Results
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                  <div className="text-2xl font-bold text-green-600">
+                    {formatCurrency(results.futureValue)}
+                  </div>
+                  <div className="text-sm text-muted-foreground">Future Value</div>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                    <div className="text-lg font-semibold text-blue-600">
+                      {formatCurrency(results.totalInvestment)}
+                    </div>
+                    <div className="text-xs text-muted-foreground">Total Investment</div>
+                  </div>
+                  <div className="text-center p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                    <div className="text-lg font-semibold text-purple-600">
+                      {formatCurrency(results.totalReturns)}
+                    </div>
+                    <div className="text-xs text-muted-foreground">Total Returns</div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 gap-2 text-sm">
+                  <div className="flex justify-between">
+                    <span>{getFrequencyText()} Investment:</span>
+                    <span className="font-semibold">{formatCurrency(results.monthlyAmount)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Investment Period:</span>
+                    <span className="font-semibold">{results.years} years</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Expected Return:</span>
+                    <span className="font-semibold">{results.returnRate}% per annum</span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
 
-      {/* Growth Chart */}
-      <Card className="shadow-lg border-0">
-        <CardHeader>
-          <CardTitle className="text-xl font-bold text-gray-900 dark:text-white">
-            SIP Growth Over Time
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ChartContainer config={chartConfig} className="h-80">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={yearlyData}>
-                <XAxis dataKey="year" />
-                <YAxis />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <Area
-                  type="monotone"
-                  dataKey="invested"
-                  stackId="1"
-                  stroke="#3b82f6"
-                  fill="#3b82f6"
-                  name="Invested Amount"
-                />
-                <Area
-                  type="monotone"
-                  dataKey="returns"
-                  stackId="1"
-                  stroke="#10b981"
-                  fill="#10b981"
-                  name="Returns"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </ChartContainer>
-        </CardContent>
-      </Card>
+      {/* Charts Section */}
+      {results && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Growth Chart */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Investment Growth Over Time</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <AreaChart data={results.yearlyData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="year" />
+                  <YAxis tickFormatter={(value) => `₹${(value / 100000).toFixed(1)}L`} />
+                  <Tooltip formatter={(value: any) => formatCurrency(value)} />
+                  <Legend />
+                  <Area 
+                    type="monotone" 
+                    dataKey="investment" 
+                    stackId="1"
+                    stroke="#3b82f6" 
+                    fill="#3b82f6" 
+                    name="Investment"
+                  />
+                  <Area 
+                    type="monotone" 
+                    dataKey="returns" 
+                    stackId="1"
+                    stroke="#10b981" 
+                    fill="#10b981" 
+                    name="Returns"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+
+          {/* Future Value Line Chart */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Portfolio Value Growth</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={results.yearlyData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="year" />
+                  <YAxis tickFormatter={(value) => `₹${(value / 100000).toFixed(1)}L`} />
+                  <Tooltip formatter={(value: any) => formatCurrency(value)} />
+                  <Legend />
+                  <Line 
+                    type="monotone" 
+                    dataKey="total" 
+                    stroke="#8b5cf6" 
+                    strokeWidth={3}
+                    name="Total Value"
+                  />
+                  <Line 
+                    type="monotone" 
+                    dataKey="investment" 
+                    stroke="#3b82f6" 
+                    strokeDasharray="5 5"
+                    name="Investment"
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Yearly Breakdown Table */}
+      {results && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Year-wise Investment Breakdown</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b">
+                    <th className="text-left p-2">Year</th>
+                    <th className="text-right p-2">Investment</th>
+                    <th className="text-right p-2">Returns</th>
+                    <th className="text-right p-2">Total Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {results.yearlyData.map((year: any) => (
+                    <tr key={year.year} className="border-b">
+                      <td className="p-2">{year.year}</td>
+                      <td className="text-right p-2">{formatCurrency(year.investment)}</td>
+                      <td className="text-right p-2 text-green-600">{formatCurrency(year.returns)}</td>
+                      <td className="text-right p-2 font-semibold">{formatCurrency(year.total)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
