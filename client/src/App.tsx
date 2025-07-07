@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/hooks/useTheme";
 import { I18nProvider } from "@/hooks/useI18n";
-import EnhancedHeader from "@/components/EnhancedHeader";
+import Header from "@/components/Header";
 import EnhancedFooter from "@/components/EnhancedFooter";
 import FloatingActionButton from "@/components/FloatingActionButton";
 import TrendingBanner from "@/components/TrendingBanner";
@@ -22,7 +22,7 @@ function Router() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300">
       <TrendingBanner />
       <div className="mt-12">
-        <EnhancedHeader />
+        <Header />
         <main className="relative">
           <Switch>
             <Route path="/" component={Home} />
