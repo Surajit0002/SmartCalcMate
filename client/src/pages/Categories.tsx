@@ -403,13 +403,27 @@ export default function Categories() {
               <Link key={tool.id} href={`/calculator/${tool.id}`}>
                 <Card className={`group cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-lg border-0 overflow-hidden ${
                   viewMode === 'list' ? 'flex items-center h-16' : 'h-32'
-                }`}>
+                } ${tool.isPopular ? 'ring-2 ring-orange-400 ring-opacity-50' : ''}`}>
                   {viewMode === 'grid' ? (
                     <div className={`bg-gradient-to-br ${getToolGradient(tool.categoryId)} p-4 text-white relative h-full flex flex-col`}>
-                      <div className="absolute top-2 right-2 flex gap-1">
-                        {tool.isNew && <div className="w-2 h-2 bg-green-400 rounded-full"></div>}
-                        {tool.isPro && <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>}
-                        {tool.isPopular && <div className="w-2 h-2 bg-orange-400 rounded-full"></div>}
+                      <div className="absolute top-2 right-2 flex flex-col gap-1">
+                        {tool.isPopular && (
+                          <Badge className="bg-orange-500 text-white text-xs px-2 py-0.5 flex items-center gap-1">
+                            <Star className="w-3 h-3 fill-current" />
+                            Popular
+                          </Badge>
+                        )}
+                        {tool.isNew && (
+                          <Badge className="bg-green-500 text-white text-xs px-2 py-0.5">
+                            New
+                          </Badge>
+                        )}
+                        {tool.isPro && (
+                          <Badge className="bg-yellow-500 text-white text-xs px-2 py-0.5 flex items-center gap-1">
+                            <Crown className="w-3 h-3 fill-current" />
+                            Pro
+                          </Badge>
+                        )}
                       </div>
                       
                       <div className="flex-1 flex items-center justify-center mb-3">
@@ -430,10 +444,10 @@ export default function Categories() {
                   ) : (
                     <>
                       <div className={`bg-gradient-to-br ${getToolGradient(tool.categoryId)} p-3 text-white flex-shrink-0 w-16 relative`}>
-                        <div className="absolute top-1 right-1 flex gap-1">
+                        <div className="absolute top-1 right-1 flex flex-col gap-1">
+                          {tool.isPopular && <div className="w-1.5 h-1.5 bg-orange-400 rounded-full animate-pulse"></div>}
                           {tool.isNew && <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>}
                           {tool.isPro && <div className="w-1.5 h-1.5 bg-yellow-400 rounded-full"></div>}
-                          {tool.isPopular && <div className="w-1.5 h-1.5 bg-orange-400 rounded-full"></div>}
                         </div>
                         
                         <div className="flex items-center justify-center h-full">
@@ -445,7 +459,26 @@ export default function Categories() {
                       
                       <div className="flex-1 bg-white dark:bg-gray-800 p-3 flex items-center justify-between">
                         <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-sm mb-1 truncate">{tool.name}</h3>
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3 className="font-semibold text-sm truncate">{tool.name}</h3>
+                            {tool.isPopular && (
+                              <Badge className="bg-orange-100 text-orange-800 text-xs">
+                                <Star className="w-3 h-3 mr-1 fill-current" />
+                                Popular
+                              </Badge>
+                            )}
+                            {tool.isNew && (
+                              <Badge className="bg-green-100 text-green-800 text-xs">
+                                New
+                              </Badge>
+                            )}
+                            {tool.isPro && (
+                              <Badge className="bg-yellow-100 text-yellow-800 text-xs">
+                                <Crown className="w-3 h-3 mr-1" />
+                                Pro
+                              </Badge>
+                            )}
+                          </div>
                           <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">{tool.description}</p>
                         </div>
                         <ArrowRight className="h-4 w-4 text-gray-400 ml-3 flex-shrink-0" />
