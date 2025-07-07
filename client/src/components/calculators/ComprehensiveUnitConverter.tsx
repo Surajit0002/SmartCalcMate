@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,7 +9,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { 
   Ruler, Scale, Thermometer, Clock, Gauge, Expand, 
-  Droplets, HardDrive, Zap, Activity, Copy, RotateCw
+  Droplets, HardDrive, Zap, Activity, Copy, RotateCw,
+  Star, TrendingUp, Calculator, Sparkles
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -24,6 +26,7 @@ interface UnitCategory {
   name: string;
   icon: React.ReactNode;
   color: string;
+  gradient: string;
   units: Unit[];
 }
 
@@ -33,6 +36,7 @@ const unitCategories: UnitCategory[] = [
     name: 'Length',
     icon: <Ruler className="w-5 h-5" />,
     color: 'blue',
+    gradient: 'from-blue-500 via-cyan-500 to-teal-500',
     units: [
       { name: 'Meter', symbol: 'm', factor: 1 },
       { name: 'Kilometer', symbol: 'km', factor: 1000 },
@@ -53,6 +57,7 @@ const unitCategories: UnitCategory[] = [
     name: 'Weight & Mass',
     icon: <Scale className="w-5 h-5" />,
     color: 'green',
+    gradient: 'from-green-500 via-emerald-500 to-lime-500',
     units: [
       { name: 'Kilogram', symbol: 'kg', factor: 1 },
       { name: 'Gram', symbol: 'g', factor: 0.001 },
@@ -73,6 +78,7 @@ const unitCategories: UnitCategory[] = [
     name: 'Temperature',
     icon: <Thermometer className="w-5 h-5" />,
     color: 'red',
+    gradient: 'from-red-500 via-orange-500 to-yellow-500',
     units: [
       { name: 'Celsius', symbol: '°C', factor: 1, offset: 0 },
       { name: 'Fahrenheit', symbol: '°F', factor: 5/9, offset: -32 },
@@ -86,6 +92,7 @@ const unitCategories: UnitCategory[] = [
     name: 'Time',
     icon: <Clock className="w-5 h-5" />,
     color: 'purple',
+    gradient: 'from-purple-500 via-violet-500 to-indigo-500',
     units: [
       { name: 'Second', symbol: 's', factor: 1 },
       { name: 'Minute', symbol: 'min', factor: 60 },
@@ -106,6 +113,7 @@ const unitCategories: UnitCategory[] = [
     name: 'Speed & Velocity',
     icon: <Gauge className="w-5 h-5" />,
     color: 'orange',
+    gradient: 'from-orange-500 via-amber-500 to-yellow-500',
     units: [
       { name: 'Meter per Second', symbol: 'm/s', factor: 1 },
       { name: 'Kilometer per Hour', symbol: 'km/h', factor: 0.277778 },
@@ -122,6 +130,7 @@ const unitCategories: UnitCategory[] = [
     name: 'Area',
     icon: <Expand className="w-5 h-5" />,
     color: 'teal',
+    gradient: 'from-teal-500 via-cyan-500 to-blue-500',
     units: [
       { name: 'Square Meter', symbol: 'm²', factor: 1 },
       { name: 'Square Kilometer', symbol: 'km²', factor: 1000000 },
@@ -140,6 +149,7 @@ const unitCategories: UnitCategory[] = [
     name: 'Volume & Capacity',
     icon: <Droplets className="w-5 h-5" />,
     color: 'cyan',
+    gradient: 'from-cyan-500 via-blue-500 to-indigo-500',
     units: [
       { name: 'Liter', symbol: 'L', factor: 1 },
       { name: 'Milliliter', symbol: 'mL', factor: 0.001 },
@@ -163,6 +173,7 @@ const unitCategories: UnitCategory[] = [
     name: 'Data Size',
     icon: <HardDrive className="w-5 h-5" />,
     color: 'indigo',
+    gradient: 'from-indigo-500 via-purple-500 to-pink-500',
     units: [
       { name: 'Byte', symbol: 'B', factor: 1 },
       { name: 'Kilobyte', symbol: 'KB', factor: 1000 },
@@ -183,6 +194,7 @@ const unitCategories: UnitCategory[] = [
     name: 'Power & Energy',
     icon: <Zap className="w-5 h-5" />,
     color: 'yellow',
+    gradient: 'from-yellow-500 via-orange-500 to-red-500',
     units: [
       { name: 'Watt', symbol: 'W', factor: 1 },
       { name: 'Kilowatt', symbol: 'kW', factor: 1000 },
@@ -200,6 +212,7 @@ const unitCategories: UnitCategory[] = [
     name: 'Pressure',
     icon: <Activity className="w-5 h-5" />,
     color: 'pink',
+    gradient: 'from-pink-500 via-rose-500 to-red-500',
     units: [
       { name: 'Pascal', symbol: 'Pa', factor: 1 },
       { name: 'Kilopascal', symbol: 'kPa', factor: 1000 },
@@ -222,6 +235,7 @@ export default function ComprehensiveUnitConverter() {
   const [inputValue, setInputValue] = useState('');
   const [result, setResult] = useState('');
   const [conversionHistory, setConversionHistory] = useState<any[]>([]);
+  const [isConverting, setIsConverting] = useState(false);
   const { toast } = useToast();
 
   const currentCategory = unitCategories.find(cat => cat.id === activeCategory);
@@ -287,19 +301,23 @@ export default function ComprehensiveUnitConverter() {
     const numValue = parseFloat(inputValue);
     if (isNaN(numValue)) return;
 
-    const convertedValue = convertUnits(numValue, fromUnit, toUnit, currentCategory);
-    const formattedResult = formatNumber(convertedValue);
-    setResult(formattedResult);
+    setIsConverting(true);
+    setTimeout(() => {
+      const convertedValue = convertUnits(numValue, fromUnit, toUnit, currentCategory);
+      const formattedResult = formatNumber(convertedValue);
+      setResult(formattedResult);
+      setIsConverting(false);
 
-    // Add to history
-    const historyItem = {
-      id: Date.now(),
-      category: currentCategory.name,
-      from: `${numValue} ${fromUnit}`,
-      to: `${formattedResult} ${toUnit}`,
-      timestamp: new Date().toLocaleTimeString()
-    };
-    setConversionHistory(prev => [historyItem, ...prev.slice(0, 9)]);
+      // Add to history
+      const historyItem = {
+        id: Date.now(),
+        category: currentCategory.name,
+        from: `${numValue} ${fromUnit}`,
+        to: `${formattedResult} ${toUnit}`,
+        timestamp: new Date().toLocaleTimeString()
+      };
+      setConversionHistory(prev => [historyItem, ...prev.slice(0, 9)]);
+    }, 300);
   };
 
   const formatNumber = (num: number) => {
@@ -345,178 +363,294 @@ export default function ComprehensiveUnitConverter() {
   }, [inputValue, fromUnit, toUnit, currentCategory]);
 
   return (
-    <div className="max-w-6xl mx-auto p-6 space-y-6">
-      <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold mb-4">Comprehensive Unit Converter</h1>
-        <p className="text-xl text-muted-foreground">
-          Convert between 120+ units across 10 categories with precision
-        </p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-purple-900">
+      <div className="max-w-7xl mx-auto p-6 space-y-8">
+        {/* Hero Section */}
+        <div className="text-center space-y-6 py-12">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="p-3 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl shadow-lg">
+              <Calculator className="w-8 h-8 text-white" />
+            </div>
+            <Sparkles className="w-6 h-6 text-yellow-500 animate-pulse" />
+          </div>
+          
+          <h1 className="text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-fade-in">
+            Comprehensive Unit Converter
+          </h1>
+          
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            Convert between <span className="font-semibold text-blue-600">120+ units</span> across 
+            <span className="font-semibold text-purple-600"> 10 categories</span> with precision and style
+          </p>
+          
+          <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-green-500" />
+              <span>Instant Conversion</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Star className="w-4 h-4 text-yellow-500" />
+              <span>High Precision</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-purple-500" />
+              <span>Beautiful UI</span>
+            </div>
+          </div>
+        </div>
 
-      <Tabs value={activeCategory} onValueChange={setActiveCategory}>
-        <TabsList className="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-10 w-full">
+        <Tabs value={activeCategory} onValueChange={setActiveCategory} className="space-y-8">
+          {/* Category Tabs */}
+          <div className="flex justify-center">
+            <TabsList className="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-10 w-full max-w-6xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border shadow-lg">
+              {unitCategories.map(category => (
+                <TabsTrigger 
+                  key={category.id} 
+                  value={category.id} 
+                  className="flex items-center gap-2 px-3 py-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-white data-[state=active]:to-gray-50 data-[state=active]:shadow-md transition-all duration-200 hover:scale-105"
+                >
+                  <div className={`p-1 rounded-lg bg-gradient-to-br ${category.gradient}`}>
+                    {category.icon}
+                  </div>
+                  <span className="hidden sm:inline font-medium">{category.name}</span>
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </div>
+
           {unitCategories.map(category => (
-            <TabsTrigger key={category.id} value={category.id} className="flex items-center gap-1">
-              {category.icon}
-              <span className="hidden sm:inline">{category.name}</span>
-            </TabsTrigger>
-          ))}
-        </TabsList>
-
-        {unitCategories.map(category => (
-          <TabsContent key={category.id} value={category.id}>
-            <div className="grid lg:grid-cols-3 gap-6">
-              {/* Converter */}
-              <div className="lg:col-span-2">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-3">
-                      {category.icon}
-                      {category.name} Converter
-                    </CardTitle>
-                    <CardDescription>
-                      Convert between {category.units.length} different {category.name.toLowerCase()} units
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    {/* From Unit */}
-                    <div className="space-y-2">
-                      <Label>From</Label>
-                      <div className="flex gap-2">
-                        <Input
-                          type="number"
-                          placeholder="Enter value"
-                          value={inputValue}
-                          onChange={(e) => setInputValue(e.target.value)}
-                          className="flex-1"
-                        />
-                        <Select value={fromUnit} onValueChange={setFromUnit}>
-                          <SelectTrigger className="w-40">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {category.units.map(unit => (
-                              <SelectItem key={unit.symbol} value={unit.symbol}>
-                                {unit.name} ({unit.symbol})
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+            <TabsContent key={category.id} value={category.id} className="space-y-8">
+              <div className="grid lg:grid-cols-3 gap-8">
+                {/* Main Converter */}
+                <div className="lg:col-span-2">
+                  <Card className="shadow-2xl border-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+                    <CardHeader className={`bg-gradient-to-r ${category.gradient} text-white rounded-t-lg`}>
+                      <CardTitle className="flex items-center gap-3 text-2xl">
+                        <div className="p-2 bg-white/20 rounded-lg">
+                          {category.icon}
+                        </div>
+                        {category.name} Converter
+                      </CardTitle>
+                      <CardDescription className="text-white/90 text-lg">
+                        Convert between {category.units.length} different {category.name.toLowerCase()} units with precision
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="p-8 space-y-8">
+                      {/* From Unit */}
+                      <div className="space-y-3">
+                        <Label className="text-lg font-semibold">From</Label>
+                        <div className="flex gap-3">
+                          <Input
+                            type="number"
+                            placeholder="Enter value"
+                            value={inputValue}
+                            onChange={(e) => setInputValue(e.target.value)}
+                            className="flex-1 text-lg h-14 border-2 focus:border-blue-500 transition-colors"
+                          />
+                          <Select value={fromUnit} onValueChange={setFromUnit}>
+                            <SelectTrigger className="w-48 h-14 border-2">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {category.units.map(unit => (
+                                <SelectItem key={unit.symbol} value={unit.symbol}>
+                                  {unit.name} ({unit.symbol})
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
                       </div>
-                    </div>
 
-                    {/* Swap Button */}
-                    <div className="flex justify-center">
-                      <Button variant="outline" onClick={swapUnits}>
-                        <RotateCw className="w-4 h-4" />
-                      </Button>
-                    </div>
-
-                    {/* To Unit */}
-                    <div className="space-y-2">
-                      <Label>To</Label>
-                      <div className="flex gap-2">
-                        <Input
-                          type="text"
-                          value={result}
-                          readOnly
-                          className="flex-1 font-mono"
-                          placeholder="Result will appear here"
-                        />
-                        <Select value={toUnit} onValueChange={setToUnit}>
-                          <SelectTrigger className="w-40">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {category.units.map(unit => (
-                              <SelectItem key={unit.symbol} value={unit.symbol}>
-                                {unit.name} ({unit.symbol})
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-
-                    {result && (
-                      <Button onClick={copyResult} className="w-full">
-                        <Copy className="w-4 h-4 mr-2" />
-                        Copy Result
-                      </Button>
-                    )}
-
-                    {/* Quick Convert Buttons */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                      {['1', '10', '100', '1000'].map(val => (
-                        <Button
-                          key={val}
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setInputValue(val)}
+                      {/* Swap Button */}
+                      <div className="flex justify-center">
+                        <Button 
+                          variant="outline" 
+                          onClick={swapUnits}
+                          className="h-12 w-12 rounded-full border-2 hover:scale-110 transition-transform shadow-lg"
                         >
-                          {val}
+                          <RotateCw className={`w-5 h-5 ${isConverting ? 'animate-spin' : ''}`} />
                         </Button>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
+                      </div>
 
-              {/* History & Quick Access */}
-              <div className="space-y-6">
-                {/* Conversion History */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Recent Conversions</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    {conversionHistory.length === 0 ? (
-                      <p className="text-muted-foreground text-sm">No conversions yet</p>
-                    ) : (
-                      <div className="space-y-2">
-                        {conversionHistory.map(item => (
-                          <div key={item.id} className="text-sm p-2 bg-muted rounded">
-                            <div className="font-medium">{item.from} → {item.to}</div>
-                            <div className="text-xs text-muted-foreground">
-                              {item.category} • {item.timestamp}
-                            </div>
+                      {/* To Unit */}
+                      <div className="space-y-3">
+                        <Label className="text-lg font-semibold">To</Label>
+                        <div className="flex gap-3">
+                          <div className="relative flex-1">
+                            <Input
+                              type="text"
+                              value={result}
+                              readOnly
+                              className="flex-1 font-mono text-lg h-14 border-2 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600"
+                              placeholder="Result will appear here"
+                            />
+                            {isConverting && (
+                              <div className="absolute inset-0 bg-white/50 dark:bg-gray-800/50 flex items-center justify-center rounded-md">
+                                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+                              </div>
+                            )}
                           </div>
+                          <Select value={toUnit} onValueChange={setToUnit}>
+                            <SelectTrigger className="w-48 h-14 border-2">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {category.units.map(unit => (
+                                <SelectItem key={unit.symbol} value={unit.symbol}>
+                                  {unit.name} ({unit.symbol})
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+
+                      {result && (
+                        <Button 
+                          onClick={copyResult} 
+                          className={`w-full h-12 bg-gradient-to-r ${category.gradient} hover:shadow-lg transition-all duration-200 text-lg font-semibold`}
+                        >
+                          <Copy className="w-5 h-5 mr-2" />
+                          Copy Result
+                        </Button>
+                      )}
+
+                      {/* Quick Values */}
+                      <div className="space-y-3">
+                        <Label className="text-sm font-medium text-muted-foreground">Quick Values</Label>
+                        <div className="grid grid-cols-4 gap-2">
+                          {['1', '10', '100', '1000'].map(val => (
+                            <Button
+                              key={val}
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setInputValue(val)}
+                              className="hover:scale-105 transition-transform"
+                            >
+                              {val}
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Sidebar */}
+                <div className="space-y-6">
+                  {/* Conversion History */}
+                  <Card className="shadow-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Clock className="w-5 h-5" />
+                        Recent Conversions
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      {conversionHistory.length === 0 ? (
+                        <p className="text-muted-foreground text-sm text-center py-8">
+                          No conversions yet
+                        </p>
+                      ) : (
+                        <div className="space-y-3">
+                          {conversionHistory.map(item => (
+                            <div key={item.id} className="p-3 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 rounded-lg border hover:shadow-md transition-shadow">
+                              <div className="font-medium text-sm">{item.from} → {item.to}</div>
+                              <div className="text-xs text-muted-foreground flex items-center gap-2">
+                                <Badge variant="secondary" className="text-xs">{item.category}</Badge>
+                                <span>{item.timestamp}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+
+                  {/* Popular Conversions */}
+                  <Card className="shadow-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <TrendingUp className="w-5 h-5" />
+                        Popular {category.name} Conversions
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-2">
+                        {getPopularConversions(category.id).map((conv, index) => (
+                          <Button
+                            key={index}
+                            variant="ghost"
+                            size="sm"
+                            className="w-full justify-start text-left hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-200 transition-all"
+                            onClick={() => {
+                              setFromUnit(conv.from);
+                              setToUnit(conv.to);
+                              setInputValue('1');
+                            }}
+                          >
+                            <Star className="w-3 h-3 mr-2 text-yellow-500" />
+                            {conv.name}
+                          </Button>
                         ))}
                       </div>
-                    )}
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </Card>
 
-                {/* Common Conversions */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Popular {category.name} Conversions</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      {getPopularConversions(category.id).map((conv, index) => (
-                        <Button
-                          key={index}
-                          variant="ghost"
-                          size="sm"
-                          className="w-full justify-start text-left"
-                          onClick={() => {
-                            setFromUnit(conv.from);
-                            setToUnit(conv.to);
-                            setInputValue('1');
-                          }}
-                        >
-                          {conv.name}
-                        </Button>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
+                  {/* Category Stats */}
+                  <Card className="shadow-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Activity className="w-5 h-5" />
+                        Category Info
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-muted-foreground">Total Units</span>
+                          <Badge className={`bg-gradient-to-r ${category.gradient} text-white`}>
+                            {category.units.length}
+                          </Badge>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-muted-foreground">Most Common</span>
+                          <Badge variant="outline">
+                            {category.units[0]?.symbol}
+                          </Badge>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-muted-foreground">Category</span>
+                          <Badge variant="secondary">
+                            {category.name}
+                          </Badge>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
               </div>
-            </div>
-          </TabsContent>
-        ))}
-      </Tabs>
+            </TabsContent>
+          ))}
+        </Tabs>
+
+        {/* Footer Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+          <Card className="text-center p-6 bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-xl">
+            <div className="text-3xl font-bold">{unitCategories.reduce((acc, cat) => acc + cat.units.length, 0)}+</div>
+            <div className="text-blue-100">Total Units</div>
+          </Card>
+          <Card className="text-center p-6 bg-gradient-to-br from-green-500 to-teal-600 text-white shadow-xl">
+            <div className="text-3xl font-bold">{unitCategories.length}</div>
+            <div className="text-green-100">Categories</div>
+          </Card>
+          <Card className="text-center p-6 bg-gradient-to-br from-purple-500 to-pink-600 text-white shadow-xl">
+            <div className="text-3xl font-bold">∞</div>
+            <div className="text-purple-100">Precision</div>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 }
