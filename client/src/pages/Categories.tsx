@@ -398,12 +398,12 @@ export default function Categories() {
             viewMode === 'grid' 
               ? 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6' 
               : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
-          }`}></div>
+          }`}>
             {filteredTools.map((tool, index) => (
               <Link key={tool.id} href={`/calculator/${tool.id}`}>
                 <Card className={`group cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-lg border-0 overflow-hidden ${
                   viewMode === 'list' ? 'flex items-center h-16' : 'h-32'
-                }`}></div>
+                }`}></old_str>
                   {viewMode === 'grid' ? (
                     <div className={`bg-gradient-to-br ${getToolGradient(tool.categoryId)} p-4 text-white relative h-full flex flex-col`}>
                       <div className="absolute top-2 right-2 flex gap-1">
