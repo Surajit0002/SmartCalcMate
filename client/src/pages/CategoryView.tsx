@@ -16,8 +16,16 @@ export default function CategoryView({ params }: CategoryViewProps) {
   const [, setLocation] = useLocation();
   const category = categories.find(c => c.id === params.id);
   
-  // Get calculators for this category
-  const categoryCalculators = calculators.filter(calc => calc.category === params.id);
+  // Get calculators for this category and remove duplicates using Map
+  const categoryCalculators = calculators
+    .filter(calc => calc.category === params.id)
+    .reduce((acc, calc) => {
+      const existing = acc.find(c => c.id === calc.id);
+      if (!existing) {
+        acc.push(calc);
+      }
+      return acc;
+    }, [] as typeof calculators);
 
   if (!category) {
     return (
