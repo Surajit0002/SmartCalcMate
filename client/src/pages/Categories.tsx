@@ -393,59 +393,62 @@ export default function Categories() {
             </TabsList>
           </Tabs>
 
-          {/* Ultra-Compact Tools Grid */}
-          <div className={`grid gap-1.5 ${
+          {/* Enhanced Tools Grid */}
+          <div className={`grid gap-4 ${
             viewMode === 'grid' 
-              ? 'grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 xl:grid-cols-16 2xl:grid-cols-20' 
+              ? 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6' 
               : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
-          }`}>
+          }`}></div>
             {filteredTools.map((tool, index) => (
               <Link key={tool.id} href={`/calculator/${tool.id}`}>
-                <Card className={`group cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border-0 overflow-hidden ${
-                  viewMode === 'list' ? 'flex items-center h-14' : 'h-16'
-                }`}>
+                <Card className={`group cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-lg border-0 overflow-hidden ${
+                  viewMode === 'list' ? 'flex items-center h-16' : 'h-32'
+                }`}></div>
                   {viewMode === 'grid' ? (
-                    <div className={`bg-gradient-to-br ${getToolGradient(tool.categoryId)} p-1.5 text-white relative h-full flex flex-col`}>
-                      <div className="absolute top-0.5 right-0.5 flex gap-0.5">
-                        {tool.isNew && <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>}
-                        {tool.isPro && <div className="w-1.5 h-1.5 bg-yellow-400 rounded-full"></div>}
-                        {tool.isPopular && <div className="w-1.5 h-1.5 bg-orange-400 rounded-full"></div>}
+                    <div className={`bg-gradient-to-br ${getToolGradient(tool.categoryId)} p-4 text-white relative h-full flex flex-col`}>
+                      <div className="absolute top-2 right-2 flex gap-1">
+                        {tool.isNew && <div className="w-2 h-2 bg-green-400 rounded-full"></div>}
+                        {tool.isPro && <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>}
+                        {tool.isPopular && <div className="w-2 h-2 bg-orange-400 rounded-full"></div>}
                       </div>
                       
-                      <div className="flex-1 flex items-center justify-center">
-                        <div className="bg-white/20 backdrop-blur-sm rounded p-1 group-hover:scale-110 transition-transform duration-200">
-                          <i className={`fas ${tool.icon} text-sm text-white`}></i>
+                      <div className="flex-1 flex items-center justify-center mb-3">
+                        <div className="bg-white/20 backdrop-blur-sm rounded-lg p-3 group-hover:scale-110 transition-transform duration-200">
+                          <i className={`fas ${tool.icon} text-xl text-white`}></i>
                         </div>
                       </div>
                       
-                      <div className="text-center mt-1">
-                        <h3 className="font-medium text-[9px] leading-tight line-clamp-2 max-h-[18px]">
+                      <div className="text-center">
+                        <h3 className="font-semibold text-sm leading-tight line-clamp-2 mb-1">
                           {tool.name}
                         </h3>
+                        <p className="text-xs text-white/80 line-clamp-2">
+                          {tool.description}
+                        </p>
                       </div>
                     </div>
                   ) : (
                     <>
-                      <div className={`bg-gradient-to-br ${getToolGradient(tool.categoryId)} p-2 text-white flex-shrink-0 w-12 relative`}>
-                        <div className="absolute top-0.5 right-0.5 flex gap-0.5">
-                          {tool.isNew && <div className="w-1 h-1 bg-green-400 rounded-full"></div>}
-                          {tool.isPro && <div className="w-1 h-1 bg-yellow-400 rounded-full"></div>}
-                          {tool.isPopular && <div className="w-1 h-1 bg-orange-400 rounded-full"></div>}
+                      <div className={`bg-gradient-to-br ${getToolGradient(tool.categoryId)} p-3 text-white flex-shrink-0 w-16 relative`}>
+                        <div className="absolute top-1 right-1 flex gap-1">
+                          {tool.isNew && <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>}
+                          {tool.isPro && <div className="w-1.5 h-1.5 bg-yellow-400 rounded-full"></div>}
+                          {tool.isPopular && <div className="w-1.5 h-1.5 bg-orange-400 rounded-full"></div>}
                         </div>
                         
                         <div className="flex items-center justify-center h-full">
-                          <div className="bg-white/20 backdrop-blur-sm rounded p-1">
-                            <i className={`fas ${tool.icon} text-xs text-white`}></i>
+                          <div className="bg-white/20 backdrop-blur-sm rounded p-2">
+                            <i className={`fas ${tool.icon} text-sm text-white`}></i>
                           </div>
                         </div>
                       </div>
                       
-                      <div className="flex-1 bg-white dark:bg-gray-800 p-2 flex items-center justify-between">
+                      <div className="flex-1 bg-white dark:bg-gray-800 p-3 flex items-center justify-between">
                         <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-xs mb-0.5 truncate">{tool.name}</h3>
-                          <p className="text-[10px] text-gray-600 dark:text-gray-400 line-clamp-1">{tool.description}</p>
+                          <h3 className="font-semibold text-sm mb-1 truncate">{tool.name}</h3>
+                          <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">{tool.description}</p>
                         </div>
-                        <ArrowRight className="h-3 w-3 text-gray-400 ml-2 flex-shrink-0" />
+                        <ArrowRight className="h-4 w-4 text-gray-400 ml-3 flex-shrink-0" />
                       </div>
                     </>
                   )}
