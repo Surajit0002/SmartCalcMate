@@ -8,13 +8,13 @@ import { ArrowLeft, Calculator, TrendingUp, Zap, Clock } from "lucide-react";
 
 interface CategoryViewProps {
   params: {
-    category: string;
+    id: string;
   };
 }
 
 export default function CategoryView({ params }: CategoryViewProps) {
   const [, setLocation] = useLocation();
-  const category = getCategoryById(params.category);
+  const category = getCategoryById(params.id);
 
   if (!category) {
     return (

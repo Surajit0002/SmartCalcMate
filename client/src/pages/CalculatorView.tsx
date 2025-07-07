@@ -29,13 +29,13 @@ import TextCodeConverterHub from "@/components/calculators/TextCodeConverterHub"
 
 interface CalculatorViewProps {
   params: {
-    calculator: string;
+    id: string;
   };
 }
 
 export default function CalculatorView({ params }: CalculatorViewProps) {
   const [, setLocation] = useLocation();
-  const calculator = getCalculatorById(params.calculator);
+  const calculator = getCalculatorById(params.id);
 
   if (!calculator) {
     return (
@@ -81,19 +81,19 @@ export default function CalculatorView({ params }: CalculatorViewProps) {
     ];
 
     // Route to appropriate component based on category
-    if (financialTools.includes(params.calculator)) {
+    if (financialTools.includes(params.id)) {
       return <ComprehensiveFinancialSuite />;
     }
 
-    if (unitConverters.includes(params.calculator)) {
+    if (unitConverters.includes(params.id)) {
       return <ComprehensiveUnitConverter />;
     }
 
-    if (textTools.includes(params.calculator)) {
+    if (textTools.includes(params.id)) {
       return <TextCodeConverterHub />;
     }
 
-    if (aiTools.includes(params.calculator)) {
+    if (aiTools.includes(params.id)) {
       return <AIConverterHub />;
     }
 
@@ -104,7 +104,7 @@ export default function CalculatorView({ params }: CalculatorViewProps) {
       'csv-to-xml', 'docx-to-odt', 'merge-pdf', 'split-pdf', 'compress-pdf', 'remove-pdf-password'
     ];
     
-    if (fileTools.includes(params.calculator)) {
+    if (fileTools.includes(params.id)) {
       return <FileConverterHub />;
     }
 
@@ -114,12 +114,12 @@ export default function CalculatorView({ params }: CalculatorViewProps) {
       'video-compressor', 'mp4-to-gif', 'gif-to-mp4', 'youtube-to-mp3', 'youtube-thumbnail'
     ];
     
-    if (mediaTools.includes(params.calculator)) {
+    if (mediaTools.includes(params.id)) {
       return <MediaConverterHub />;
     }
 
     // Individual calculator components for specific tools
-    switch (params.calculator) {
+    switch (params.id) {
       case 'emi': return <EMICalculator />;
       case 'sip': return <SIPCalculator />;
       case 'mortgage': return <MortgageCalculator />;
