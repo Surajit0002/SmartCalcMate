@@ -16,6 +16,7 @@ import {
   Heart, Code, Globe, Settings, FileText, Video, Brain
 } from 'lucide-react';
 import { categories, calculators } from '@/lib/calculatorData';
+import { getCardStyles } from '@/lib/cardColors';
 import SEOHead from '@/components/SEOHead';
 
 const iconMap = {

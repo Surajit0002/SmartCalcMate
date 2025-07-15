@@ -17,6 +17,7 @@ import {
   Radar, Crosshair, Fingerprint, RefreshCw, Shuffle, ListFilter
 } from 'lucide-react';
 import { categories, calculators } from '@/lib/calculatorData';
+import { getCardStyles } from '@/lib/cardColors';
 import SEOHead from '@/components/SEOHead';
 
 const iconMap = {
@@ -263,60 +264,65 @@ export default function EnhancedHome() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {featuredCalculators.map((tool) => (
-                <Link key={tool.id} href={`/calculator/${tool.id}`}>
-                  <Card className="group cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105 h-full">
-                    <CardHeader className="pb-3">
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-center gap-3">
-                          <div className="p-2 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg text-white group-hover:scale-110 transition-transform">
-                            {getIcon(tool.icon)}
+              {featuredCalculators.map((tool, index) => {
+                const cardStyles = getCardStyles(index);
+                return (
+                  <Link key={tool.id} href={`/calculator/${tool.id}`}>
+                    <Card className={`group cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105 ${cardStyles.cardBg} border-0 shadow-lg`} style={{ minHeight: '280px' }}>
+                      <CardHeader className="pb-3 h-24">
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex items-center gap-3">
+                            <div className={`p-2 ${cardStyles.iconBg} rounded-lg text-white group-hover:scale-110 transition-transform`}>
+                              {getIcon(tool.icon)}
+                            </div>
+                            <div>
+                              <CardTitle className="text-lg text-white group-hover:text-yellow-300 transition-colors">
+                                {tool.name}
+                              </CardTitle>
+                              {tool.rating && (
+                                <div className="flex items-center gap-1 mt-1">
+                                  {getRatingStars(tool.rating)}
+                                  <span className="text-sm text-white/80 ml-1">
+                                    {tool.rating.toFixed(1)}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
                           </div>
-                          <div>
-                            <CardTitle className="text-lg group-hover:text-blue-600 transition-colors">
-                              {tool.name}
-                            </CardTitle>
-                            {tool.rating && (
-                              <div className="flex items-center gap-1 mt-1">
-                                {getRatingStars(tool.rating)}
-                                <span className="text-sm text-gray-500 ml-1">
-                                  {tool.rating.toFixed(1)}
-                                </span>
+                          <Badge className="bg-yellow-400 text-yellow-900 hover:bg-yellow-300">
+                            <Star className="w-3 h-3 mr-1" />
+                            Featured
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="flex flex-col justify-between" style={{ minHeight: '156px' }}>
+                        <div>
+                          <p className="text-white/90 mb-4 line-clamp-3">
+                            {tool.description}
+                          </p>
+                          
+                          <div className="flex items-center justify-between mb-3">
+                            <Badge variant="outline" className="text-xs text-white border-white/30 bg-white/20">
+                              {categories.find(c => c.id === tool.category)?.name}
+                            </Badge>
+                            {tool.usageCount && (
+                              <div className="flex items-center text-xs text-white/80">
+                                <Users className="w-3 h-3 mr-1" />
+                                {tool.usageCount.toLocaleString()}
                               </div>
                             )}
                           </div>
                         </div>
-                        <Badge className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
-                          <Star className="w-3 h-3 mr-1" />
-                          Featured
-                        </Badge>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-gray-600 dark:text-gray-300 mb-4">
-                        {tool.description}
-                      </p>
-                      
-                      <div className="flex items-center justify-between mb-3">
-                        <Badge variant="outline" className="text-xs">
-                          {categories.find(c => c.id === tool.category)?.name}
-                        </Badge>
-                        {tool.usageCount && (
-                          <div className="flex items-center text-xs text-gray-500">
-                            <Users className="w-3 h-3 mr-1" />
-                            {tool.usageCount.toLocaleString()}
-                          </div>
-                        )}
-                      </div>
-                      
-                      <Button size="sm" className="w-full group-hover:bg-blue-600 transition-colors">
-                        Open Tool
-                        <ArrowRight className="w-4 h-4 ml-2" />
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </Link>
-              ))}
+                        
+                        <Button size="sm" className="w-full bg-white/20 hover:bg-white/30 text-white border-white/30 transition-colors">
+                          Open Tool
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                );
+              })}
             </div>
           </TabsContent>
 
@@ -332,73 +338,76 @@ export default function EnhancedHome() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {categories.map((category) => (
-                <Link key={category.id} href={`/category/${category.id}`}>
-                  <Card className="group cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105 h-full">
-                    <div className={`h-2 bg-gradient-to-r ${category.gradient}`}></div>
-                    <CardHeader className="pb-3">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className={`p-3 rounded-xl bg-gradient-to-r ${category.gradient} text-white group-hover:scale-110 transition-transform`}>
-                          {getIcon(category.icon)}
-                        </div>
-                        <div className="flex gap-2">
-                          {category.trending && (
-                            <Badge className="bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
-                              <TrendingUp className="w-3 h-3 mr-1" />
-                              Trending
-                            </Badge>
-                          )}
-                          {category.isPopular && (
-                            <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                              <Flame className="w-3 h-3 mr-1" />
-                              Popular
-                            </Badge>
-                          )}
-                        </div>
-                      </div>
-                      <CardTitle className="text-xl group-hover:text-blue-600 transition-colors">
-                        {category.name}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-gray-600 dark:text-gray-300 mb-4">
-                        {category.description}
-                      </p>
-                      
-                      <div className="flex items-center justify-between mb-3">
-                        <Badge variant="outline" className="text-sm">
-                          {category.calculators.length} Tools
-                        </Badge>
-                        <div className="flex items-center text-sm text-gray-500">
-                          <Users className="w-4 h-4 mr-1" />
-                          {category.calculators.reduce((sum, tool) => sum + (tool.usageCount || 0), 0).toLocaleString()}
-                        </div>
-                      </div>
-                      
-                      {/* Show top 3 tools in category */}
-                      <div className="space-y-2 mb-4">
-                        {category.calculators.slice(0, 3).map((tool) => (
-                          <div key={tool.id} className="flex items-center gap-2 text-sm">
-                            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                            <span className="text-gray-700 dark:text-gray-300">{tool.name}</span>
-                            {tool.featured && <Star className="w-3 h-3 text-yellow-500" />}
+              {categories.map((category, index) => {
+                const cardStyles = getCardStyles(index + 5); // Offset for different colors
+                return (
+                  <Link key={category.id} href={`/category/${category.id}`}>
+                    <Card className={`group cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105 ${cardStyles.cardBg} border-0 shadow-lg`} style={{ minHeight: '320px' }}>
+                      <div className={`h-2 ${cardStyles.iconBg}`}></div>
+                      <CardHeader className="pb-3">
+                        <div className="flex items-center justify-between mb-3">
+                          <div className={`p-3 rounded-xl ${cardStyles.iconBg} text-white group-hover:scale-110 transition-transform`}>
+                            {getIcon(category.icon)}
                           </div>
-                        ))}
-                        {category.calculators.length > 3 && (
-                          <div className="text-sm text-gray-500">
-                            +{category.calculators.length - 3} more tools
+                          <div className="flex gap-2">
+                            {category.trending && (
+                              <Badge className="bg-orange-400 text-orange-900 hover:bg-orange-300">
+                                <TrendingUp className="w-3 h-3 mr-1" />
+                                Trending
+                              </Badge>
+                            )}
+                            {category.isPopular && (
+                              <Badge className="bg-blue-400 text-blue-900 hover:bg-blue-300">
+                                <Flame className="w-3 h-3 mr-1" />
+                                Popular
+                              </Badge>
+                            )}
                           </div>
-                        )}
-                      </div>
-                      
-                      <Button size="sm" className={`w-full bg-gradient-to-r ${category.gradient} hover:opacity-90 transition-opacity`}>
-                        Explore Category
-                        <ChevronRight className="w-4 h-4 ml-2" />
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </Link>
-              ))}
+                        </div>
+                        <CardTitle className="text-xl text-white group-hover:text-yellow-300 transition-colors">
+                          {category.name}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-white/90 mb-4">
+                          {category.description}
+                        </p>
+                        
+                        <div className="flex items-center justify-between mb-3">
+                          <Badge variant="outline" className="text-sm text-white border-white/30 bg-white/20">
+                            {category.calculators.length} Tools
+                          </Badge>
+                          <div className="flex items-center text-sm text-white/80">
+                            <Users className="w-4 h-4 mr-1" />
+                            {category.calculators.reduce((sum, tool) => sum + (tool.usageCount || 0), 0).toLocaleString()}
+                          </div>
+                        </div>
+                        
+                        {/* Show top 3 tools in category */}
+                        <div className="space-y-2 mb-4">
+                          {category.calculators.slice(0, 3).map((tool) => (
+                            <div key={tool.id} className="flex items-center gap-2 text-sm">
+                              <div className="w-2 h-2 bg-white/70 rounded-full"></div>
+                              <span className="text-white/90">{tool.name}</span>
+                              {tool.featured && <Star className="w-3 h-3 text-yellow-400" />}
+                            </div>
+                          ))}
+                          {category.calculators.length > 3 && (
+                            <div className="text-sm text-white/60">
+                              +{category.calculators.length - 3} more tools
+                            </div>
+                          )}
+                        </div>
+                        
+                        <Button size="sm" className="w-full bg-white/20 hover:bg-white/30 text-white border-white/30 transition-colors">
+                          Explore Category
+                          <ChevronRight className="w-4 h-4 ml-2" />
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                );
+              })}
             </div>
           </TabsContent>
 
@@ -414,60 +423,65 @@ export default function EnhancedHome() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {popularCalculators.map((tool) => (
-                <Link key={tool.id} href={`/calculator/${tool.id}`}>
-                  <Card className="group cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105 h-full">
-                    <CardHeader className="pb-3">
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-center gap-3">
-                          <div className="p-2 bg-gradient-to-br from-red-500 to-pink-600 rounded-lg text-white group-hover:scale-110 transition-transform">
-                            {getIcon(tool.icon)}
+              {popularCalculators.map((tool, index) => {
+                const cardStyles = getCardStyles(index + 10); // Offset for different colors
+                return (
+                  <Link key={tool.id} href={`/calculator/${tool.id}`}>
+                    <Card className={`group cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105 ${cardStyles.cardBg} border-0 shadow-lg`} style={{ minHeight: '280px' }}>
+                      <CardHeader className="pb-3 h-24">
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex items-center gap-3">
+                            <div className={`p-2 ${cardStyles.iconBg} rounded-lg text-white group-hover:scale-110 transition-transform`}>
+                              {getIcon(tool.icon)}
+                            </div>
+                            <div>
+                              <CardTitle className="text-lg text-white group-hover:text-yellow-300 transition-colors">
+                                {tool.name}
+                              </CardTitle>
+                              {tool.rating && (
+                                <div className="flex items-center gap-1 mt-1">
+                                  {getRatingStars(tool.rating)}
+                                  <span className="text-sm text-white/80 ml-1">
+                                    {tool.rating.toFixed(1)}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
                           </div>
-                          <div>
-                            <CardTitle className="text-lg group-hover:text-blue-600 transition-colors">
-                              {tool.name}
-                            </CardTitle>
-                            {tool.rating && (
-                              <div className="flex items-center gap-1 mt-1">
-                                {getRatingStars(tool.rating)}
-                                <span className="text-sm text-gray-500 ml-1">
-                                  {tool.rating.toFixed(1)}
-                                </span>
+                          <Badge className="bg-red-400 text-red-900 hover:bg-red-300">
+                            <Flame className="w-3 h-3 mr-1" />
+                            Popular
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="flex flex-col justify-between" style={{ minHeight: '156px' }}>
+                        <div>
+                          <p className="text-white/90 mb-4 line-clamp-3">
+                            {tool.description}
+                          </p>
+                          
+                          <div className="flex items-center justify-between mb-3">
+                            <Badge variant="outline" className="text-xs text-white border-white/30 bg-white/20">
+                              {categories.find(c => c.id === tool.category)?.name}
+                            </Badge>
+                            {tool.usageCount && (
+                              <div className="flex items-center text-xs text-white/80">
+                                <Users className="w-3 h-3 mr-1" />
+                                {tool.usageCount.toLocaleString()}
                               </div>
                             )}
                           </div>
                         </div>
-                        <Badge className="bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
-                          <Flame className="w-3 h-3 mr-1" />
-                          Popular
-                        </Badge>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-gray-600 dark:text-gray-300 mb-4">
-                        {tool.description}
-                      </p>
-                      
-                      <div className="flex items-center justify-between mb-3">
-                        <Badge variant="outline" className="text-xs">
-                          {categories.find(c => c.id === tool.category)?.name}
-                        </Badge>
-                        {tool.usageCount && (
-                          <div className="flex items-center text-xs text-gray-500">
-                            <Users className="w-3 h-3 mr-1" />
-                            {tool.usageCount.toLocaleString()}
-                          </div>
-                        )}
-                      </div>
-                      
-                      <Button size="sm" className="w-full group-hover:bg-red-600 transition-colors">
-                        Open Tool
-                        <ArrowRight className="w-4 h-4 ml-2" />
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </Link>
-              ))}
+                        
+                        <Button size="sm" className="w-full bg-white/20 hover:bg-white/30 text-white border-white/30 transition-colors">
+                          Open Tool
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                );
+              })}
             </div>
           </TabsContent>
 
@@ -483,60 +497,65 @@ export default function EnhancedHome() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {newCalculators.map((tool) => (
-                <Link key={tool.id} href={`/calculator/${tool.id}`}>
-                  <Card className="group cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105 h-full">
-                    <CardHeader className="pb-3">
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-center gap-3">
-                          <div className="p-2 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg text-white group-hover:scale-110 transition-transform">
-                            {getIcon(tool.icon)}
+              {newCalculators.map((tool, index) => {
+                const cardStyles = getCardStyles(index + 15); // Offset for different colors
+                return (
+                  <Link key={tool.id} href={`/calculator/${tool.id}`}>
+                    <Card className={`group cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105 ${cardStyles.cardBg} border-0 shadow-lg`} style={{ minHeight: '280px' }}>
+                      <CardHeader className="pb-3 h-24">
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex items-center gap-3">
+                            <div className={`p-2 ${cardStyles.iconBg} rounded-lg text-white group-hover:scale-110 transition-transform`}>
+                              {getIcon(tool.icon)}
+                            </div>
+                            <div>
+                              <CardTitle className="text-lg text-white group-hover:text-yellow-300 transition-colors">
+                                {tool.name}
+                              </CardTitle>
+                              {tool.rating && (
+                                <div className="flex items-center gap-1 mt-1">
+                                  {getRatingStars(tool.rating)}
+                                  <span className="text-sm text-white/80 ml-1">
+                                    {tool.rating.toFixed(1)}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
                           </div>
-                          <div>
-                            <CardTitle className="text-lg group-hover:text-blue-600 transition-colors">
-                              {tool.name}
-                            </CardTitle>
-                            {tool.rating && (
-                              <div className="flex items-center gap-1 mt-1">
-                                {getRatingStars(tool.rating)}
-                                <span className="text-sm text-gray-500 ml-1">
-                                  {tool.rating.toFixed(1)}
-                                </span>
+                          <Badge className="bg-green-400 text-green-900 hover:bg-green-300">
+                            <Sparkles className="w-3 h-3 mr-1" />
+                            New
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="flex flex-col justify-between" style={{ minHeight: '156px' }}>
+                        <div>
+                          <p className="text-white/90 mb-4 line-clamp-3">
+                            {tool.description}
+                          </p>
+                          
+                          <div className="flex items-center justify-between mb-3">
+                            <Badge variant="outline" className="text-xs text-white border-white/30 bg-white/20">
+                              {categories.find(c => c.id === tool.category)?.name}
+                            </Badge>
+                            {tool.usageCount && (
+                              <div className="flex items-center text-xs text-white/80">
+                                <Users className="w-3 h-3 mr-1" />
+                                {tool.usageCount.toLocaleString()}
                               </div>
                             )}
                           </div>
                         </div>
-                        <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                          <Sparkles className="w-3 h-3 mr-1" />
-                          New
-                        </Badge>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-gray-600 dark:text-gray-300 mb-4">
-                        {tool.description}
-                      </p>
-                      
-                      <div className="flex items-center justify-between mb-3">
-                        <Badge variant="outline" className="text-xs">
-                          {categories.find(c => c.id === tool.category)?.name}
-                        </Badge>
-                        {tool.usageCount && (
-                          <div className="flex items-center text-xs text-gray-500">
-                            <Users className="w-3 h-3 mr-1" />
-                            {tool.usageCount.toLocaleString()}
-                          </div>
-                        )}
-                      </div>
-                      
-                      <Button size="sm" className="w-full group-hover:bg-green-600 transition-colors">
-                        Try Now
-                        <ArrowRight className="w-4 h-4 ml-2" />
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </Link>
-              ))}
+                        
+                        <Button size="sm" className="w-full bg-white/20 hover:bg-white/30 text-white border-white/30 transition-colors">
+                          Try Now
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                );
+              })}
             </div>
           </TabsContent>
         </Tabs>
