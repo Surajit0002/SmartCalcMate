@@ -1,3 +1,14 @@
+import React from 'react';
+import { 
+  Search, Grid3X3, List, ArrowRight, Star, TrendingUp, Crown,
+  Calculator, Clock, Users, Target, Flame, Sparkles, Timer,
+  Filter, SortAsc, BarChart3, Eye, Award, Zap, Shield,
+  CheckCircle2, Lightbulb, Workflow, MapPin, Compass, Radar,
+  Crosshair, Fingerprint, RefreshCw, Shuffle, ListFilter,
+  Heart, Code, Globe, Settings, FileText, Video, Brain,
+  Download, Image, Music, Share2
+} from 'lucide-react';
+
 export interface Calculator {
   id: string;
   name: string;
@@ -33,6 +44,45 @@ export interface Category {
   trending?: boolean;
   iconComponent?: React.ReactNode;
 }
+
+const iconMap = {
+  'fa-chart-line': BarChart3,
+  'fa-heartbeat': Heart,
+  'fa-square-root-alt': Calculator,
+  'fa-calendar-day': Clock,
+  'fa-exchange-alt': RefreshCw,
+  'fa-file-alt': FileText,
+  'fa-video': Video,
+  'fa-bitcoin': Target,
+  'fa-code': Code,
+  'fa-robot': Brain,
+  'fa-language': Globe,
+  'fa-tools': Settings,
+  'fa-piggy-bank': Target,
+  'fa-percentage': Target,
+  'fa-home': Target,
+  'fa-chart-area': BarChart3,
+  'fa-balance-scale': Target,
+  'fa-weight': Target,
+  'fa-fire': Flame,
+  'fa-birthday-cake': Timer,
+  'fa-calculator': Calculator,
+  'fa-percent': Target,
+  'fa-receipt': FileText,
+  'fa-key': Shield,
+  'fa-chart-pie': BarChart3,
+  'fa-file-invoice-dollar': FileText,
+  'fa-youtube': Video,
+  'fa-instagram': Image,
+  'fa-facebook': Globe,
+  'fa-twitter': Globe,
+  'fa-soundcloud': Music,
+  'fa-pinterest': Image,
+  'fa-download': Download,
+  'fa-hashtag': Target,
+  'fa-link': Globe,
+  'fa-share-alt': Share2
+};
 
 export const calculators: Calculator[] = [
   // Finance & Investment (8 tools)
@@ -219,6 +269,21 @@ export const calculators: Calculator[] = [
   { id: 'gif-to-mp4', name: 'GIF to MP4', description: 'Convert GIF to video', category: 'media-converters', icon: 'fa-film' },
   { id: 'youtube-to-mp3', name: 'YouTube to MP3', description: 'Download YouTube audio', category: 'media-converters', icon: 'fa-youtube' },
   { id: 'youtube-thumbnail', name: 'YouTube Thumbnail', description: 'Download video thumbnails', category: 'media-converters', icon: 'fa-image' },
+
+   // Downloader Tools
+   { id: 'youtube-downloader', name: 'YouTube Video Downloader', description: 'Download videos from YouTube', category: 'downloader-tools', icon: 'fa-youtube' },
+   { id: 'instagram-downloader', name: 'Instagram Reel Downloader', description: 'Download reels from Instagram', category: 'downloader-tools', icon: 'fa-instagram' },
+   { id: 'facebook-downloader', name: 'Facebook Video Downloader', description: 'Download videos from Facebook', category: 'downloader-tools', icon: 'fa-facebook' },
+   { id: 'twitter-downloader', name: 'Twitter Video Downloader', description: 'Download videos from Twitter', category: 'downloader-tools', icon: 'fa-twitter' },
+   { id: 'soundcloud-downloader', name: 'SoundCloud to MP3', description: 'Download audio from SoundCloud', category: 'downloader-tools', icon: 'fa-soundcloud' },
+   { id: 'pinterest-downloader', name: 'Pinterest Image Downloader', description: 'Download images from Pinterest', category: 'downloader-tools', icon: 'fa-pinterest' },
+
+   // Social Media Tools
+   { id: 'instagram-caption-generator', name: 'Instagram Caption Generator', description: 'Generate creative captions for Instagram', category: 'social-media-tools', icon: 'fa-instagram' },
+   { id: 'tweet-thread-composer', name: 'Tweet Thread Composer', description: 'Compose tweet threads easily', category: 'social-media-tools', icon: 'fa-twitter' },
+   { id: 'hashtag-generator', name: 'Hashtag Generator', description: 'Generate relevant hashtags', category: 'social-media-tools', icon: 'fa-hashtag' },
+   { id: 'reels-trend-finder', name: 'Reels Trend Finder', description: 'Discover trending reels', category: 'social-media-tools', icon: 'fa-instagram' },
+   { id: 'social-bio-link-generator', name: 'Social Bio Link Generator', description: 'Create a link for your social bio', category: 'social-media-tools', icon: 'fa-link' },
 
   // AI-Powered Tools (7 tools)
   { id: 'ocr', name: 'OCR (Image to Text)', description: 'Extract text from images', category: 'ai-converters', icon: 'fa-eye', isPro: true },
@@ -417,6 +482,28 @@ export const categories: Category[] = [
     color: 'gray',
     gradient: 'from-gray-500 via-slate-500 to-zinc-600',
     calculators: calculators.filter(c => c.category === 'misc-converters'),
+    isPopular: false,
+    trending: false
+  },
+   {
+    id: 'downloader-tools',
+    name: 'Downloader Tools',
+    description: 'Tools for downloading content from various platforms',
+    icon: 'fa-download',
+    color: 'blue',
+    gradient: 'from-blue-400 via-cyan-500 to-teal-500',
+    calculators: calculators.filter(c => c.category === 'downloader-tools'),
+    isPopular: false,
+    trending: false
+  },
+  {
+    id: 'social-media-tools',
+    name: 'Social Media Tools',
+    description: 'Tools to manage and enhance your social media presence',
+    icon: 'fa-share-alt',
+    color: 'purple',
+    gradient: 'from-purple-400 via-pink-500 to-red-500',
+    calculators: calculators.filter(c => c.category === 'social-media-tools'),
     isPopular: false,
     trending: false
   }
