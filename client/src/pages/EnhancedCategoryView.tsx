@@ -14,6 +14,8 @@ import {
   BarChart3, Eye, Download, Share2, Bookmark, Heart, Shield
 } from 'lucide-react';
 import { getCategoryById, calculators } from '@/lib/calculatorData';
+import { getCardStyles } from '@/lib/cardColors';
+import ToolPopupModal from '@/components/ToolPopupModal';
 import SEOHead from '@/components/SEOHead';
 
 interface EnhancedCategoryViewProps {
@@ -86,9 +88,18 @@ export default function EnhancedCategoryView({ params }: EnhancedCategoryViewPro
   const [sortBy, setSortBy] = useState<'name' | 'popularity' | 'rating' | 'difficulty'>('name');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [filterBy, setFilterBy] = useState<'all' | 'featured' | 'new' | 'pro' | 'popular'>('all');
+  const [selectedTool, setSelectedTool] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalCardIndex, setModalCardIndex] = useState(0);
 
   const category = getCategoryById(params.id);
   const categoryTools = calculators.filter(tool => tool.category === params.id);
+
+  const handleToolClick = (tool: any, index: number) => {
+    setSelectedTool(tool);
+    setModalCardIndex(index);
+    setIsModalOpen(true);
+  };
 
   const filteredAndSortedTools = useMemo(() => {
     let filtered = categoryTools;
@@ -327,25 +338,31 @@ export default function EnhancedCategoryView({ params }: EnhancedCategoryViewPro
           ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6' 
           : 'space-y-4'
         }>
-          {filteredAndSortedTools.map((tool, index) => (
-            <Link key={tool.id} href={`/calculator/${tool.id}`}>
-              <Card className={`group cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105 ${
-                viewMode === 'list' ? 'flex' : ''
-              }`}>
+          {filteredAndSortedTools.map((tool, index) => {
+            const cardStyles = getCardStyles(index);
+            return (
+              <Card 
+                key={tool.id}
+                className={`group cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105 ${cardStyles.cardBg} border-0 shadow-lg ${
+                  viewMode === 'list' ? 'flex' : ''
+                }`}
+                style={{ minHeight: viewMode === 'grid' ? '280px' : 'auto' }}
+                onClick={() => handleToolClick(tool, index)}
+              >
                 <CardHeader className={`pb-3 ${viewMode === 'list' ? 'flex-shrink-0' : ''}`}>
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div className={`p-2 bg-gradient-to-br ${category.gradient} rounded-lg text-white group-hover:scale-110 transition-transform`}>
+                      <div className={`p-2 ${cardStyles.iconBg} rounded-lg text-white group-hover:scale-110 transition-transform`}>
                         {getIcon(tool.icon)}
                       </div>
                       <div>
-                        <CardTitle className="text-lg group-hover:text-blue-600 transition-colors">
+                        <CardTitle className="text-lg text-white group-hover:text-yellow-300 transition-colors">
                           {tool.name}
                         </CardTitle>
                         {tool.rating && (
                           <div className="flex items-center gap-1 mt-1">
                             {getRatingStars(tool.rating)}
-                            <span className="text-sm text-gray-500 ml-1">
+                            <span className="text-sm text-white/80 ml-1">
                               {tool.rating.toFixed(1)}
                             </span>
                           </div>
@@ -381,7 +398,7 @@ export default function EnhancedCategoryView({ params }: EnhancedCategoryViewPro
                   </div>
                 </CardHeader>
                 <CardContent className={viewMode === 'list' ? 'flex-1' : ''}>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4">
+                  <p className="text-white/90 mb-4">
                     {tool.description}
                   </p>
                   
@@ -413,7 +430,7 @@ export default function EnhancedCategoryView({ params }: EnhancedCategoryViewPro
                         </Badge>
                       )}
                       {tool.estimatedTime && (
-                        <div className="flex items-center text-xs text-gray-500">
+                        <div className="flex items-center text-xs text-white/70">
                           <Timer className="w-3 h-3 mr-1" />
                           {tool.estimatedTime}
                         </div>
@@ -422,7 +439,7 @@ export default function EnhancedCategoryView({ params }: EnhancedCategoryViewPro
                   </div>
 
                   {tool.usageCount && (
-                    <div className="flex items-center text-xs text-gray-500 mb-3">
+                    <div className="flex items-center text-xs text-white/70 mb-3">
                       <Users className="w-3 h-3 mr-1" />
                       {tool.usageCount.toLocaleString()} users
                     </div>
@@ -430,15 +447,15 @@ export default function EnhancedCategoryView({ params }: EnhancedCategoryViewPro
 
                   <Button 
                     size="sm" 
-                    className={`w-full bg-gradient-to-r ${category.gradient} hover:opacity-90 transition-opacity`}
+                    className="w-full bg-white/20 hover:bg-white/30 text-white border-white/30 transition-all"
                   >
                     Open Tool
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </CardContent>
               </Card>
-            </Link>
-          ))}
+            );
+          })}
         </div>
 
         {filteredAndSortedTools.length === 0 && (
@@ -500,6 +517,16 @@ export default function EnhancedCategoryView({ params }: EnhancedCategoryViewPro
           </Card>
         )}
       </div>
+      
+      {/* Tool Popup Modal */}
+      {selectedTool && (
+        <ToolPopupModal
+          tool={selectedTool}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          cardIndex={modalCardIndex}
+        />
+      )}
     </div>
   );
 }

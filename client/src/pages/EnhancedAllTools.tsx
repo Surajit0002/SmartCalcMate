@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { categories, calculators } from '@/lib/calculatorData';
 import { getCardStyles } from '@/lib/cardColors';
+import ToolPopupModal from '@/components/ToolPopupModal';
 import SEOHead from '@/components/SEOHead';
 
 const iconMap = {
@@ -84,6 +85,15 @@ export default function EnhancedAllTools() {
   const [sortBy, setSortBy] = useState<'name' | 'popularity' | 'rating' | 'difficulty' | 'category'>('name');
   const [viewMode, setViewMode] = useState<'grid' | 'list' | 'compact'>('grid');
   const [filterBy, setFilterBy] = useState<'all' | 'featured' | 'new' | 'pro' | 'popular'>('all');
+  const [selectedTool, setSelectedTool] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalCardIndex, setModalCardIndex] = useState(0);
+
+  const handleToolClick = (tool: any, index: number) => {
+    setSelectedTool(tool);
+    setModalCardIndex(index);
+    setIsModalOpen(true);
+  };
 
   const filteredAndSortedTools = useMemo(() => {
     let filtered = calculators;
@@ -326,26 +336,31 @@ export default function EnhancedAllTools() {
               <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-lg">
                 <CardContent className="p-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-                    {filteredAndSortedTools.map((tool) => (
-                      <Link key={tool.id} href={`/calculator/${tool.id}`}>
-                        <div className="p-3 rounded-lg border hover:border-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors cursor-pointer">
+                    {filteredAndSortedTools.map((tool, index) => {
+                      const cardStyles = getCardStyles(index);
+                      return (
+                        <div 
+                          key={tool.id}
+                          className={`p-3 rounded-lg border-0 ${cardStyles.cardBg} hover:shadow-lg transition-all cursor-pointer`}
+                          onClick={() => handleToolClick(tool, index)}
+                        >
                           <div className="flex items-center gap-2">
-                            <div className="p-1 bg-blue-100 dark:bg-blue-900 rounded">
+                            <div className={`p-1 ${cardStyles.iconBg} rounded`}>
                               {getIcon(tool.icon)}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <div className="font-medium text-sm truncate">{tool.name}</div>
-                              <div className="text-xs text-gray-500 truncate">{tool.description}</div>
+                              <div className="font-medium text-sm truncate text-white">{tool.name}</div>
+                              <div className="text-xs text-white/80 truncate">{tool.description}</div>
                             </div>
                             <div className="flex gap-1">
-                              {tool.featured && <Star className="w-3 h-3 text-yellow-500" />}
-                              {tool.isNew && <Sparkles className="w-3 h-3 text-green-500" />}
-                              {tool.isPro && <Crown className="w-3 h-3 text-orange-500" />}
+                              {tool.featured && <Star className="w-3 h-3 text-yellow-300" />}
+                              {tool.isNew && <Sparkles className="w-3 h-3 text-green-300" />}
+                              {tool.isPro && <Crown className="w-3 h-3 text-orange-300" />}
                             </div>
                           </div>
                         </div>
-                      </Link>
-                    ))}
+                      );
+                    })}
                   </div>
                 </CardContent>
               </Card>
@@ -354,25 +369,31 @@ export default function EnhancedAllTools() {
                 ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6' 
                 : 'space-y-4'
               }>
-                {filteredAndSortedTools.map((tool) => (
-                  <Link key={tool.id} href={`/calculator/${tool.id}`}>
-                    <Card className={`group cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105 ${
-                      viewMode === 'list' ? 'flex' : ''
-                    }`}>
+                {filteredAndSortedTools.map((tool, index) => {
+                  const cardStyles = getCardStyles(index);
+                  return (
+                    <Card 
+                      key={tool.id}
+                      className={`group cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105 ${cardStyles.cardBg} border-0 shadow-lg ${
+                        viewMode === 'list' ? 'flex' : ''
+                      }`}
+                      style={{ minHeight: viewMode === 'grid' ? '280px' : 'auto' }}
+                      onClick={() => handleToolClick(tool, index)}
+                    >
                       <CardHeader className={`pb-3 ${viewMode === 'list' ? 'flex-shrink-0' : ''}`}>
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex items-center gap-3">
-                            <div className="p-2 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg text-white group-hover:scale-110 transition-transform">
+                            <div className={`p-2 ${cardStyles.iconBg} rounded-lg text-white group-hover:scale-110 transition-transform`}>
                               {getIcon(tool.icon)}
                             </div>
                             <div>
-                              <CardTitle className="text-lg group-hover:text-blue-600 transition-colors">
+                              <CardTitle className="text-lg text-white group-hover:text-yellow-300 transition-colors">
                                 {tool.name}
                               </CardTitle>
                               {tool.rating && (
                                 <div className="flex items-center gap-1 mt-1">
                                   {getRatingStars(tool.rating)}
-                                  <span className="text-sm text-gray-500 ml-1">
+                                  <span className="text-sm text-white/80 ml-1">
                                     {tool.rating.toFixed(1)}
                                   </span>
                                 </div>
@@ -408,13 +429,13 @@ export default function EnhancedAllTools() {
                         </div>
                       </CardHeader>
                       <CardContent className={viewMode === 'list' ? 'flex-1' : ''}>
-                        <p className="text-gray-600 dark:text-gray-300 mb-4">
+                        <p className="text-white/90 mb-4">
                           {tool.description}
                         </p>
                         
                         <div className="flex items-center justify-between mb-3">
                           <div className="flex items-center gap-2">
-                            <Badge variant="outline" className="text-xs">
+                            <Badge variant="outline" className="text-xs border-white/30 text-white">
                               {categories.find(c => c.id === tool.category)?.name}
                             </Badge>
                             {tool.difficulty && (
@@ -424,7 +445,7 @@ export default function EnhancedAllTools() {
                             )}
                           </div>
                           {tool.estimatedTime && (
-                            <div className="flex items-center text-xs text-gray-500">
+                            <div className="flex items-center text-xs text-white/70">
                               <Timer className="w-3 h-3 mr-1" />
                               {tool.estimatedTime}
                             </div>
@@ -432,7 +453,7 @@ export default function EnhancedAllTools() {
                         </div>
                         
                         {tool.usageCount && (
-                          <div className="flex items-center text-xs text-gray-500 mb-3">
+                          <div className="flex items-center text-xs text-white/70 mb-3">
                             <Users className="w-3 h-3 mr-1" />
                             {tool.usageCount.toLocaleString()} users
                           </div>
@@ -440,15 +461,15 @@ export default function EnhancedAllTools() {
                         
                         <Button 
                           size="sm" 
-                          className="w-full group-hover:bg-blue-600 transition-colors"
+                          className="w-full bg-white/20 hover:bg-white/30 text-white border-white/30 transition-all"
                         >
                           Open Tool
                           <ArrowRight className="w-4 h-4 ml-2" />
                         </Button>
                       </CardContent>
                     </Card>
-                  </Link>
-                ))}
+                  );
+                })}
               </div>
             )}
 
@@ -492,25 +513,30 @@ export default function EnhancedAllTools() {
                   </CardHeader>
                   <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                      {tools.slice(0, 8).map((tool) => (
-                        <Link key={tool.id} href={`/calculator/${tool.id}`}>
-                          <div className="p-4 rounded-lg border hover:border-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors cursor-pointer">
+                      {tools.slice(0, 8).map((tool, index) => {
+                        const cardStyles = getCardStyles(index);
+                        return (
+                          <div 
+                            key={tool.id}
+                            className={`p-4 rounded-lg border-0 ${cardStyles.cardBg} hover:shadow-lg transition-all cursor-pointer`}
+                            onClick={() => handleToolClick(tool, index)}
+                          >
                             <div className="flex items-center gap-2 mb-2">
-                              <div className="p-1 bg-blue-100 dark:bg-blue-900 rounded">
+                              <div className={`p-1 ${cardStyles.iconBg} rounded`}>
                                 {getIcon(tool.icon)}
                               </div>
-                              <div className="font-medium text-sm">{tool.name}</div>
+                              <div className="font-medium text-sm text-white">{tool.name}</div>
                             </div>
-                            <div className="text-xs text-gray-500 mb-2">{tool.description}</div>
+                            <div className="text-xs text-white/80 mb-2">{tool.description}</div>
                             <div className="flex items-center gap-1">
-                              {tool.featured && <Star className="w-3 h-3 text-yellow-500" />}
-                              {tool.isNew && <Sparkles className="w-3 h-3 text-green-500" />}
-                              {tool.isPro && <Crown className="w-3 h-3 text-orange-500" />}
-                              {tool.isPopular && <Flame className="w-3 h-3 text-red-500" />}
+                              {tool.featured && <Star className="w-3 h-3 text-yellow-300" />}
+                              {tool.isNew && <Sparkles className="w-3 h-3 text-green-300" />}
+                              {tool.isPro && <Crown className="w-3 h-3 text-orange-300" />}
+                              {tool.isPopular && <Flame className="w-3 h-3 text-red-300" />}
                             </div>
                           </div>
-                        </Link>
-                      ))}
+                        );
+                      })}
                     </div>
                     {tools.length > 8 && (
                       <div className="mt-4 text-center">
@@ -542,6 +568,16 @@ export default function EnhancedAllTools() {
           </TabsContent>
         </Tabs>
       </div>
+      
+      {/* Tool Popup Modal */}
+      {selectedTool && (
+        <ToolPopupModal
+          tool={selectedTool}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          cardIndex={modalCardIndex}
+        />
+      )}
     </div>
   );
 }
