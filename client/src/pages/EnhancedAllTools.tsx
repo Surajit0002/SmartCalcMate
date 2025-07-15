@@ -67,15 +67,15 @@ const getRatingStars = (rating: number) => {
   const stars = [];
   const fullStars = Math.floor(rating || 0);
   const hasHalfStar = (rating || 0) % 1 !== 0;
-  
+
   for (let i = 0; i < fullStars; i++) {
     stars.push(<Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />);
   }
-  
+
   if (hasHalfStar) {
     stars.push(<Star key="half" className="w-4 h-4 text-yellow-400 fill-current opacity-50" />);
   }
-  
+
   return stars;
 };
 
@@ -429,36 +429,23 @@ export default function EnhancedAllTools() {
                         </div>
                       </CardHeader>
                       <CardContent className={viewMode === 'list' ? 'flex-1' : ''}>
-                        <p className="text-white/90 mb-4">
-                          {tool.description}
-                        </p>
-                        
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="flex items-center gap-2">
-                            <Badge variant="outline" className="text-xs border-white/30 text-white">
-                              {categories.find(c => c.id === tool.category)?.name}
+                        <div>
+                          <p className={`${cardStyles.textColor} opacity-90 mb-4 line-clamp-3`}>
+                            {tool.description}
+                          </p>
+
+                          <div className="flex items-center justify-between mb-3">
+                            <Badge variant="outline" className={`text-xs ${cardStyles.textColor} border-black/30 bg-black/10`}>
+                              {tool.category}
                             </Badge>
-                            {tool.difficulty && (
-                              <Badge className={`text-xs ${getDifficultyColor(tool.difficulty)}`}>
-                                {tool.difficulty}
-                              </Badge>
+                            {tool.usageCount && (
+                              <div className={`flex items-center text-xs ${cardStyles.textColor} opacity-70`}>
+                                <Users className="w-3 h-3 mr-1" />
+                                {tool.usageCount.toLocaleString()}
+                              </div>
                             )}
                           </div>
-                          {tool.estimatedTime && (
-                            <div className="flex items-center text-xs text-white/70">
-                              <Timer className="w-3 h-3 mr-1" />
-                              {tool.estimatedTime}
-                            </div>
-                          )}
-                        </div>
-                        
-                        {tool.usageCount && (
-                          <div className="flex items-center text-xs text-white/70 mb-3">
-                            <Users className="w-3 h-3 mr-1" />
-                            {tool.usageCount.toLocaleString()} users
-                          </div>
-                        )}
-                        
+
                         <Button 
                           size="sm" 
                           className="w-full bg-white/20 hover:bg-white/30 text-white border-white/30 transition-all"
@@ -568,7 +555,7 @@ export default function EnhancedAllTools() {
           </TabsContent>
         </Tabs>
       </div>
-      
+
       {/* Tool Popup Modal */}
       {selectedTool && (
         <ToolPopupModal

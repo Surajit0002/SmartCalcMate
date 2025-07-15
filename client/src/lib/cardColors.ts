@@ -53,9 +53,9 @@ export const getCardColor = (index: number) => {
 export const getCardStyles = (index: number) => {
   const colors = getCardColor(index);
   return {
-    cardBg: `${colors.bgLight} ${colors.darkBg}`,
-    iconBg: `${colors.bg} ${colors.darkBg}`,
-    iconColor: `${colors.icon} ${colors.darkIcon}`,
-    textColor: 'text-white'
+    cardBg: `${colors.bg}`,
+    iconBg: `${colors.bg}`,
+    iconColor: 'text-black',
+    textColor: 'text-black'
   };
 };

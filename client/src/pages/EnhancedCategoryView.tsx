@@ -398,7 +398,7 @@ export default function EnhancedCategoryView({ params }: EnhancedCategoryViewPro
                   </div>
                 </CardHeader>
                 <CardContent className={viewMode === 'list' ? 'flex-1' : ''}>
-                  <p className="text-white/90 mb-4">
+                  <p className="text-black opacity-90 mb-4">
                     {tool.description}
                   </p>
                   
@@ -439,7 +439,7 @@ export default function EnhancedCategoryView({ params }: EnhancedCategoryViewPro
                   </div>
 
                   {tool.usageCount && (
-                    <div className="flex items-center text-xs text-white/70 mb-3">
+                    <div className="flex items-center text-xs text-black opacity-70 mb-3">
                       <Users className="w-3 h-3 mr-1" />
                       {tool.usageCount.toLocaleString()} users
                     </div>
@@ -447,7 +447,7 @@ export default function EnhancedCategoryView({ params }: EnhancedCategoryViewPro
 
                   <Button 
                     size="sm" 
-                    className="w-full bg-white/20 hover:bg-white/30 text-white border-white/30 transition-all"
+                    className="w-full bg-black/20 hover:bg-black/30 text-black border-black/30 transition-all"
                   >
                     Open Tool
                     <ArrowRight className="w-4 h-4 ml-2" />

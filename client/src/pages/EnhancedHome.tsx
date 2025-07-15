@@ -58,15 +58,15 @@ const getRatingStars = (rating: number) => {
   const stars = [];
   const fullStars = Math.floor(rating || 0);
   const hasHalfStar = (rating || 0) % 1 !== 0;
-  
+
   for (let i = 0; i < fullStars; i++) {
     stars.push(<Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />);
   }
-  
+
   if (hasHalfStar) {
     stars.push(<Star key="half" className="w-4 h-4 text-yellow-400 fill-current opacity-50" />);
   }
-  
+
   return stars;
 };
 
@@ -262,7 +262,7 @@ export default function EnhancedHome() {
                 Our most popular and highly-rated tools, hand-picked for their accuracy and usefulness
               </p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {featuredCalculators.map((tool, index) => {
                 const cardStyles = getCardStyles(index);
@@ -276,13 +276,13 @@ export default function EnhancedHome() {
                               {getIcon(tool.icon)}
                             </div>
                             <div>
-                              <CardTitle className="text-lg text-white group-hover:text-yellow-300 transition-colors">
+                              <CardTitle className="text-lg text-black group-hover:text-gray-800 transition-colors">
                                 {tool.name}
                               </CardTitle>
                               {tool.rating && (
                                 <div className="flex items-center gap-1 mt-1">
                                   {getRatingStars(tool.rating)}
-                                  <span className="text-sm text-white/80 ml-1">
+                                  <span className="text-sm text-black opacity-80 ml-1">
                                     {tool.rating.toFixed(1)}
                                   </span>
                                 </div>
@@ -297,12 +297,12 @@ export default function EnhancedHome() {
                       </CardHeader>
                       <CardContent className="flex flex-col justify-between" style={{ minHeight: '156px' }}>
                         <div>
-                          <p className="text-white/90 mb-4 line-clamp-3">
+                          <p className="text-black opacity-90 mb-4 line-clamp-3">
                             {tool.description}
                           </p>
-                          
+
                           <div className="flex items-center justify-between mb-3">
-                            <Badge variant="outline" className="text-xs text-white border-white/30 bg-white/20">
+                            <Badge variant="outline" className="text-xs text-black border-black/30 bg-black/10">
                               {categories.find(c => c.id === tool.category)?.name}
                             </Badge>
                             {tool.usageCount && (
@@ -313,7 +313,7 @@ export default function EnhancedHome() {
                             )}
                           </div>
                         </div>
-                        
+
                         <Button size="sm" className="w-full bg-white/20 hover:bg-white/30 text-white border-white/30 transition-colors">
                           Open Tool
                           <ArrowRight className="w-4 h-4 ml-2" />
@@ -336,7 +336,7 @@ export default function EnhancedHome() {
                 Explore our comprehensive collection of tools organized by category
               </p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {categories.map((category, index) => {
                 const cardStyles = getCardStyles(index + 5); // Offset for different colors
@@ -364,17 +364,17 @@ export default function EnhancedHome() {
                             )}
                           </div>
                         </div>
-                        <CardTitle className="text-xl text-white group-hover:text-yellow-300 transition-colors">
+                        <CardTitle className="text-xl text-black group-hover:text-gray-800 transition-colors">
                           {category.name}
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <p className="text-white/90 mb-4">
+                        <p className="text-black opacity-90 mb-4">
                           {category.description}
                         </p>
-                        
+
                         <div className="flex items-center justify-between mb-3">
-                          <Badge variant="outline" className="text-sm text-white border-white/30 bg-white/20">
+                          <Badge variant="outline" className="text-sm text-black border-black/30 bg-black/10">
                             {category.calculators.length} Tools
                           </Badge>
                           <div className="flex items-center text-sm text-white/80">
@@ -382,7 +382,7 @@ export default function EnhancedHome() {
                             {category.calculators.reduce((sum, tool) => sum + (tool.usageCount || 0), 0).toLocaleString()}
                           </div>
                         </div>
-                        
+
                         {/* Show top 3 tools in category */}
                         <div className="space-y-2 mb-4">
                           {category.calculators.slice(0, 3).map((tool) => (
@@ -398,7 +398,7 @@ export default function EnhancedHome() {
                             </div>
                           )}
                         </div>
-                        
+
                         <Button size="sm" className="w-full bg-white/20 hover:bg-white/30 text-white border-white/30 transition-colors">
                           Explore Category
                           <ChevronRight className="w-4 h-4 ml-2" />
@@ -421,7 +421,7 @@ export default function EnhancedHome() {
                 Most used tools by our community of {stats.dailyUsers} daily users
               </p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {popularCalculators.map((tool, index) => {
                 const cardStyles = getCardStyles(index + 10); // Offset for different colors
@@ -435,13 +435,13 @@ export default function EnhancedHome() {
                               {getIcon(tool.icon)}
                             </div>
                             <div>
-                              <CardTitle className="text-lg text-white group-hover:text-yellow-300 transition-colors">
+                              <CardTitle className="text-lg text-black group-hover:text-gray-800 transition-colors">
                                 {tool.name}
                               </CardTitle>
                               {tool.rating && (
                                 <div className="flex items-center gap-1 mt-1">
                                   {getRatingStars(tool.rating)}
-                                  <span className="text-sm text-white/80 ml-1">
+                                  <span className="text-sm text-black opacity-80 ml-1">
                                     {tool.rating.toFixed(1)}
                                   </span>
                                 </div>
@@ -456,12 +456,12 @@ export default function EnhancedHome() {
                       </CardHeader>
                       <CardContent className="flex flex-col justify-between" style={{ minHeight: '156px' }}>
                         <div>
-                          <p className="text-white/90 mb-4 line-clamp-3">
+                          <p className="text-black opacity-90 mb-4 line-clamp-3">
                             {tool.description}
                           </p>
-                          
+
                           <div className="flex items-center justify-between mb-3">
-                            <Badge variant="outline" className="text-xs text-white border-white/30 bg-white/20">
+                            <Badge variant="outline" className="text-xs text-black border-black/30 bg-black/10">
                               {categories.find(c => c.id === tool.category)?.name}
                             </Badge>
                             {tool.usageCount && (
@@ -472,7 +472,7 @@ export default function EnhancedHome() {
                             )}
                           </div>
                         </div>
-                        
+
                         <Button size="sm" className="w-full bg-white/20 hover:bg-white/30 text-white border-white/30 transition-colors">
                           Open Tool
                           <ArrowRight className="w-4 h-4 ml-2" />
@@ -495,7 +495,7 @@ export default function EnhancedHome() {
                 Recently added tools with the latest features and improvements
               </p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {newCalculators.map((tool, index) => {
                 const cardStyles = getCardStyles(index + 15); // Offset for different colors
@@ -509,13 +509,13 @@ export default function EnhancedHome() {
                               {getIcon(tool.icon)}
                             </div>
                             <div>
-                              <CardTitle className="text-lg text-white group-hover:text-yellow-300 transition-colors">
+                              <CardTitle className="text-lg text-black group-hover:text-gray-800 transition-colors">
                                 {tool.name}
                               </CardTitle>
                               {tool.rating && (
                                 <div className="flex items-center gap-1 mt-1">
                                   {getRatingStars(tool.rating)}
-                                  <span className="text-sm text-white/80 ml-1">
+                                  <span className="text-sm text-black opacity-80 ml-1">
                                     {tool.rating.toFixed(1)}
                                   </span>
                                 </div>
@@ -530,12 +530,12 @@ export default function EnhancedHome() {
                       </CardHeader>
                       <CardContent className="flex flex-col justify-between" style={{ minHeight: '156px' }}>
                         <div>
-                          <p className="text-white/90 mb-4 line-clamp-3">
+                          <p className="text-black opacity-90 mb-4 line-clamp-3">
                             {tool.description}
                           </p>
-                          
+
                           <div className="flex items-center justify-between mb-3">
-                            <Badge variant="outline" className="text-xs text-white border-white/30 bg-white/20">
+                            <Badge variant="outline" className="text-xs text-black border-black/30 bg-black/10">
                               {categories.find(c => c.id === tool.category)?.name}
                             </Badge>
                             {tool.usageCount && (
@@ -546,7 +546,7 @@ export default function EnhancedHome() {
                             )}
                           </div>
                         </div>
-                        
+
                         <Button size="sm" className="w-full bg-white/20 hover:bg-white/30 text-white border-white/30 transition-colors">
                           Try Now
                           <ArrowRight className="w-4 h-4 ml-2" />
