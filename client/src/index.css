@@ -1259,6 +1259,46 @@
   @apply bg-white/30 dark:bg-gray-900/30 backdrop-blur-lg border border-white/30 dark:border-gray-700/30;
 }
 
+/* Footer Responsive Grid */
+.footer-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .footer-grid {
+    grid-template-columns: 2fr repeat(4, 1fr);
+    gap: 2rem;
+  }
+}
+
+/* Compact Card Styles */
+.compact-card {
+  @apply p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 transition-all duration-300 cursor-pointer bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm hover:bg-white dark:hover:bg-gray-800;
+}
+
+.compact-icon {
+  @apply w-6 h-6 rounded-md flex items-center justify-center text-xs;
+}
+
+/* Better spacing for mobile */
+@media (max-width: 640px) {
+  .container-responsive {
+    @apply px-3;
+  }
+  
+  .section-padding {
+    @apply py-4;
+  }
+}
+
 .animate-pulse-soft {
   animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
