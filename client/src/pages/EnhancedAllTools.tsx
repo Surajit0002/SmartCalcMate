@@ -446,13 +446,14 @@ export default function EnhancedAllTools() {
                             )}
                           </div>
 
-                        <Button 
-                          size="sm" 
-                          className="w-full bg-white/20 hover:bg-white/30 text-white border-white/30 transition-all"
-                        >
-                          Open Tool
-                          <ArrowRight className="w-4 h-4 ml-2" />
-                        </Button>
+                          <Button 
+                            size="sm" 
+                            className="w-full bg-white/20 hover:bg-white/30 text-white border-white/30 transition-all"
+                          >
+                            Open Tool
+                            <ArrowRight className="w-4 h-4 ml-2" />
+                          </Button>
+                        </div>
                       </CardContent>
                     </Card>
                   );
