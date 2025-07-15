@@ -11,13 +11,17 @@ import FloatingActionButton from "@/components/FloatingActionButton";
 import TrendingBanner from "@/components/TrendingBanner";
 import Home from '@/pages/Home';
 import Categories from '@/pages/Categories';
+import EnhancedCategories from '@/pages/EnhancedCategories';
 import CalculatorView from '@/pages/CalculatorView';
 import CategoryView from '@/pages/CategoryView';
+import EnhancedCategoryView from '@/pages/EnhancedCategoryView';
 import Favorites from '@/pages/Favorites';
 import History from '@/pages/History';
 import Profile from '@/pages/Profile';
 import FinancialSuite from '@/pages/FinancialSuite';
 import AllTools from '@/pages/AllTools';
+import EnhancedAllTools from '@/pages/EnhancedAllTools';
+import Discover from '@/pages/Discover';
 import NotFound from '@/pages/not-found';
 
 function Router() {
@@ -29,14 +33,15 @@ function Router() {
         <main className="relative">
           <Switch>
             <Route path="/" component={Home} />
-            <Route path="/categories" component={Categories} />
+            <Route path="/categories" component={EnhancedCategories} />
             <Route path="/calculator/:id" component={CalculatorView} />
-            <Route path="/category/:id" component={CategoryView} />
+            <Route path="/category/:id" component={EnhancedCategoryView} />
             <Route path="/favorites" component={Favorites} />
             <Route path="/history" component={History} />
             <Route path="/profile" component={Profile} />
             <Route path="/financial-suite" component={FinancialSuite} />
-            <Route path="/all-tools" component={AllTools} />
+            <Route path="/all-tools" component={EnhancedAllTools} />
+            <Route path="/discover" component={Discover} />
             <Route component={NotFound} />
           </Switch>
         </main>

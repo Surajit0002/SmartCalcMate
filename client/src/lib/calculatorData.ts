@@ -8,6 +8,16 @@ export interface Calculator {
   function?: string;
   isNew?: boolean;
   isPro?: boolean;
+  isPopular?: boolean;
+  difficulty?: 'easy' | 'medium' | 'advanced';
+  usageCount?: number;
+  rating?: number;
+  tags?: string[];
+  longDescription?: string;
+  features?: string[];
+  inputTypes?: string[];
+  outputTypes?: string[];
+  estimatedTime?: string;
 }
 
 export interface Category {
@@ -16,17 +26,158 @@ export interface Category {
   description: string;
   icon: string;
   color: string;
+  gradient: string;
   calculators: Calculator[];
+  isPopular?: boolean;
+  totalTools?: number;
+  trending?: boolean;
+  iconComponent?: React.ReactNode;
 }
 
 export const calculators: Calculator[] = [
-  // Finance & Investment (7 tools)
-  { id: 'emi', name: 'EMI Calculator', description: 'Calculate EMI for loans', category: 'finance', icon: 'fa-chart-line', featured: true },
-  { id: 'sip', name: 'SIP Calculator', description: 'Systematic Investment Planning', category: 'finance', icon: 'fa-piggy-bank', featured: true },
-  { id: 'compound-interest', name: 'Compound Interest', description: 'Interest calculation over time', category: 'finance', icon: 'fa-percentage', featured: true },
-  { id: 'mortgage', name: 'Mortgage Calculator', description: 'Home loan calculations', category: 'finance', icon: 'fa-home', featured: true },
-  { id: 'investment', name: 'Investment Calculator', description: 'Investment planning tools', category: 'finance', icon: 'fa-chart-area', featured: true },
-  { id: 'loan-comparison', name: 'Loan Comparison', description: 'Compare loan options', category: 'finance', icon: 'fa-balance-scale', featured: true },
+  // Finance & Investment (8 tools)
+  { 
+    id: 'emi', 
+    name: 'EMI Calculator', 
+    description: 'Calculate EMI for loans with detailed breakdown', 
+    category: 'finance', 
+    icon: 'fa-chart-line', 
+    featured: true, 
+    isPopular: true,
+    difficulty: 'easy',
+    rating: 4.8,
+    usageCount: 125000,
+    tags: ['loan', 'emi', 'finance'],
+    longDescription: 'Calculate your Equated Monthly Installment (EMI) with detailed amortization schedule, interest breakdown, and payment analysis.',
+    features: ['Amortization Schedule', 'Interest Breakdown', 'Payment Analysis', 'Prepayment Options'],
+    inputTypes: ['Principal Amount', 'Interest Rate', 'Loan Tenure'],
+    outputTypes: ['Monthly EMI', 'Total Interest', 'Total Payment'],
+    estimatedTime: '< 1 minute'
+  },
+  { 
+    id: 'sip', 
+    name: 'SIP Calculator', 
+    description: 'Systematic Investment Planning with growth projections', 
+    category: 'finance', 
+    icon: 'fa-piggy-bank', 
+    featured: true, 
+    isPopular: true,
+    difficulty: 'easy',
+    rating: 4.7,
+    usageCount: 98000,
+    tags: ['sip', 'investment', 'mutual funds'],
+    longDescription: 'Plan your systematic investment with detailed projections, goal planning, and wealth accumulation analysis.',
+    features: ['Goal Planning', 'Growth Projections', 'Inflation Adjustment', 'Step-up SIP'],
+    inputTypes: ['Monthly Investment', 'Expected Returns', 'Time Period'],
+    outputTypes: ['Maturity Amount', 'Total Investment', 'Wealth Gained'],
+    estimatedTime: '< 1 minute'
+  },
+  { 
+    id: 'compound-interest', 
+    name: 'Compound Interest', 
+    description: 'Interest calculation with compounding frequency', 
+    category: 'finance', 
+    icon: 'fa-percentage', 
+    featured: true, 
+    isPopular: true,
+    difficulty: 'medium',
+    rating: 4.6,
+    usageCount: 87000,
+    tags: ['compound', 'interest', 'investment'],
+    longDescription: 'Calculate compound interest with various compounding frequencies and visualize growth over time.',
+    features: ['Multiple Compounding Frequencies', 'Growth Visualization', 'Year-by-Year Breakdown'],
+    inputTypes: ['Principal', 'Annual Rate', 'Time Period', 'Compounding Frequency'],
+    outputTypes: ['Final Amount', 'Interest Earned', 'Growth Chart'],
+    estimatedTime: '< 1 minute'
+  },
+  { 
+    id: 'mortgage', 
+    name: 'Mortgage Calculator', 
+    description: 'Complete home loan analysis with taxes and insurance', 
+    category: 'finance', 
+    icon: 'fa-home', 
+    featured: true, 
+    isPopular: true,
+    difficulty: 'medium',
+    rating: 4.5,
+    usageCount: 76000,
+    tags: ['mortgage', 'home loan', 'property'],
+    longDescription: 'Comprehensive mortgage calculator with property taxes, insurance, and PMI calculations.',
+    features: ['Property Tax Calculation', 'Insurance Estimates', 'PMI Analysis', 'Extra Payment Impact'],
+    inputTypes: ['Home Price', 'Down Payment', 'Interest Rate', 'Loan Term'],
+    outputTypes: ['Monthly Payment', 'Total Interest', 'Amortization Schedule'],
+    estimatedTime: '2-3 minutes'
+  },
+  { 
+    id: 'investment', 
+    name: 'Investment Calculator', 
+    description: 'Advanced investment planning and portfolio analysis', 
+    category: 'finance', 
+    icon: 'fa-chart-area', 
+    featured: true, 
+    isPro: true,
+    difficulty: 'advanced',
+    rating: 4.4,
+    usageCount: 54000,
+    tags: ['investment', 'portfolio', 'returns'],
+    longDescription: 'Advanced investment calculator with portfolio diversification, risk analysis, and return projections.',
+    features: ['Portfolio Diversification', 'Risk Analysis', 'Return Projections', 'Asset Allocation'],
+    inputTypes: ['Investment Amount', 'Asset Mix', 'Risk Profile', 'Time Horizon'],
+    outputTypes: ['Expected Returns', 'Risk Metrics', 'Portfolio Performance'],
+    estimatedTime: '3-5 minutes'
+  },
+  { 
+    id: 'loan-comparison', 
+    name: 'Loan Comparison', 
+    description: 'Compare multiple loan offers side by side', 
+    category: 'finance', 
+    icon: 'fa-balance-scale', 
+    featured: true,
+    difficulty: 'medium',
+    rating: 4.3,
+    usageCount: 45000,
+    tags: ['loan', 'comparison', 'finance'],
+    longDescription: 'Compare multiple loan offers with detailed analysis of terms, costs, and benefits.',
+    features: ['Side-by-Side Comparison', 'Cost Analysis', 'Benefits Breakdown', 'Recommendation Engine'],
+    inputTypes: ['Multiple Loan Offers', 'Terms & Conditions', 'Interest Rates'],
+    outputTypes: ['Comparison Table', 'Cost Analysis', 'Best Option Recommendation'],
+    estimatedTime: '2-3 minutes'
+  },
+  { 
+    id: 'retirement-planning', 
+    name: 'Retirement Planning', 
+    description: 'Comprehensive retirement savings calculator', 
+    category: 'finance', 
+    icon: 'fa-chart-pie', 
+    isNew: true,
+    isPro: true,
+    difficulty: 'advanced',
+    rating: 4.9,
+    usageCount: 32000,
+    tags: ['retirement', 'savings', 'planning'],
+    longDescription: 'Plan your retirement with detailed savings projections, inflation adjustments, and goal tracking.',
+    features: ['Inflation Adjustment', 'Goal Tracking', 'Savings Projections', 'Withdrawal Strategy'],
+    inputTypes: ['Current Age', 'Retirement Age', 'Current Savings', 'Monthly Contributions'],
+    outputTypes: ['Retirement Corpus', 'Monthly Savings Required', 'Withdrawal Plan'],
+    estimatedTime: '5-7 minutes'
+  },
+  { 
+    id: 'tax-calculator', 
+    name: 'Tax Calculator', 
+    description: 'Income tax calculation with deductions', 
+    category: 'finance', 
+    icon: 'fa-file-invoice-dollar', 
+    isNew: true,
+    difficulty: 'medium',
+    rating: 4.2,
+    usageCount: 28000,
+    tags: ['tax', 'income', 'deductions'],
+    longDescription: 'Calculate income tax with various deductions, exemptions, and tax-saving options.',
+    features: ['Deduction Analysis', 'Tax Saving Tips', 'Exemption Calculator', 'Tax Planning'],
+    inputTypes: ['Annual Income', 'Deductions', 'Exemptions', 'Tax Regime'],
+    outputTypes: ['Tax Liability', 'Tax Savings', 'Effective Tax Rate'],
+    estimatedTime: '3-4 minutes'
+  },
 
   // Unit Converters (10 tools)
   { id: 'unit-converter', name: 'Unit Converter', description: 'Convert various units', category: 'unit-converters', icon: 'fa-exchange-alt', featured: true },
@@ -140,98 +291,134 @@ export const categories: Category[] = [
   {
     id: 'finance',
     name: 'Finance & Investment',
-    description: 'EMI, SIP, Investment calculators',
+    description: 'Professional financial calculators for smart money decisions',
     icon: 'fa-chart-line',
     color: 'green',
-    calculators: calculators.filter(c => c.category === 'finance')
+    gradient: 'from-emerald-500 via-teal-500 to-cyan-600',
+    calculators: calculators.filter(c => c.category === 'finance'),
+    isPopular: true,
+    trending: true
   },
   {
     id: 'health',
     name: 'Health & Fitness',
-    description: 'BMI, BMR, Age calculators',
+    description: 'Health monitoring and fitness calculation tools',
     icon: 'fa-heartbeat',
     color: 'red',
-    calculators: calculators.filter(c => c.category === 'health')
+    gradient: 'from-rose-500 via-pink-500 to-purple-600',
+    calculators: calculators.filter(c => c.category === 'health'),
+    isPopular: true,
+    trending: false
   },
   {
     id: 'math',
     name: 'Math & Numbers',
-    description: 'Scientific, Number system converters',
+    description: 'Advanced mathematical calculations and number systems',
     icon: 'fa-square-root-alt',
     color: 'blue',
-    calculators: calculators.filter(c => c.category === 'math')
+    gradient: 'from-blue-500 via-indigo-500 to-purple-600',
+    calculators: calculators.filter(c => c.category === 'math'),
+    isPopular: true,
+    trending: false
   },
   {
     id: 'daily',
     name: 'Daily Utilities',
-    description: 'Tip, Password generators',
+    description: 'Everyday calculation tools and practical utilities',
     icon: 'fa-calendar-day',
     color: 'purple',
-    calculators: calculators.filter(c => c.category === 'daily')
+    gradient: 'from-purple-500 via-violet-500 to-pink-600',
+    calculators: calculators.filter(c => c.category === 'daily'),
+    isPopular: true,
+    trending: false
   },
   {
     id: 'unit-converters',
     name: 'Unit Converters',
-    description: 'Length, Weight, Temperature & more',
+    description: 'Comprehensive unit conversion tools for all measurements',
     icon: 'fa-exchange-alt',
     color: 'orange',
-    calculators: calculators.filter(c => c.category === 'unit-converters')
+    gradient: 'from-orange-500 via-amber-500 to-yellow-600',
+    calculators: calculators.filter(c => c.category === 'unit-converters'),
+    isPopular: true,
+    trending: false
   },
   {
     id: 'file-converters',
     name: 'File Converters',
-    description: 'PDF, Word, Excel conversions',
+    description: 'Professional file format conversion and processing tools',
     icon: 'fa-file-alt',
     color: 'indigo',
-    calculators: calculators.filter(c => c.category === 'file-converters')
+    gradient: 'from-indigo-500 via-purple-500 to-pink-600',
+    calculators: calculators.filter(c => c.category === 'file-converters'),
+    isPopular: true,
+    trending: true
   },
   {
     id: 'media-converters',
     name: 'Media Converters',
-    description: 'Video, Audio format converters',
+    description: 'Audio, video, and image format conversion tools',
     icon: 'fa-video',
     color: 'pink',
-    calculators: calculators.filter(c => c.category === 'media-converters')
+    gradient: 'from-pink-500 via-rose-500 to-red-600',
+    calculators: calculators.filter(c => c.category === 'media-converters'),
+    isPopular: true,
+    trending: true
   },
   {
     id: 'currency-crypto',
     name: 'Currency & Crypto',
-    description: 'Live rates, Crypto converters',
+    description: 'Live currency rates and cryptocurrency conversion tools',
     icon: 'fa-bitcoin',
     color: 'yellow',
-    calculators: calculators.filter(c => c.category === 'currency-crypto')
+    gradient: 'from-yellow-500 via-orange-500 to-red-600',
+    calculators: calculators.filter(c => c.category === 'currency-crypto'),
+    isPopular: true,
+    trending: false
   },
   {
     id: 'text-converters',
     name: 'Text & Code Tools',
-    description: 'Text manipulation & code tools',
+    description: 'Text manipulation, formatting, and code processing tools',
     icon: 'fa-code',
     color: 'teal',
-    calculators: calculators.filter(c => c.category === 'text-converters')
+    gradient: 'from-teal-500 via-cyan-500 to-blue-600',
+    calculators: calculators.filter(c => c.category === 'text-converters'),
+    isPopular: true,
+    trending: false
   },
   {
     id: 'ai-converters',
     name: 'AI-Powered Tools',
-    description: 'OCR, Speech, AI translation',
+    description: 'Advanced AI tools for OCR, speech, and intelligent processing',
     icon: 'fa-robot',
     color: 'emerald',
-    calculators: calculators.filter(c => c.category === 'ai-converters')
+    gradient: 'from-emerald-500 via-green-500 to-teal-600',
+    calculators: calculators.filter(c => c.category === 'ai-converters'),
+    isPopular: true,
+    trending: true
   },
   {
     id: 'language-converters',
     name: 'Language & Script',
-    description: 'Translation & script converters',
+    description: 'Translation and script conversion tools',
     icon: 'fa-language',
     color: 'cyan',
-    calculators: calculators.filter(c => c.category === 'language-converters')
+    gradient: 'from-cyan-500 via-blue-500 to-indigo-600',
+    calculators: calculators.filter(c => c.category === 'language-converters'),
+    isPopular: false,
+    trending: false
   },
   {
     id: 'misc-converters',
     name: 'Specialized Tools',
-    description: 'Unique & specialized converters',
+    description: 'Unique and specialized conversion utilities',
     icon: 'fa-tools',
     color: 'gray',
-    calculators: calculators.filter(c => c.category === 'misc-converters')
+    gradient: 'from-gray-500 via-slate-500 to-zinc-600',
+    calculators: calculators.filter(c => c.category === 'misc-converters'),
+    isPopular: false,
+    trending: false
   }
 ];
 

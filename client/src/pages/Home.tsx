@@ -1,5 +1,5 @@
-import DynamicHomePage from '@/components/DynamicHomePage';
+import EnhancedHome from '@/pages/EnhancedHome';
 
 export default function Home() {
-  return <DynamicHomePage />;
+  return <EnhancedHome />;
 }
