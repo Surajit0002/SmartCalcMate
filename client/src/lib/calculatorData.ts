@@ -61,22 +61,20 @@ export const calculators: Calculator[] = [
   { id: 'power-converter', name: 'Power Converter', description: 'Watts, HP, kilowatts', category: 'unit-converters', icon: 'fa-bolt' },
   { id: 'pressure-converter', name: 'Pressure Converter', description: 'PSI, bar, pascal, atm', category: 'unit-converters', icon: 'fa-compress' },
 
-  // File Converters
-  { id: 'pdf-to-word', name: 'PDF to Word', description: 'Convert PDF to DOCX', category: 'file-converters', icon: 'fa-file-word', isPro: true },
-  { id: 'pdf-to-excel', name: 'PDF to Excel', description: 'Extract tables to Excel', category: 'file-converters', icon: 'fa-file-excel', isPro: true },
-  { id: 'pdf-to-image', name: 'PDF to Image', description: 'Convert PDF pages to images', category: 'file-converters', icon: 'fa-file-image', isPro: true },
-  { id: 'word-to-pdf', name: 'Word to PDF', description: 'Convert DOCX to PDF', category: 'file-converters', icon: 'fa-file-pdf' },
-  { id: 'excel-to-pdf', name: 'Excel to PDF', description: 'Convert spreadsheets to PDF', category: 'file-converters', icon: 'fa-file-pdf' },
-  { id: 'image-to-pdf', name: 'Image to PDF', description: 'Combine images into PDF', category: 'file-converters', icon: 'fa-file-pdf' },
-  { id: 'text-to-pdf', name: 'Text to PDF', description: 'Convert text files to PDF', category: 'file-converters', icon: 'fa-file-pdf' },
+  // Basic File Converters (keeping non-duplicate entries)
+  { id: 'pdf-to-excel-basic', name: 'PDF to Excel', description: 'Extract tables to Excel', category: 'file-converters', icon: 'fa-file-excel', isPro: true },
+  { id: 'pdf-to-image-basic', name: 'PDF to Image', description: 'Convert PDF pages to images', category: 'file-converters', icon: 'fa-file-image', isPro: true },
+  { id: 'excel-to-pdf-basic', name: 'Excel to PDF', description: 'Convert spreadsheets to PDF', category: 'file-converters', icon: 'fa-file-pdf' },
+  { id: 'image-to-pdf-basic', name: 'Image to PDF', description: 'Combine images into PDF', category: 'file-converters', icon: 'fa-file-pdf' },
+  { id: 'text-to-pdf-basic', name: 'Text to PDF', description: 'Convert text files to PDF', category: 'file-converters', icon: 'fa-file-pdf' },
   { id: 'merge-pdfs', name: 'Merge PDFs', description: 'Combine multiple PDFs', category: 'file-converters', icon: 'fa-object-group' },
   { id: 'split-pdf', name: 'Split PDF', description: 'Split PDF into pages', category: 'file-converters', icon: 'fa-cut' },
-  { id: 'compress-pdf', name: 'Compress PDF', description: 'Reduce PDF file size', category: 'file-converters', icon: 'fa-compress-alt' },
+  { id: 'compress-pdf-basic', name: 'Compress PDF', description: 'Reduce PDF file size', category: 'file-converters', icon: 'fa-compress-alt' },
   { id: 'remove-pdf-password', name: 'Remove PDF Password', description: 'Unlock protected PDFs', category: 'file-converters', icon: 'fa-unlock' },
   { id: 'csv-to-excel', name: 'CSV to Excel', description: 'Convert CSV to XLSX', category: 'file-converters', icon: 'fa-file-excel' },
   { id: 'excel-to-csv', name: 'Excel to CSV', description: 'Convert XLSX to CSV', category: 'file-converters', icon: 'fa-file-csv' },
-  { id: 'csv-to-json', name: 'CSV to JSON', description: 'Convert CSV to JSON format', category: 'file-converters', icon: 'fa-code' },
-  { id: 'json-to-csv', name: 'JSON to CSV', description: 'Convert JSON to CSV format', category: 'file-converters', icon: 'fa-table' },
+  { id: 'csv-to-json-basic', name: 'CSV to JSON', description: 'Convert CSV to JSON format', category: 'file-converters', icon: 'fa-code' },
+  { id: 'json-to-csv-basic', name: 'JSON to CSV', description: 'Convert JSON to CSV format', category: 'file-converters', icon: 'fa-table' },
   { id: 'json-to-xml', name: 'JSON ↔ XML', description: 'Convert between JSON and XML', category: 'file-converters', icon: 'fa-exchange' },
   { id: 'docx-to-odt', name: 'DOCX to ODT', description: 'Convert Word to OpenDocument', category: 'file-converters', icon: 'fa-file-alt', isNew: true },
 
@@ -144,16 +142,16 @@ export const calculators: Calculator[] = [
   { id: 'tip', name: 'Tip Calculator', description: 'Calculate tips and splits', category: 'utility', icon: 'fa-receipt' },
 
   // Currency & Crypto
-  { id: 'crypto-converter', name: 'Crypto Converter (BTC/ETH)', description: 'Convert cryptocurrencies', category: 'currency-crypto', icon: 'fa-bitcoin', function: 'Convert cryptocurrencies', isNew: true },
+  { id: 'crypto-converter-pro', name: 'Crypto Converter (BTC/ETH)', description: 'Convert cryptocurrencies', category: 'currency-crypto', icon: 'fa-bitcoin', function: 'Convert cryptocurrencies', isNew: true },
   { id: 'currency-history', name: 'Currency Rate History Viewer', description: 'View historical exchange rates', category: 'currency-crypto', icon: 'fa-chart-line', function: 'View historical exchange rates', isNew: true },
   { id: 'gold-converter', name: 'Gold & Silver Rate', description: 'Current precious metal rates', category: 'currency-crypto', icon: 'fa-coins', function: 'Current precious metal rates', isNew: true },
 
   // Text Format Converters
   { id: 'text-case', name: 'Text Case Converter', description: 'Convert text case formats', category: 'text-converters', icon: 'fa-font', function: 'Convert text case formats', isNew: true },
-  { id: 'binary-text', name: 'Binary ↔ Text', description: 'Convert between binary and text', category: 'text-converters', icon: 'fa-binary', function: 'Convert between binary and text', isNew: true },
-  { id: 'text-reverser', name: 'Text Reverser', description: 'Reverse text strings', category: 'text-converters', icon: 'fa-undo', function: 'Reverse text strings', isNew: true },
-  { id: 'slug-generator', name: 'Slug Generator', description: 'Generate URL-friendly slugs', category: 'text-converters', icon: 'fa-link', function: 'Generate URL-friendly slugs', isNew: true },
-  { id: 'text-capitalizer', name: 'Text Capitalizer', description: 'Capitalize text properly', category: 'text-converters', icon: 'fa-text-height', function: 'Capitalize text properly', isNew: true },
+  { id: 'binary-text-pro', name: 'Binary ↔ Text', description: 'Convert between binary and text', category: 'text-converters', icon: 'fa-binary', function: 'Convert between binary and text', isNew: true },
+  { id: 'text-reverser-pro', name: 'Text Reverser', description: 'Reverse text strings', category: 'text-converters', icon: 'fa-undo', function: 'Reverse text strings', isNew: true },
+  { id: 'slug-generator-pro', name: 'Slug Generator', description: 'Generate URL-friendly slugs', category: 'text-converters', icon: 'fa-link', function: 'Generate URL-friendly slugs', isNew: true },
+  { id: 'text-capitalizer-pro', name: 'Text Capitalizer', description: 'Capitalize text properly', category: 'text-converters', icon: 'fa-text-height', function: 'Capitalize text properly', isNew: true },
   { id: 'remove-lines', name: 'Remove Duplicate Lines', description: 'Remove duplicate text lines', category: 'text-converters', icon: 'fa-minus', function: 'Remove duplicate text lines', isNew: true },
   { id: 'text-encryptor', name: 'ROT13 / Base64 Encryptor', description: 'Encrypt and decrypt text', category: 'text-converters', icon: 'fa-lock', function: 'Encrypt and decrypt text', isNew: true },
 
@@ -171,7 +169,7 @@ export const calculators: Calculator[] = [
 
   // Language & Script Converters
   { id: 'text-translator', name: 'Text Translator', description: 'Translate text between languages', category: 'language-converters', icon: 'fa-language', function: 'Translate text between languages', isNew: true },
-  { id: 'script-converter', name: 'Script Converter', description: 'Convert between scripts (e.g., Hindi ↔ Roman)', category: 'language-converters', icon: 'fa-font', function: 'Convert between scripts', isNew: true },
+  { id: 'script-converter-pro', name: 'Script Converter', description: 'Convert between scripts (e.g., Hindi ↔ Roman)', category: 'language-converters', icon: 'fa-font', function: 'Convert between scripts', isNew: true },
   { id: 'font-converter', name: 'Font Style Converter', description: 'Convert font styles', category: 'language-converters', icon: 'fa-text-height', function: 'Convert font styles', isNew: true },
   { id: 'unicode-converter', name: 'Unicode ↔ ASCII', description: 'Convert between Unicode and ASCII', category: 'language-converters', icon: 'fa-font', function: 'Convert between Unicode and ASCII', isNew: true },
 
