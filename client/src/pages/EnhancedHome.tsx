@@ -19,7 +19,7 @@ import {
 import { categories, calculators } from '@/lib/calculatorData';
 import { getCardStyles } from '@/lib/cardColors';
 import SEOHead from '@/components/SEOHead';
-import SimpleToolModal from '@/components/SimpleToolModal';
+import UnifiedToolModal from '@/components/UnifiedToolModal';
 
 const iconMap = {
   'fa-chart-line': BarChart3,
@@ -607,7 +607,7 @@ export default function EnhancedHome() {
       </div>
        {/* Tool Popup Modal */}
       {selectedTool && (
-        <SimpleToolModal
+        <UnifiedToolModal
           tool={selectedTool}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}

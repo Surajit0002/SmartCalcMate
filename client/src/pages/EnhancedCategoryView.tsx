@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { getCategoryById, calculators } from '@/lib/calculatorData';
 import { getCardStyles } from '@/lib/cardColors';
-import SimpleToolModal from '@/components/SimpleToolModal';
+import UnifiedToolModal from '@/components/UnifiedToolModal';
 import SEOHead from '@/components/SEOHead';
 
 interface EnhancedCategoryViewProps {
@@ -520,7 +520,7 @@ export default function EnhancedCategoryView({ params }: EnhancedCategoryViewPro
       
       {/* Tool Popup Modal */}
       {selectedTool && (
-        <SimpleToolModal
+        <UnifiedToolModal
           tool={selectedTool}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}

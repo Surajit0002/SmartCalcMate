@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { categories, calculators } from '@/lib/calculatorData';
 import { getCardStyles } from '@/lib/cardColors';
-import SimpleToolModal from '@/components/SimpleToolModal';
+import UnifiedToolModal from '@/components/UnifiedToolModal';
 import SEOHead from '@/components/SEOHead';
 
 const iconMap = {
@@ -559,7 +559,7 @@ export default function EnhancedAllTools() {
 
       {/* Tool Popup Modal */}
       {selectedTool && (
-        <SimpleToolModal
+        <UnifiedToolModal
           tool={selectedTool}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
