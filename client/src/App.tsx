@@ -9,17 +9,14 @@ import UltraEnhancedHeader from "@/components/UltraEnhancedHeader";
 import EnhancedFooter from "@/components/EnhancedFooter";
 import FloatingActionButton from "@/components/FloatingActionButton";
 import TrendingBanner from "@/components/TrendingBanner";
-import Home from '@/pages/Home';
-import Categories from '@/pages/Categories';
+import EnhancedHome from '@/pages/EnhancedHome';
 import EnhancedCategories from '@/pages/EnhancedCategories';
 import CalculatorView from '@/pages/CalculatorView';
-import CategoryView from '@/pages/CategoryView';
 import EnhancedCategoryView from '@/pages/EnhancedCategoryView';
 import Favorites from '@/pages/Favorites';
 import History from '@/pages/History';
 import Profile from '@/pages/Profile';
 import FinancialSuite from '@/pages/FinancialSuite';
-import AllTools from '@/pages/AllTools';
 import EnhancedAllTools from '@/pages/EnhancedAllTools';
 import Discover from '@/pages/Discover';
 import NotFound from '@/pages/not-found';
@@ -32,7 +29,7 @@ function Router() {
         <UltraEnhancedHeader />
         <main className="relative">
           <Switch>
-            <Route path="/" component={Home} />
+            <Route path="/" component={EnhancedHome} />
             <Route path="/categories" component={EnhancedCategories} />
             <Route path="/calculator/:id" component={CalculatorView} />
             <Route path="/category/:id" component={EnhancedCategoryView} />
