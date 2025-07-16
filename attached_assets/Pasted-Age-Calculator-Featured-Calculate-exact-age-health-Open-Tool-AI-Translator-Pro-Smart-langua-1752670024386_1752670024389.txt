@@ -1,0 +1,565 @@
+Age Calculator
+Featured
+Calculate exact age
+
+health
+Open Tool
+AI Translator
+Pro
+Smart language translation
+
+ai-converters
+Open Tool
+Algebra Solver
+Solve algebraic equations
+
+math
+Open Tool
+Area Converter
+Convert area units
+
+unit-converters
+Open Tool
+Audio Compressor
+Reduce audio file size
+
+media-converters
+Open Tool
+Audio Converter
+Convert between audio formats
+
+media-converters
+Open Tool
+Audio Transcriber
+Pro
+Professional transcription
+
+ai-converters
+Open Tool
+Base64 Encoder/Decoder
+Encode and decode Base64
+
+text-converters
+Open Tool
+Binary ↔ Text
+Convert binary and text
+
+text-converters
+Open Tool
+BMI Calculator
+Featured
+Body mass index calculator
+
+health
+Open Tool
+BMR Calculator
+Featured
+Metabolic rate calculator
+
+health
+Open Tool
+Code Explainer
+Pro
+Explain code functionality
+
+ai-converters
+Open Tool
+Compound Interest
+4.6
+Featured
+Popular
+Interest calculation with compounding frequency
+
+finance
+87,000
+Open Tool
+Crypto Converter
+Convert cryptocurrencies
+
+currency-crypto
+Open Tool
+CSV to Excel
+Convert CSV to Excel format
+
+file-converters
+Open Tool
+CSV to JSON
+Convert CSV to JSON
+
+file-converters
+Open Tool
+CSV to XML
+Convert CSV to XML
+
+file-converters
+Open Tool
+Currency Converter
+Featured
+Real-time currency conversion
+
+currency-crypto
+Open Tool
+Currency History
+Historical exchange rates
+
+currency-crypto
+Open Tool
+Data Size Converter
+Convert data size units
+
+unit-converters
+Open Tool
+Document Summarizer
+Pro
+AI text summarization
+
+ai-converters
+Open Tool
+DOCX to ODT
+Convert Word to OpenDocument
+
+file-converters
+Open Tool
+EMI Calculator
+4.8
+Featured
+Popular
+Calculate EMI for loans with detailed breakdown
+
+finance
+1,25,000
+Open Tool
+Excel to CSV
+Convert Excel to CSV
+
+file-converters
+Open Tool
+Facebook Video Downloader
+Download videos from Facebook
+
+downloader-tools
+Open Tool
+Favicon Generator
+Generate website favicons
+
+misc-converters
+Open Tool
+Font Style Converter
+Convert font styles
+
+language-converters
+Open Tool
+Fraction ↔ Decimal
+Convert fractions and decimals
+
+math
+Open Tool
+GIF to MP4
+Convert GIF to video
+
+media-converters
+Open Tool
+Gold & Silver Rates
+Precious metal rates
+
+currency-crypto
+Open Tool
+Hash Generator
+Generate MD5, SHA hashes
+
+text-converters
+Open Tool
+Hashtag Generator
+Generate relevant hashtags
+
+social-media-tools
+Open Tool
+HTML ↔ Markdown
+Convert HTML and Markdown
+
+text-converters
+Open Tool
+ICO to PNG
+Convert ICO to PNG
+
+misc-converters
+Open Tool
+Image to PDF
+Convert images to PDF
+
+file-converters
+Open Tool
+Instagram Caption Generator
+Generate creative captions for Instagram
+
+social-media-tools
+Open Tool
+Instagram Reel Downloader
+Download reels from Instagram
+
+downloader-tools
+Open Tool
+Investment Calculator
+4.4
+Featured
+Pro
+Advanced investment planning and portfolio analysis
+
+finance
+54,000
+Open Tool
+JSON ↔ XML
+Convert JSON and XML
+
+text-converters
+Open Tool
+JSON to CSV
+Convert JSON to CSV
+
+file-converters
+Open Tool
+Language Detector
+Detect text language
+
+language-converters
+Open Tool
+Length Converter
+Convert length units
+
+unit-converters
+Open Tool
+Loan Comparison
+4.3
+Featured
+Compare multiple loan offers side by side
+
+finance
+45,000
+Open Tool
+Merge PDF
+Combine multiple PDFs
+
+file-converters
+Open Tool
+Metadata Extractor
+Extract file metadata
+
+misc-converters
+Open Tool
+Mortgage Calculator
+4.5
+Featured
+Popular
+Complete home loan analysis with taxes and insurance
+
+finance
+76,000
+Open Tool
+MP4 to GIF
+Convert video to GIF
+
+media-converters
+Open Tool
+Number Base Converter
+Binary, decimal, hex conversion
+
+math
+Open Tool
+OCR (Image to Text)
+Pro
+Extract text from images
+
+ai-converters
+Open Tool
+Password Generator
+Generate secure passwords
+
+daily
+Open Tool
+PDF Compressor
+Reduce PDF file size
+
+file-converters
+Open Tool
+PDF to Excel
+Extract tables from PDF
+
+file-converters
+Open Tool
+PDF to Image
+Convert PDF pages to images
+
+file-converters
+Open Tool
+PDF to Word
+Convert PDF to editable Word
+
+file-converters
+Open Tool
+Percentage Calculator
+Featured
+Calculate percentages
+
+math
+Open Tool
+Pinterest Image Downloader
+Download images from Pinterest
+
+downloader-tools
+Open Tool
+PNG to ICO
+Convert PNG to ICO
+
+misc-converters
+Open Tool
+Power Converter
+Convert power units
+
+unit-converters
+Open Tool
+Pressure Converter
+Convert pressure units
+
+unit-converters
+Open Tool
+QR Code Generator
+Generate QR codes
+
+text-converters
+Open Tool
+Reels Trend Finder
+Discover trending reels
+
+social-media-tools
+Open Tool
+Regex Tester
+Test regular expressions
+
+text-converters
+Open Tool
+Remove Duplicate Lines
+Clean duplicate text
+
+text-converters
+Open Tool
+Retirement Planning
+4.9
+New
+Pro
+Comprehensive retirement savings calculator
+
+finance
+32,000
+Open Tool
+Roman ↔ Decimal
+Roman numeral conversion
+
+math
+Open Tool
+ROT13 Cipher
+ROT13 encryption/decryption
+
+text-converters
+Open Tool
+Scientific Calculator
+Featured
+Advanced mathematical functions
+
+math
+Open Tool
+Script Converter
+Convert between scripts
+
+language-converters
+Open Tool
+SIP Calculator
+4.7
+Featured
+Popular
+Systematic Investment Planning with growth projections
+
+finance
+98,000
+Open Tool
+Slug Generator
+URL-friendly text
+
+text-converters
+Open Tool
+Social Bio Link Generator
+Create a link for your social bio
+
+social-media-tools
+Open Tool
+SoundCloud to MP3
+Download audio from SoundCloud
+
+downloader-tools
+Open Tool
+Speech to Text
+Pro
+Transcribe audio to text
+
+ai-converters
+Open Tool
+Speed Converter
+Convert speed units
+
+unit-converters
+Open Tool
+Split PDF
+Split PDF into pages
+
+file-converters
+Open Tool
+SQL Formatter
+Format SQL queries
+
+text-converters
+Open Tool
+Tax Calculator
+4.2
+New
+Income tax calculation with deductions
+
+finance
+28,000
+Open Tool
+Temperature Converter
+Convert temperature units
+
+unit-converters
+Open Tool
+Text Capitalizer
+Smart capitalization
+
+text-converters
+Open Tool
+Text Case Converter
+Upper, lower, title case
+
+text-converters
+Open Tool
+Text Diff Checker
+Compare text differences
+
+misc-converters
+Open Tool
+Text Reverser
+Reverse text strings
+
+text-converters
+Open Tool
+Text to PDF
+Convert text to PDF
+
+file-converters
+Open Tool
+Text to Speech
+Pro
+Convert text to audio
+
+ai-converters
+Open Tool
+Text Translator
+Translate between languages
+
+language-converters
+Open Tool
+Time Converter
+Convert time units
+
+unit-converters
+Open Tool
+Tip Calculator
+Featured
+Calculate tips and splits
+
+daily
+Open Tool
+Tweet Thread Composer
+Compose tweet threads easily
+
+social-media-tools
+Open Tool
+Twitter Video Downloader
+Download videos from Twitter
+
+downloader-tools
+Open Tool
+Unicode ↔ ASCII
+Convert Unicode and ASCII
+
+language-converters
+Open Tool
+Unit Converter
+Featured
+Convert various units
+
+unit-converters
+Open Tool
+URL Shortener
+Shorten long URLs
+
+misc-converters
+Open Tool
+UUID Generator
+Generate unique identifiers
+
+text-converters
+Open Tool
+VCF to CSV
+Convert contacts to CSV
+
+misc-converters
+Open Tool
+Video Compressor
+Reduce video file size
+
+media-converters
+Open Tool
+Video Converter
+Convert between video formats
+
+media-converters
+Open Tool
+Video to MP3
+Extract audio from video
+
+media-converters
+Open Tool
+Volume Converter
+Convert volume units
+
+unit-converters
+Open Tool
+Weight Converter
+Convert weight units
+
+unit-converters
+Open Tool
+Word to PDF
+Convert Word to PDF
+
+file-converters
+Open Tool
+YouTube Thumbnail
+Download video thumbnails
+
+media-converters
+Open Tool
+YouTube Timestamp Link
+Create timestamped YouTube links
+
+misc-converters
+Open Tool
+YouTube to MP3
+Download YouTube audio
+
+media-converters
+Open Tool
+YouTube Video Downloader
+Download videos from YouTube
+
+downloader-tools
+Open Tool
