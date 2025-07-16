@@ -157,29 +157,19 @@ const UnifiedToolModal: React.FC<UnifiedToolModalProps> = ({ tool, isOpen, onClo
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-5xl max-h-[95vh] overflow-y-auto">
-        <DialogHeader className={`${cardStyles.cardBg} -m-6 mb-0 p-6 rounded-t-lg`}>
+      <DialogContent className="w-[95vw] max-w-4xl h-[90vh] max-h-[800px] p-0 gap-0 overflow-hidden">
+        <DialogHeader className={`${cardStyles.cardBg} p-4 sm:p-6 rounded-t-lg border-b`}>
           <div className="flex items-start justify-between">
-            <div className="flex items-center gap-4">
-              <div className={`p-3 ${cardStyles.iconBg} rounded-xl text-white`}>
+            <div className="flex items-center gap-2 sm:gap-4 min-w-0">
+              <div className={`p-2 sm:p-3 ${cardStyles.iconBg} rounded-xl text-white`}>
                 {getIcon(tool.icon)}
               </div>
-              <div>
-                <DialogTitle className="text-2xl font-bold text-white mb-2">
+              <div className="min-w-0 flex-1">
+                <DialogTitle className="text-lg sm:text-xl font-bold text-white mb-1 truncate">
                   {tool.name}
                 </DialogTitle>
-                <div className="flex items-center gap-2 mb-2">
-                  {tool.rating && (
-                    <div className="flex items-center gap-1">
-                      {getRatingStars(tool.rating)}
-                      <span className="text-white/90 text-sm ml-1">
-                        {tool.rating.toFixed(1)} ({usageStats.totalReviews} reviews)
-                      </span>
-                    </div>
-                  )}
-                </div>
-                <div className="flex items-center gap-2">
-                  <Badge variant="outline" className="text-white border-white/30 bg-white/20">
+                <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
+                  <Badge variant="outline" className="text-white border-white/30 bg-white/20 text-xs">
                     {category?.name}
                   </Badge>
                   {tool.difficulty && (
@@ -187,295 +177,150 @@ const UnifiedToolModal: React.FC<UnifiedToolModalProps> = ({ tool, isOpen, onClo
                       {tool.difficulty}
                     </Badge>
                   )}
+                  {tool.rating && (
+                    <div className="hidden sm:flex items-center gap-1">
+                      {getRatingStars(tool.rating)}
+                      <span className="text-white/90 text-xs">
+                        {tool.rating.toFixed(1)}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsFavorite(!isFavorite)}
-                className="text-white hover:bg-white/20"
+                className="text-white hover:bg-white/20 p-2"
               >
                 <Heart className={`w-4 h-4 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
               </Button>
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => setIsBookmarked(!isBookmarked)}
-                className="text-white hover:bg-white/20"
+                onClick={onClose}
+                className="text-white hover:bg-white/20 p-2"
               >
-                <Bookmark className={`w-4 h-4 ${isBookmarked ? 'fill-blue-500 text-blue-500' : ''}`} />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-white hover:bg-white/20"
-              >
-                <Share2 className="w-4 h-4" />
+                <X className="w-4 h-4" />
               </Button>
             </div>
           </div>
         </DialogHeader>
 
-        <div className="p-6">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="calculator">Calculator</TabsTrigger>
-              <TabsTrigger value="about">About</TabsTrigger>
-              <TabsTrigger value="features">Features</TabsTrigger>
-              <TabsTrigger value="stats">Statistics</TabsTrigger>
+        <div className="flex-1 overflow-y-auto">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
+            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mx-4 my-2 sm:mx-6 sm:my-4">
+              <TabsTrigger value="calculator" className="text-xs sm:text-sm">Calculator</TabsTrigger>
+              <TabsTrigger value="info" className="text-xs sm:text-sm">Info</TabsTrigger>
+              <TabsTrigger value="features" className="text-xs sm:text-sm hidden sm:block">Features</TabsTrigger>
+              <TabsTrigger value="stats" className="text-xs sm:text-sm hidden sm:block">Stats</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="calculator" className="space-y-4">
-              <div className="min-h-[400px]">
-                {CalculatorComponent}
-              </div>
-            </TabsContent>
+            <div className="flex-1 overflow-y-auto px-4 sm:px-6 pb-4">
+              <TabsContent value="calculator" className="h-full mt-0">
+                <div className="h-full">
+                  {CalculatorComponent}
+                </div>
+              </TabsContent>
 
-            <TabsContent value="about" className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <TabsContent value="info" className="space-y-4 mt-0">
                 <Card>
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
+                    <CardTitle className="flex items-center gap-2 text-lg">
                       <Info className="w-5 h-5" />
-                      Description
+                      About
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-600 dark:text-gray-300 mb-4">
+                    <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm">
                       {tool.longDescription || tool.description}
                     </p>
-                    <div className="space-y-2">
+                    <div className="grid grid-cols-2 gap-4 text-sm">
                       <div className="flex items-center gap-2">
                         <Users className="w-4 h-4 text-blue-500" />
-                        <span className="text-sm">{usageStats.dailyUsers} daily users</span>
+                        <span>{usageStats.dailyUsers} users</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Clock className="w-4 h-4 text-green-500" />
-                        <span className="text-sm">{tool.estimatedTime || '< 1 min'}</span>
+                        <span>{tool.estimatedTime || '< 1 min'}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <BarChart3 className="w-4 h-4 text-purple-500" />
-                        <span className="text-sm">{usageStats.successRate}% success rate</span>
+                        <span>{usageStats.successRate}% success</span>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <TrendingUp className="w-5 h-5" />
-                      Quick Stats
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      <div className="flex justify-between">
-                        <span className="text-sm">Usage Today</span>
-                        <span className="font-semibold">{usageStats.dailyUsers}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-sm">Total Calculations</span>
-                        <span className="font-semibold">{usageStats.totalCalculations.toLocaleString()}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-sm">Average Rating</span>
-                        <span className="font-semibold">{usageStats.avgRating}/5</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-sm">Response Time</span>
-                        <span className="font-semibold">{usageStats.responseTime}ms</span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Sparkles className="w-5 h-5" />
-                    Recent Updates
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    {recentUpdates.map((update, idx) => (
-                      <div key={idx} className="flex items-center gap-2">
-                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span className="text-sm">{update}</span>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="features" className="space-y-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Zap className="w-5 h-5" />
-                    Key Features
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {tool.features && tool.features.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {tool.features.map((feature, idx) => (
-                        <div key={idx} className="flex items-center gap-2 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                          <CheckCircle2 className="w-4 h-4 text-green-500" />
-                          <span className="text-sm">{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-center py-8 text-gray-500">
-                      <Lightbulb className="w-12 h-12 mx-auto mb-2 text-gray-400" />
-                      <p>Feature details coming soon...</p>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Award className="w-5 h-5" />
-                    Tool Status
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-3">
-                    {tool.featured && (
-                      <div className="flex items-center gap-2 p-2 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+                      <div className="flex items-center gap-2">
                         <Star className="w-4 h-4 text-yellow-500" />
-                        <span className="text-sm">Featured Tool</span>
-                      </div>
-                    )}
-                    {tool.isNew && (
-                      <div className="flex items-center gap-2 p-2 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                        <Sparkles className="w-4 h-4 text-green-500" />
-                        <span className="text-sm">New Release</span>
-                      </div>
-                    )}
-                    {tool.isPopular && (
-                      <div className="flex items-center gap-2 p-2 bg-red-50 dark:bg-red-900/20 rounded-lg">
-                        <Flame className="w-4 h-4 text-red-500" />
-                        <span className="text-sm">Popular Choice</span>
-                      </div>
-                    )}
-                    {tool.isPro && (
-                      <div className="flex items-center gap-2 p-2 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-                        <Crown className="w-4 h-4 text-purple-500" />
-                        <span className="text-sm">Pro Feature</span>
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="stats" className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <BarChart3 className="w-5 h-5" />
-                      Performance Metrics
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div>
-                      <div className="flex justify-between mb-2">
-                        <span className="text-sm">Success Rate</span>
-                        <span className="text-sm font-semibold">{usageStats.successRate}%</span>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className="bg-blue-600 h-2 rounded-full" 
-                          style={{ width: `${usageStats.successRate}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="flex justify-between mb-2">
-                        <span className="text-sm">User Satisfaction</span>
-                        <span className="text-sm font-semibold">{Math.round(usageStats.avgRating * 20)}%</span>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className="bg-green-600 h-2 rounded-full" 
-                          style={{ width: `${usageStats.avgRating * 20}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="flex justify-between mb-2">
-                        <span className="text-sm">Response Speed</span>
-                        <span className="text-sm font-semibold">{100 - (usageStats.responseTime / 10)}%</span>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className="bg-purple-600 h-2 rounded-full" 
-                          style={{ width: `${100 - (usageStats.responseTime / 10)}%` }}
-                        ></div>
+                        <span>{usageStats.avgRating}/5 rating</span>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
+              </TabsContent>
 
+              <TabsContent value="features" className="space-y-4 mt-0">
                 <Card>
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Target className="w-5 h-5" />
-                      Related Tools
+                    <CardTitle className="flex items-center gap-2 text-lg">
+                      <Zap className="w-5 h-5" />
+                      Features
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid grid-cols-1 gap-3">
-                      {relatedTools.map((relatedTool, idx) => (
-                        <div key={relatedTool.id} className="p-3 border rounded-lg hover:border-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors cursor-pointer">
-                          <div className="flex items-center gap-2">
-                            <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                              {getIcon(relatedTool.icon)}
-                            </div>
-                            <span className="font-medium text-sm">{relatedTool.name}</span>
-                            <Button size="sm" variant="outline" className="ml-auto">
-                              Try Now
-                            </Button>
+                    {tool.features && tool.features.length > 0 ? (
+                      <div className="grid grid-cols-1 gap-2">
+                        {tool.features.slice(0, 6).map((feature, idx) => (
+                          <div key={idx} className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-800 rounded-lg text-sm">
+                            <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
+                            <span>{feature}</span>
                           </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-6 text-gray-500">
+                        <Lightbulb className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+                        <p className="text-sm">Features coming soon...</p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="stats" className="space-y-4 mt-0">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-lg">
+                      <BarChart3 className="w-5 h-5" />
+                      Statistics
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div className="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                          <div className="font-bold text-lg text-blue-600">{usageStats.dailyUsers}</div>
+                          <div className="text-xs text-gray-600 dark:text-gray-300">Daily Users</div>
                         </div>
-                      ))}
+                        <div className="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                          <div className="font-bold text-lg text-green-600">{usageStats.successRate}%</div>
+                          <div className="text-xs text-gray-600 dark:text-gray-300">Success Rate</div>
+                        </div>
+                        <div className="text-center p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                          <div className="font-bold text-lg text-purple-600">{usageStats.avgRating}</div>
+                          <div className="text-xs text-gray-600 dark:text-gray-300">Rating</div>
+                        </div>
+                        <div className="text-center p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
+                          <div className="font-bold text-lg text-orange-600">{usageStats.responseTime}ms</div>
+                          <div className="text-xs text-gray-600 dark:text-gray-300">Response</div>
+                        </div>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
-              </div>
-            </TabsContent>
+              </TabsContent>
+            </div>
           </Tabs>
-
-          <div className="flex items-center justify-between pt-6 border-t mt-6">
-            <div className="flex items-center gap-2">
-              <Badge variant="outline" className="text-xs">
-                Updated: {new Date().toLocaleDateString()}
-              </Badge>
-              <Badge variant="outline" className="text-xs">
-                Version: 2.1.0
-              </Badge>
-            </div>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm">
-                <Copy className="w-4 h-4 mr-2" />
-                Copy Link
-              </Button>
-              <Button size="sm" className={`${cardStyles.iconBg} hover:opacity-90`} onClick={onClose}>
-                <CheckCircle2 className="w-4 h-4 mr-2" />
-                Close Tool
-              </Button>
-            </div>
-          </div>
         </div>
       </DialogContent>
     </Dialog>

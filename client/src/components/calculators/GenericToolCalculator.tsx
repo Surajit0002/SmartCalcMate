@@ -94,33 +94,36 @@ export default function GenericToolCalculator({ tool }: GenericToolCalculatorPro
 
   const performCalculation = (tool: Calculator, inputs: Record<string, any>) => {
     // This would contain the actual calculation logic for each tool type
-    const results: Record<string, any> = {};
+    let calculationResults: Record<string, any> = {};
     
     switch (tool.category) {
       case 'unit-converters':
-        results.converted = convertUnit(tool.id, inputs.value, inputs.fromUnit, inputs.toUnit);
-        results.formula = getConversionFormula(tool.id, inputs.fromUnit, inputs.toUnit);
+        calculationResults.converted = convertUnit(tool.id, inputs.value, inputs.fromUnit, inputs.toUnit);
+        calculationResults.formula = getConversionFormula(tool.id, inputs.fromUnit, inputs.toUnit);
         break;
         
       case 'text-converters':
-        results.output = convertText(tool.id, inputs.inputText);
-        results.stats = getTextStats(inputs.inputText, results.output);
+        calculationResults.output = convertText(tool.id, inputs.inputText);
+        const stats = getTextStats(inputs.inputText, calculationResults.output);
+        calculationResults.inputLength = stats.inputLength;
+        calculationResults.outputLength = stats.outputLength;
+        calculationResults.difference = stats.difference;
         break;
         
       case 'currency-crypto':
-        results.converted = convertCurrency(inputs.amount, inputs.fromCurrency, inputs.toCurrency);
-        results.rate = getExchangeRate(inputs.fromCurrency, inputs.toCurrency);
+        calculationResults.converted = convertCurrency(inputs.amount, inputs.fromCurrency, inputs.toCurrency);
+        calculationResults.rate = getExchangeRate(inputs.fromCurrency, inputs.toCurrency);
         break;
         
       case 'finance':
-        results = calculateFinance(tool.id, inputs);
+        calculationResults = calculateFinance(tool.id, inputs);
         break;
         
       default:
-        results.message = 'Calculation completed successfully';
+        calculationResults.message = 'Calculation completed successfully';
     }
     
-    return results;
+    return calculationResults;
   };
 
   const handleInputChange = (key: string, value: any) => {
