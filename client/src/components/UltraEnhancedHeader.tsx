@@ -104,17 +104,11 @@ export default function UltraEnhancedHeader() {
   const navigationItems = [
     { name: 'Home', href: '/', icon: Home, gradient: 'from-blue-500 to-purple-500' },
     { name: 'Categories', href: '/categories', icon: Grid3X3, gradient: 'from-green-500 to-blue-500' },
-    { name: 'All Tools', href: '/all-tools', icon: List, gradient: 'from-purple-500 to-pink-500' },
-    { name: 'Discover', href: '/discover', icon: Compass, gradient: 'from-orange-500 to-red-500' },
-    { name: 'Favorites', href: '/favorites', icon: Heart, gradient: 'from-red-500 to-pink-500' },
-    { name: 'History', href: '/history', icon: History, gradient: 'from-indigo-500 to-blue-500' }
+    { name: 'All Tools', href: '/all-tools', icon: List, gradient: 'from-purple-500 to-pink-500' }
   ];
 
   const quickActions = [
-    { name: 'Save', icon: Save, color: 'text-green-600', bgColor: 'bg-green-100', action: () => alert('Save feature coming soon!') },
-    { name: 'History', icon: History, color: 'text-blue-600', bgColor: 'bg-blue-100', href: '/history' },
-    { name: 'Favorites', icon: Heart, color: 'text-red-600', bgColor: 'bg-red-100', href: '/favorites' },
-    { name: 'Archive', icon: Archive, color: 'text-purple-600', bgColor: 'bg-purple-100', action: () => alert('Archive feature coming soon!') }
+    { name: 'Settings', icon: Settings, color: 'text-gray-600', bgColor: 'bg-gray-100', action: () => alert('Settings coming soon!') }
   ];
 
   return (
@@ -236,36 +230,20 @@ export default function UltraEnhancedHeader() {
             </div>
           </div>
 
-          {/* Quick actions with prominent save/history */}
+          {/* Header right side actions */}
           <div className="flex items-center gap-3">
-            {/* Quick action buttons */}
-            <div className="hidden lg:flex items-center gap-2">
-              {quickActions.map((action) => (
-                <div key={action.name} className="relative group">
-                  {action.href ? (
-                    <Link href={action.href}>
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className={`gap-2 ${action.bgColor} ${action.color} hover:scale-105 transition-transform duration-200 rounded-full px-4 py-2`}
-                      >
-                        <action.icon className="w-4 h-4" />
-                        <span className="hidden xl:inline">{action.name}</span>
-                      </Button>
-                    </Link>
-                  ) : (
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className={`gap-2 ${action.bgColor} ${action.color} hover:scale-105 transition-transform duration-200 rounded-full px-4 py-2`}
-                      onClick={action.action}
-                    >
-                      <action.icon className="w-4 h-4" />
-                      <span className="hidden xl:inline">{action.name}</span>
-                    </Button>
-                  )}
-                </div>
-              ))}
+            {/* Favorites and History icons */}
+            <div className="hidden sm:flex items-center gap-2">
+              <Link href="/favorites">
+                <Button variant="ghost" size="sm" className="rounded-full w-10 h-10 p-0 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20">
+                  <Heart className="w-5 h-5" />
+                </Button>
+              </Link>
+              <Link href="/history">
+                <Button variant="ghost" size="sm" className="rounded-full w-10 h-10 p-0 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20">
+                  <History className="w-5 h-5" />
+                </Button>
+              </Link>
             </div>
 
             {/* Live stats display */}
@@ -481,34 +459,26 @@ export default function UltraEnhancedHeader() {
 
             {/* Mobile quick actions */}
             <div className="grid grid-cols-2 gap-3">
-              {quickActions.map((action) => (
-                <div key={action.name}>
-                  {action.href ? (
-                    <Link href={action.href}>
-                      <Button 
-                        variant="ghost" 
-                        className={`w-full gap-3 ${action.bgColor} ${action.color} justify-start rounded-xl py-4`}
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        <action.icon className="w-5 h-5" />
-                        {action.name}
-                      </Button>
-                    </Link>
-                  ) : (
-                    <Button 
-                      variant="ghost" 
-                      className={`w-full gap-3 ${action.bgColor} ${action.color} justify-start rounded-xl py-4`}
-                      onClick={() => {
-                        action.action?.();
-                        setIsMenuOpen(false);
-                      }}
-                    >
-                      <action.icon className="w-5 h-5" />
-                      {action.name}
-                    </Button>
-                  )}
-                </div>
-              ))}
+              <Link href="/favorites">
+                <Button 
+                  variant="ghost" 
+                  className="w-full gap-3 bg-red-100 text-red-600 justify-start rounded-xl py-4"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <Heart className="w-5 h-5" />
+                  Favorites
+                </Button>
+              </Link>
+              <Link href="/history">
+                <Button 
+                  variant="ghost" 
+                  className="w-full gap-3 bg-blue-100 text-blue-600 justify-start rounded-xl py-4"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <History className="w-5 h-5" />
+                  History
+                </Button>
+              </Link>
             </div>
 
             {/* Mobile navigation */}
