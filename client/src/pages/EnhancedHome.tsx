@@ -19,6 +19,7 @@ import {
 import { categories, calculators } from '@/lib/calculatorData';
 import { getCardStyles } from '@/lib/cardColors';
 import SEOHead from '@/components/SEOHead';
+import SimpleToolModal from '@/components/SimpleToolModal';
 
 const iconMap = {
   'fa-chart-line': BarChart3,
@@ -74,6 +75,9 @@ export default function EnhancedHome() {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isAnimated, setIsAnimated] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTool, setSelectedTool] = useState(null);
+    const [modalCardIndex, setModalCardIndex] = useState(0);
 
   useEffect(() => {
     setIsAnimated(true);
@@ -120,6 +124,12 @@ export default function EnhancedHome() {
     { title: 'Dark Mode Optimization', description: 'Better contrast and readability', date: '2 weeks ago', type: 'improvement' },
     { title: 'Mobile App Beta', description: 'iOS and Android apps now available', date: '3 weeks ago', type: 'announcement' }
   ];
+
+    const openModal = (tool, index) => {
+        setSelectedTool(tool);
+        setIsModalOpen(true);
+        setModalCardIndex(index);
+    };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
@@ -267,8 +277,8 @@ export default function EnhancedHome() {
               {featuredCalculators.map((tool, index) => {
                 const cardStyles = getCardStyles(index);
                 return (
-                  <Link key={tool.id} href={`/calculator/${tool.id}`}>
-                    <Card className={`group cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105 ${cardStyles.cardBg} border-0 shadow-lg`} style={{ minHeight: '280px' }}>
+                  
+                    <Card onClick={() => openModal(tool, index)} key={tool.id} className={`group cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105 ${cardStyles.cardBg} border-0 shadow-lg`} style={{ minHeight: '280px' }}>
                       <CardHeader className="pb-3 h-24">
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex items-center gap-3">
@@ -320,7 +330,7 @@ export default function EnhancedHome() {
                         </Button>
                       </CardContent>
                     </Card>
-                  </Link>
+                  
                 );
               })}
             </div>
@@ -341,8 +351,8 @@ export default function EnhancedHome() {
               {categories.map((category, index) => {
                 const cardStyles = getCardStyles(index + 5); // Offset for different colors
                 return (
-                  <Link key={category.id} href={`/category/${category.id}`}>
-                    <Card className={`group cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105 ${cardStyles.cardBg} border-0 shadow-lg`} style={{ minHeight: '320px' }}>
+                   
+                    <Card key={category.id} className={`group cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105 ${cardStyles.cardBg} border-0 shadow-lg`} style={{ minHeight: '320px' }}>
                       <div className={`h-2 ${cardStyles.iconBg}`}></div>
                       <CardHeader className="pb-3">
                         <div className="flex items-center justify-between mb-3">
@@ -386,11 +396,13 @@ export default function EnhancedHome() {
                         {/* Show top 3 tools in category */}
                         <div className="space-y-2 mb-4">
                           {category.calculators.slice(0, 3).map((tool) => (
-                            <div key={tool.id} className="flex items-center gap-2 text-sm">
+                            
+                              <div key={tool.id} className="flex items-center gap-2 text-sm">
                               <div className="w-2 h-2 bg-white/70 rounded-full"></div>
                               <span className="text-white/90">{tool.name}</span>
                               {tool.featured && <Star className="w-3 h-3 text-yellow-400" />}
                             </div>
+                            
                           ))}
                           {category.calculators.length > 3 && (
                             <div className="text-sm text-white/60">
@@ -405,7 +417,7 @@ export default function EnhancedHome() {
                         </Button>
                       </CardContent>
                     </Card>
-                  </Link>
+                  
                 );
               })}
             </div>
@@ -426,8 +438,8 @@ export default function EnhancedHome() {
               {popularCalculators.map((tool, index) => {
                 const cardStyles = getCardStyles(index + 10); // Offset for different colors
                 return (
-                  <Link key={tool.id} href={`/calculator/${tool.id}`}>
-                    <Card className={`group cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105 ${cardStyles.cardBg} border-0 shadow-lg`} style={{ minHeight: '280px' }}>
+                 
+                    <Card key={tool.id} onClick={() => openModal(tool, index)} className={`group cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105 ${cardStyles.cardBg} border-0 shadow-lg`} style={{ minHeight: '280px' }}>
                       <CardHeader className="pb-3 h-24">
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex items-center gap-3">
@@ -479,7 +491,7 @@ export default function EnhancedHome() {
                         </Button>
                       </CardContent>
                     </Card>
-                  </Link>
+                  
                 );
               })}
             </div>
@@ -500,8 +512,8 @@ export default function EnhancedHome() {
               {newCalculators.map((tool, index) => {
                 const cardStyles = getCardStyles(index + 15); // Offset for different colors
                 return (
-                  <Link key={tool.id} href={`/calculator/${tool.id}`}>
-                    <Card className={`group cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105 ${cardStyles.cardBg} border-0 shadow-lg`} style={{ minHeight: '280px' }}>
+                   
+                    <Card key={tool.id} onClick={() => openModal(tool, index)} className={`group cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105 ${cardStyles.cardBg} border-0 shadow-lg`} style={{ minHeight: '280px' }}>
                       <CardHeader className="pb-3 h-24">
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex items-center gap-3">
@@ -553,7 +565,7 @@ export default function EnhancedHome() {
                         </Button>
                       </CardContent>
                     </Card>
-                  </Link>
+                 
                 );
               })}
             </div>
@@ -593,6 +605,15 @@ export default function EnhancedHome() {
           </div>
         </div>
       </div>
+       {/* Tool Popup Modal */}
+      {selectedTool && (
+        <SimpleToolModal
+          tool={selectedTool}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          cardIndex={modalCardIndex}
+        />
+      )}
     </div>
   );
 }
