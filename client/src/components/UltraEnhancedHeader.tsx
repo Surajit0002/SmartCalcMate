@@ -14,6 +14,14 @@ import {
   DropdownMenuTrigger,
   DropdownMenuGroup
 } from '@/components/ui/dropdown-menu';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter
+} from '@/components/ui/dialog';
 // Removed NavigationMenu imports to avoid conflicts
 import { useTheme } from '@/hooks/useTheme';
 import { categories, calculators } from '@/lib/calculatorData';
@@ -25,7 +33,8 @@ import {
   Bookmark, History, Save, Grid3X3, Compass, Globe,
   Target, Clock, Brain, Layers, Gauge, Timer, Trophy,
   Flame, RefreshCw, ChevronRight, Plus, Bell, Home,
-  Folder, List, Eye, Download, Share2, Archive, Trash2
+  Folder, List, Eye, Download, Share2, Archive, Trash2,
+  Copy, ExternalLink
 } from 'lucide-react';
 
 const iconMap = {
@@ -69,6 +78,8 @@ export default function UltraEnhancedHeader() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [selectedNotification, setSelectedNotification] = useState(null);
+  const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
@@ -82,6 +93,12 @@ export default function UltraEnhancedHeader() {
       clearInterval(timer);
     };
   }, []);
+
+  useEffect(() => {
+    if (selectedNotification) {
+      setIsNotificationModalOpen(true);
+    }
+  }, [selectedNotification]);
 
   const dynamicStats = {
     totalTools: calculators.length,
@@ -259,11 +276,152 @@ export default function UltraEnhancedHeader() {
               </div>
             </div>
 
-            {/* Notifications */}
-            <Button variant="ghost" size="sm" className="relative rounded-full w-10 h-10 p-0">
-              <Bell className="w-5 h-5" />
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-            </Button>
+            {/* Advanced Notifications */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="relative rounded-full w-10 h-10 p-0 hover:bg-gray-100 dark:hover:bg-gray-800">
+                  <Bell className="w-5 h-5" />
+                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-red-500 to-pink-500 rounded-full flex items-center justify-center text-white text-xs font-bold animate-pulse">
+                    3
+                  </div>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-96 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border-0 shadow-2xl max-h-96">
+                <DropdownMenuLabel className="text-center py-3 border-b border-gray-200 dark:border-gray-700">
+                  <div className="flex items-center justify-between">
+                    <div className="font-semibold text-lg">Notifications</div>
+                    <Badge variant="outline" className="bg-gradient-to-r from-blue-500 to-purple-500 text-white border-0">
+                      3 New
+                    </Badge>
+                  </div>
+                </DropdownMenuLabel>
+                <ScrollArea className="h-80">
+                  <div className="p-2 space-y-2">
+                    {/* Notification Item 1 */}
+                    <div className="p-3 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-l-4 border-blue-500 hover:shadow-lg transition-all duration-200 cursor-pointer group"
+                         onClick={() => setSelectedNotification({
+                           id: 1,
+                           type: 'update',
+                           title: 'New Calculator Added!',
+                           message: 'Check out our latest EMI Calculator with advanced features',
+                           timestamp: '2 minutes ago',
+                           priority: 'high',
+                           category: 'Product Update',
+                           details: 'We have just released a brand new EMI Calculator with advanced visualization features, multiple currency support, and detailed amortization schedules. This calculator helps you plan your loan EMIs with precision and includes interactive charts for better understanding.',
+                           actionButton: 'Try Calculator',
+                           isRead: false
+                         })}>
+                      <div className="flex items-start gap-3">
+                        <div className="p-2 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg text-white group-hover:scale-105 transition-transform">
+                          <Calculator className="w-4 h-4" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-medium text-gray-900 dark:text-white text-sm">New Calculator Added!</div>
+                          <div className="text-xs text-gray-600 dark:text-gray-300 mt-1">Check out our latest EMI Calculator with advanced features</div>
+                          <div className="flex items-center justify-between mt-2">
+                            <div className="text-xs text-blue-600 dark:text-blue-400 font-medium">2 minutes ago</div>
+                            <Badge className="bg-red-500 text-white text-xs">New</Badge>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Notification Item 2 */}
+                    <div className="p-3 rounded-lg bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-l-4 border-green-500 hover:shadow-lg transition-all duration-200 cursor-pointer group"
+                         onClick={() => setSelectedNotification({
+                           id: 2,
+                           type: 'achievement',
+                           title: 'Calculation Milestone!',
+                           message: 'You have completed 100+ calculations this month',
+                           timestamp: '1 hour ago',
+                           priority: 'medium',
+                           category: 'Achievement',
+                           details: 'Congratulations! You have successfully completed over 100 calculations this month. You are among our top 10% most active users. Keep up the great work and continue exploring our advanced tools and calculators.',
+                           actionButton: 'View Stats',
+                           isRead: false
+                         })}>
+                      <div className="flex items-start gap-3">
+                        <div className="p-2 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg text-white group-hover:scale-105 transition-transform">
+                          <Trophy className="w-4 h-4" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-medium text-gray-900 dark:text-white text-sm">Calculation Milestone!</div>
+                          <div className="text-xs text-gray-600 dark:text-gray-300 mt-1">You have completed 100+ calculations this month</div>
+                          <div className="flex items-center justify-between mt-2">
+                            <div className="text-xs text-green-600 dark:text-green-400 font-medium">1 hour ago</div>
+                            <Badge className="bg-yellow-500 text-white text-xs">Achievement</Badge>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Notification Item 3 */}
+                    <div className="p-3 rounded-lg bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border-l-4 border-purple-500 hover:shadow-lg transition-all duration-200 cursor-pointer group"
+                         onClick={() => setSelectedNotification({
+                           id: 3,
+                           type: 'promotion',
+                           title: 'Pro Features Available!',
+                           message: 'Upgrade to Pro and unlock advanced features',
+                           timestamp: '3 hours ago',
+                           priority: 'high',
+                           category: 'Promotion',
+                           details: 'Unlock the full potential of CalcMate Pro with our premium features including: Advanced calculators, AI-powered tools, Priority support, Export functionality, Custom themes, and much more. Limited time offer - Get 50% off on your first year!',
+                           actionButton: 'Upgrade Now',
+                           isRead: true
+                         })}>
+                      <div className="flex items-start gap-3">
+                        <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg text-white group-hover:scale-105 transition-transform">
+                          <Crown className="w-4 h-4" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-medium text-gray-900 dark:text-white text-sm">Pro Features Available!</div>
+                          <div className="text-xs text-gray-600 dark:text-gray-300 mt-1">Upgrade to Pro and unlock advanced features</div>
+                          <div className="flex items-center justify-between mt-2">
+                            <div className="text-xs text-purple-600 dark:text-purple-400 font-medium">3 hours ago</div>
+                            <Badge className="bg-orange-500 text-white text-xs">Pro</Badge>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Notification Item 4 */}
+                    <div className="p-3 rounded-lg bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 border-l-4 border-orange-500 hover:shadow-lg transition-all duration-200 cursor-pointer group"
+                         onClick={() => setSelectedNotification({
+                           id: 4,
+                           type: 'system',
+                           title: 'System Maintenance',
+                           message: 'Scheduled maintenance on Jan 20, 2:00 AM UTC',
+                           timestamp: '1 day ago',
+                           priority: 'low',
+                           category: 'System',
+                           details: 'We have scheduled system maintenance on January 20th at 2:00 AM UTC for approximately 2 hours. During this time, some features may be temporarily unavailable. We apologize for any inconvenience and appreciate your patience.',
+                           actionButton: 'Learn More',
+                           isRead: true
+                         })}>
+                      <div className="flex items-start gap-3">
+                        <div className="p-2 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg text-white group-hover:scale-105 transition-transform">
+                          <Settings className="w-4 h-4" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-medium text-gray-900 dark:text-white text-sm">System Maintenance</div>
+                          <div className="text-xs text-gray-600 dark:text-gray-300 mt-1">Scheduled maintenance on Jan 20, 2:00 AM UTC</div>
+                          <div className="flex items-center justify-between mt-2">
+                            <div className="text-xs text-orange-600 dark:text-orange-400 font-medium">1 day ago</div>
+                            <Badge className="bg-gray-500 text-white text-xs">System</Badge>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ScrollArea>
+                <DropdownMenuSeparator />
+                <div className="p-3 text-center">
+                  <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20">
+                    View All Notifications
+                  </Button>
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
 
             {/* Theme toggle */}
             <Button
@@ -546,6 +704,122 @@ export default function UltraEnhancedHeader() {
           </div>
         </div>
       )}
+
+      {/* Advanced Notification Details Modal */}
+      <Dialog open={isNotificationModalOpen} onOpenChange={setIsNotificationModalOpen}>
+        <DialogContent className="max-w-2xl bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border-0 shadow-2xl">
+          {selectedNotification && (
+            <>
+              <DialogHeader className="space-y-4">
+                <div className="flex items-start gap-4">
+                  <div className={`p-3 rounded-xl text-white ${
+                    selectedNotification.type === 'update' ? 'bg-gradient-to-r from-blue-500 to-indigo-500' :
+                    selectedNotification.type === 'achievement' ? 'bg-gradient-to-r from-green-500 to-emerald-500' :
+                    selectedNotification.type === 'promotion' ? 'bg-gradient-to-r from-purple-500 to-pink-500' :
+                    'bg-gradient-to-r from-orange-500 to-red-500'
+                  }`}>
+                    {selectedNotification.type === 'update' && <Calculator className="w-6 h-6" />}
+                    {selectedNotification.type === 'achievement' && <Trophy className="w-6 h-6" />}
+                    {selectedNotification.type === 'promotion' && <Crown className="w-6 h-6" />}
+                    {selectedNotification.type === 'system' && <Settings className="w-6 h-6" />}
+                  </div>
+                  <div className="flex-1">
+                    <DialogTitle className="text-xl font-bold text-gray-900 dark:text-white">
+                      {selectedNotification.title}
+                    </DialogTitle>
+                    <div className="flex items-center gap-3 mt-2">
+                      <Badge className={`text-xs ${
+                        selectedNotification.priority === 'high' ? 'bg-red-500 text-white' :
+                        selectedNotification.priority === 'medium' ? 'bg-yellow-500 text-white' :
+                        'bg-gray-500 text-white'
+                      }`}>
+                        {selectedNotification.priority.toUpperCase()}
+                      </Badge>
+                      <Badge variant="outline" className="text-xs">
+                        {selectedNotification.category}
+                      </Badge>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">
+                        {selectedNotification.timestamp}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    {!selectedNotification.isRead && (
+                      <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
+                    )}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setIsNotificationModalOpen(false)}
+                      className="rounded-full w-8 h-8 p-0"
+                    >
+                      <X className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+              </DialogHeader>
+
+              <div className="space-y-6">
+                <DialogDescription className="text-base text-gray-700 dark:text-gray-300 leading-relaxed">
+                  {selectedNotification.details}
+                </DialogDescription>
+
+                {/* Additional Info Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Card className="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-blue-200 dark:border-blue-700">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-blue-500 rounded-lg text-white">
+                        <Activity className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="font-medium text-blue-900 dark:text-blue-100">Status</div>
+                        <div className="text-sm text-blue-600 dark:text-blue-300">
+                          {selectedNotification.isRead ? 'Read' : 'New'}
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+
+                  <Card className="p-4 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200 dark:border-green-700">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-green-500 rounded-lg text-white">
+                        <Clock className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="font-medium text-green-900 dark:text-green-100">Priority</div>
+                        <div className="text-sm text-green-600 dark:text-green-300 capitalize">
+                          {selectedNotification.priority}
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                </div>
+
+                {/* Action Buttons */}
+                <DialogFooter className="flex gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <Button variant="outline" className="gap-2">
+                    <Copy className="w-4 h-4" />
+                    Copy Link
+                  </Button>
+                  <Button variant="outline" className="gap-2">
+                    <Share2 className="w-4 h-4" />
+                    Share
+                  </Button>
+                  <Button className={`gap-2 ${
+                    selectedNotification.type === 'update' ? 'bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600' :
+                    selectedNotification.type === 'achievement' ? 'bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600' :
+                    selectedNotification.type === 'promotion' ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600' :
+                    'bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600'
+                  } text-white shadow-lg`}>
+                    <ExternalLink className="w-4 h-4" />
+                    {selectedNotification.actionButton}
+                  </Button>
+                </DialogFooter>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </header>
   );
 }
