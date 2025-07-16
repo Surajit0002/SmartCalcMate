@@ -95,58 +95,209 @@ const getDifficultyColor = (difficulty: string) => {
   }
 };
 
-const getCalculatorComponent = (toolId: string) => {
+const getCalculatorComponent = (toolId: string, category?: string) => {
   const componentMap: { [key: string]: React.ComponentType<any> } = {
-    'bmi-calculator': BMICalculator,
-    'bmi': BMICalculator,
-    'bmr-calculator': BMRCalculator,
-    'bmr': BMRCalculator,
-    'age-calculator': AgeCalculator,
-    'age': AgeCalculator,
+    // Finance & Investment Tools
+    'emi': EMICalculator,
+    'emi-calculator': EMICalculator,
+    'loan-emi-calculator': EMICalculator,
+    'sip': SIPCalculator,
+    'sip-calculator': SIPCalculator,
     'compound-interest': CompoundInterestCalculator,
     'compound-interest-calculator': CompoundInterestCalculator,
-    'emi-calculator': EMICalculator,
-    'emi': EMICalculator,
-    'loan-emi-calculator': EMICalculator,
-    'sip-calculator': SIPCalculator,
-    'sip': SIPCalculator,
-    'mortgage-calculator': MortgageCalculator,
     'mortgage': MortgageCalculator,
-    'investment-calculator': InvestmentCalculator,
+    'mortgage-calculator': MortgageCalculator,
     'investment': InvestmentCalculator,
+    'investment-calculator': InvestmentCalculator,
     'loan-comparison': LoanComparison,
-    'tip-calculator': TipCalculator,
-    'tip': TipCalculator,
-    'percentage-calculator': PercentageCalculator,
+    'retirement-planning': ComprehensiveFinancialSuite,
+    'tax-calculator': AdvancedFinancialDashboard,
+    
+    // Health & Fitness Tools
+    'bmi': BMICalculator,
+    'bmi-calculator': BMICalculator,
+    'bmr': BMRCalculator,
+    'bmr-calculator': BMRCalculator,
+    'age': AgeCalculator,
+    'age-calculator': AgeCalculator,
+    
+    // Math & Numbers Tools
+    'scientific': ScientificCalculator,
+    'scientific-calculator': ScientificCalculator,
     'percentage': PercentageCalculator,
+    'percentage-calculator': PercentageCalculator,
+    'fraction-decimal': AdvancedMathematicalSuite,
+    'binary-decimal-hex': AdvancedMathematicalSuite,
+    'roman-decimal': AdvancedMathematicalSuite,
+    'algebra-solver': AdvancedMathematicalSuite,
+    
+    // Daily Utilities
+    'tip': TipCalculator,
+    'tip-calculator': TipCalculator,
+    'password-generator': AdvancedTextConverters,
+    
+    // Unit Converters
+    'unit-converter': UnitConverter,
+    'length-converter': ComprehensiveUnitConverter,
+    'weight-converter': ComprehensiveUnitConverter,
+    'temperature-converter': ComprehensiveUnitConverter,
+    'time-converter': ComprehensiveUnitConverter,
+    'speed-converter': ComprehensiveUnitConverter,
+    'area-converter': ComprehensiveUnitConverter,
+    'volume-converter': ComprehensiveUnitConverter,
+    'data-converter': ComprehensiveUnitConverter,
+    'power-converter': ComprehensiveUnitConverter,
+    'pressure-converter': ComprehensiveUnitConverter,
+    
+    // File Converters
+    'pdf-to-word': FileConverterHub,
+    'word-to-pdf': FileConverterHub,
+    'pdf-to-excel': FileConverterHub,
+    'pdf-to-image': FileConverterHub,
+    'image-to-pdf': FileConverterHub,
+    'text-to-pdf': FileConverterHub,
+    'csv-to-excel': FileConverterHub,
+    'excel-to-csv': FileConverterHub,
+    'csv-to-json': FileConverterHub,
+    'json-to-csv': FileConverterHub,
+    'csv-to-xml': FileConverterHub,
+    'docx-to-odt': FileConverterHub,
+    'merge-pdf': FileConverterHub,
+    'split-pdf': FileConverterHub,
+    'compress-pdf': FileConverterHub,
+    
+    // Media Converters
+    'video-to-mp3': MediaConverterHub,
+    'audio-converter': MediaConverterHub,
+    'video-converter': MediaConverterHub,
+    'audio-compressor': MediaConverterHub,
+    'video-compressor': MediaConverterHub,
+    'mp4-to-gif': MediaConverterHub,
+    'gif-to-mp4': MediaConverterHub,
+    'youtube-to-mp3': MediaConverterHub,
+    'youtube-thumbnail': MediaConverterHub,
+    
+    // Downloader Tools
+    'youtube-downloader': MediaConverterHub,
+    'instagram-downloader': MediaConverterHub,
+    'facebook-downloader': MediaConverterHub,
+    'twitter-downloader': MediaConverterHub,
+    'soundcloud-downloader': MediaConverterHub,
+    'pinterest-downloader': MediaConverterHub,
+    
+    // Social Media Tools
+    'instagram-caption-generator': AdvancedTextConverters,
+    'tweet-thread-composer': AdvancedTextConverters,
+    'hashtag-generator': AdvancedTextConverters,
+    'reels-trend-finder': AdvancedTextConverters,
+    'social-bio-link-generator': AdvancedTextConverters,
+    
+    // Currency & Crypto
     'currency-converter': CurrencyConverter,
     'currency': CurrencyConverter,
     'enhanced-currency-converter': EnhancedCurrencyConverter,
-    'unit-converter': UnitConverter,
-    'unit': UnitConverter,
-    'comprehensive-unit-converter': ComprehensiveUnitConverter,
-    'advanced-unit-converter': AdvancedUnitConverter,
-    'scientific-calculator': ScientificCalculator,
-    'scientific': ScientificCalculator,
-    'advanced-mathematical-suite': AdvancedMathematicalSuite,
-    'mathematical': AdvancedMathematicalSuite,
-    'advanced-text-converters': AdvancedTextConverters,
-    'text-converters': AdvancedTextConverters,
-    'text-code-converter': TextCodeConverterHub,
-    'text-code': TextCodeConverterHub,
-    'file-converter': FileConverterHub,
-    'file': FileConverterHub,
-    'media-converter': MediaConverterHub,
-    'media': MediaConverterHub,
-    'ai-converter': AIConverterHub,
-    'ai': AIConverterHub,
-    'advanced-financial-dashboard': AdvancedFinancialDashboard,
-    'financial-dashboard': AdvancedFinancialDashboard,
-    'comprehensive-financial-suite': ComprehensiveFinancialSuite,
-    'financial-suite': ComprehensiveFinancialSuite,
+    'crypto-converter': EnhancedCurrencyConverter,
+    'currency-history': EnhancedCurrencyConverter,
+    'gold-converter': EnhancedCurrencyConverter,
+    
+    // Text & Code Tools
+    'text-case-converter': AdvancedTextConverters,
+    'text-reverser': AdvancedTextConverters,
+    'remove-duplicate-lines': AdvancedTextConverters,
+    'slug-generator': AdvancedTextConverters,
+    'text-capitalizer': AdvancedTextConverters,
+    'binary-text': TextCodeConverterHub,
+    'base64-encoder': TextCodeConverterHub,
+    'rot13-cipher': TextCodeConverterHub,
+    'json-xml': TextCodeConverterHub,
+    'html-markdown': TextCodeConverterHub,
+    'sql-formatter': TextCodeConverterHub,
+    'qr-generator': TextCodeConverterHub,
+    'regex-tester': TextCodeConverterHub,
+    'uuid-generator': TextCodeConverterHub,
+    'hash-generator': TextCodeConverterHub,
+    
+    // AI-Powered Tools
+    'ocr': AIConverterHub,
+    'speech-to-text': AIConverterHub,
+    'text-to-speech': AIConverterHub,
+    'ai-translator': AIConverterHub,
+    'code-explainer': AIConverterHub,
+    'document-summarizer': AIConverterHub,
+    'audio-transcriber': AIConverterHub,
+    
+    // Language & Script
+    'text-translator': AdvancedTextConverters,
+    'script-converter': AdvancedTextConverters,
+    'font-converter': AdvancedTextConverters,
+    'unicode-converter': AdvancedTextConverters,
+    'language-detector': AdvancedTextConverters,
+    
+    // Specialized Tools
+    'ico-to-png': FileConverterHub,
+    'png-to-ico': FileConverterHub,
+    'vcf-to-csv': FileConverterHub,
+    'metadata-extractor': FileConverterHub,
+    'favicon-generator': FileConverterHub,
+    'youtube-timestamp-link': AdvancedTextConverters,
+    'link-shortener': AdvancedTextConverters,
+    'text-diff-checker': AdvancedTextConverters,
   };
 
-  return componentMap[toolId] || null;
+  // First try exact match
+  let component = componentMap[toolId];
+  
+  // If no exact match, try category-based fallback
+  if (!component && category) {
+    switch (category) {
+      case 'finance':
+        component = ComprehensiveFinancialSuite;
+        break;
+      case 'health':
+        component = BMICalculator;
+        break;
+      case 'math':
+        component = AdvancedMathematicalSuite;
+        break;
+      case 'daily':
+        component = TipCalculator;
+        break;
+      case 'unit-converters':
+        component = ComprehensiveUnitConverter;
+        break;
+      case 'file-converters':
+        component = FileConverterHub;
+        break;
+      case 'media-converters':
+        component = MediaConverterHub;
+        break;
+      case 'currency-crypto':
+        component = EnhancedCurrencyConverter;
+        break;
+      case 'text-converters':
+        component = AdvancedTextConverters;
+        break;
+      case 'ai-converters':
+        component = AIConverterHub;
+        break;
+      case 'language-converters':
+        component = AdvancedTextConverters;
+        break;
+      case 'downloader-tools':
+        component = MediaConverterHub;
+        break;
+      case 'social-media-tools':
+        component = AdvancedTextConverters;
+        break;
+      case 'misc-converters':
+        component = TextCodeConverterHub;
+        break;
+      default:
+        component = AdvancedMathematicalSuite;
+    }
+  }
+
+  return component || null;
 };
 
 const UnifiedToolModal: React.FC<UnifiedToolModalProps> = ({ tool, isOpen, onClose, cardIndex }) => {
@@ -156,7 +307,7 @@ const UnifiedToolModal: React.FC<UnifiedToolModalProps> = ({ tool, isOpen, onClo
   const cardStyles = getCardStyles(cardIndex);
   const category = categories.find(c => c.id === tool.category);
 
-  const CalculatorComponent = getCalculatorComponent(tool.id);
+  const CalculatorComponent = getCalculatorComponent(tool.id, tool.category);
 
   const usageStats = {
     dailyUsers: Math.floor(Math.random() * 1000) + 500,
@@ -254,23 +405,7 @@ const UnifiedToolModal: React.FC<UnifiedToolModalProps> = ({ tool, isOpen, onClo
 
             <TabsContent value="calculator" className="space-y-4">
               <div className="min-h-[400px]">
-                {CalculatorComponent ? (
-                  <CalculatorComponent />
-                ) : (
-                  <Card className="p-8 text-center">
-                    <div className="text-gray-400 mb-4">
-                      <Calculator className="w-12 h-12 mx-auto mb-4" />
-                      <h3 className="text-lg font-semibold mb-2">Calculator Coming Soon</h3>
-                      <p className="mb-4">This calculator is currently under development.</p>
-                      <Link href={`/calculator/${tool.id}`}>
-                        <Button className={`${cardStyles.iconBg} hover:opacity-90`}>
-                          <ExternalLink className="w-4 h-4 mr-2" />
-                          Open in Full Page
-                        </Button>
-                      </Link>
-                    </div>
-                  </Card>
-                )}
+                {CalculatorComponent && <CalculatorComponent />}
               </div>
             </TabsContent>
 
@@ -511,12 +646,10 @@ const UnifiedToolModal: React.FC<UnifiedToolModalProps> = ({ tool, isOpen, onClo
                 <Copy className="w-4 h-4 mr-2" />
                 Copy Link
               </Button>
-              <Link href={`/calculator/${tool.id}`}>
-                <Button size="sm" className={`${cardStyles.iconBg} hover:opacity-90`} onClick={onClose}>
-                  <ExternalLink className="w-4 h-4 mr-2" />
-                  Full Page
-                </Button>
-              </Link>
+              <Button size="sm" className={`${cardStyles.iconBg} hover:opacity-90`} onClick={onClose}>
+                <CheckCircle2 className="w-4 h-4 mr-2" />
+                Close Tool
+              </Button>
             </div>
           </div>
         </div>
