@@ -2,7 +2,7 @@
 
 ## Overview
 
-CalcMate Pro has evolved into a comprehensive digital tool ecosystem featuring 100+ advanced calculators, converters, and AI-powered processing tools. The platform offers specialized tools across 13 categories including file conversion, media processing, AI-enhanced analysis, financial planning, health metrics, and mathematical computations. The application is built as a full-stack TypeScript application with a React frontend, Express backend, and PostgreSQL database integration.
+CalcMate Pro has evolved into a comprehensive digital tool ecosystem featuring 150+ advanced calculators, converters, and AI-powered processing tools. The platform offers specialized tools across 15 categories including file conversion, media processing, AI-enhanced analysis, financial planning, health metrics, mathematical computations, downloader tools, and social media management. The application is built as a full-stack TypeScript application with a React frontend, Express backend, and PostgreSQL database integration.
 
 ## System Architecture
 
@@ -41,10 +41,10 @@ CalcMate Pro has evolved into a comprehensive digital tool ecosystem featuring 1
 - **Data Formats**: CSV ↔ Excel ↔ JSON ↔ XML conversion with structure preservation
 - **Features**: Drag-and-drop interface, batch processing, quality controls, progress tracking
 
-### 🎬 Media Processing Hub (9 tools)
-- **Video Tools**: Format conversion (MP4, AVI, MKV), compression, audio extraction
+### 🎬 Media Processing Hub (12 tools)
+- **Video Tools**: Format conversion (MP4, WebM, MOV), compression, audio extraction
 - **Audio Tools**: Format conversion (MP3, WAV, AAC), compression, merging
-- **Image Tools**: Format conversion (JPG, PNG, WebP), optimization, batch processing
+- **Image Tools**: Format conversion (JPG, PNG, WebP), optimization, batch processing, Base64 encoding
 - **Advanced Features**: Quality presets, resolution scaling, bitrate control, real-time preview
 
 ### 🤖 AI-Powered Tools (7 tools)
@@ -77,6 +77,20 @@ CalcMate Pro has evolved into a comprehensive digital tool ecosystem featuring 1
 - **Contact Data**: VCF ↔ CSV conversion for contact management
 - **Web Tools**: URL shortening, YouTube timestamp links, metadata extraction
 - **Utilities**: Text diff checker, link analysis, data validation
+
+### ⬇️ Downloader Tools (12 tools)
+- **Video Platforms**: YouTube, TikTok, Instagram, Facebook, Twitter, Vimeo, Dailymotion
+- **Audio Platforms**: SoundCloud to MP3 conversion
+- **Image Platforms**: Pinterest bulk image downloader
+- **Professional**: LinkedIn video downloader
+- **Features**: HD quality downloads, watermark removal, batch processing
+
+### 📱 Social Media Tools (10 tools)
+- **Content Creation**: Instagram caption generator, hashtag generator, reels idea generator
+- **Platform Management**: Twitter thread composer, TikTok bio link generator
+- **Analytics**: YouTube tag extractor, story viewer tracker
+- **Automation**: Post scheduler, AI content calendar generator
+- **Advertising**: Facebook ad copy generator
 
 ## Key Components
 
@@ -149,4 +163,9 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- January 16, 2025. Added 49 new tools across 4 categories:
+  - File Converters: 15 tools (PDF conversion, document processing, data transformation)
+  - Media Converters: 12 tools (video/audio conversion, image processing)
+  - Downloader Tools: 12 tools (platform content downloading)
+  - Social Media Tools: 10 tools (content creation, management, analytics)
 - June 20, 2025. Initial setup

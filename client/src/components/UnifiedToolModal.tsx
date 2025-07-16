@@ -40,6 +40,13 @@ import AIConverterHub from '@/components/calculators/AIConverterHub';
 import AdvancedFinancialDashboard from '@/components/calculators/AdvancedFinancialDashboard';
 import ComprehensiveFinancialSuite from '@/components/calculators/ComprehensiveFinancialSuite';
 
+// Import new modal components
+import ToolModal from '@/components/modals/ToolModal';
+import FileConverterModal from '@/components/modals/FileConverterModal';
+import MediaConverterModal from '@/components/modals/MediaConverterModal';
+import DownloaderModal from '@/components/modals/DownloaderModal';
+import SocialMediaModal from '@/components/modals/SocialMediaModal';
+
 interface UnifiedToolModalProps {
   tool: CalculatorType;
   isOpen: boolean;
@@ -93,6 +100,20 @@ const getDifficultyColor = (difficulty: string) => {
 };
 
 const getCalculatorComponent = (tool: CalculatorType) => {
+  // Use new modal components for specific categories
+  switch (tool.category) {
+    case 'file-converters':
+      return <FileConverterModal tool={tool} />;
+    case 'media-converters':
+      return <MediaConverterModal tool={tool} />;
+    case 'downloader-tools':
+      return <DownloaderModal tool={tool} />;
+    case 'social-media-tools':
+      return <SocialMediaModal tool={tool} />;
+    default:
+      break;
+  }
+
   // Specialized components for core tools
   const specializedComponents: { [key: string]: React.ComponentType<any> } = {
     // Finance & Investment Tools (keep existing specialized components)
