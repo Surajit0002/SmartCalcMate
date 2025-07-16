@@ -1,0 +1,83 @@
+📁 File Converters (🧰 Format Converters)
+Description: Professional file format conversion and processing tools.
+
+Tool Name	Purpose
+PDF to Word	Convert PDF documents to editable Word files
+Word to PDF	Convert DOC/DOCX files to secure PDF format
+Excel to PDF	Convert spreadsheets to PDF
+PDF to JPG	Export each PDF page as an image
+JPG to PDF	Combine images into a single PDF
+PDF Compressor	Reduce PDF file size without quality loss
+PDF Splitter	Split large PDFs into separate files
+PDF Merger	Merge multiple PDFs into one document
+PPT to PDF	Convert presentations to static PDF
+TXT to PDF	Turn plain text into printable PDF format
+HTML to PDF	Convert webpages or code snippets to PDF
+Epub to PDF	Convert eBook files to PDF format
+CSV to JSON	Data transformation for development
+JSON to CSV	Convert structured JSON into readable spreadsheets
+Base64 to File	Decode Base64 string into download-ready file
+
+✅ Total Suggested Tools: 15
+
+🎞 Media Converters
+Description: Audio, video, and image format conversion tools.
+
+Tool Name	Purpose
+Video to MP3	Extract audio from video files
+MP4 to WebM	Convert MP4 to WebM format
+MOV to MP4	Convert Apple video formats to standard MP4
+Audio Converter	Convert MP3, WAV, OGG, etc.
+Image Format Converter	JPG ⇄ PNG ⇄ WebP ⇄ SVG
+GIF to MP4	Convert animated GIFs to lightweight MP4
+MP3 to WAV	High-quality audio conversion
+Image to Base64	Convert image to Base64 string
+Base64 to Image	Convert Base64 back to image
+Compress Image	Shrink image file size for web use
+Resize Image	Scale image dimensions
+Video Compressor	Reduce size of large video files
+
+✅ Total Suggested Tools: 12
+
+⬇️ Downloader Tools
+Description: Download content from various platforms in one click.
+
+Tool Name	Purpose
+YouTube Video Downloader	Download videos in HD/MP4/MP3 formats
+Instagram Reel Downloader	Save reels to device
+Facebook Video Downloader	Download Facebook public videos
+Twitter Video Downloader	Extract MP4 from X/Twitter posts
+Pinterest Image Downloader	Bulk download pins
+LinkedIn Video Downloader	Download professional content
+SoundCloud to MP3	Convert SoundCloud tracks to MP3
+TikTok Video Downloader	Save TikTok without watermark
+Vimeo Downloader	Download Vimeo-hosted videos
+Dailymotion Downloader	Access content from Dailymotion
+Reddit Video Downloader	Fetch video + audio from Reddit posts
+Public URL Downloader	Generic file downloader from open URLs
+
+✅ Total Suggested Tools: 12
+
+📱 Social Media Tools
+Description: Enhance and manage social media presence effectively.
+
+Tool Name	Purpose
+Instagram Caption Generator	Auto-generate engaging captions for posts
+Hashtag Generator	Suggest trending hashtags for visibility
+Reels Idea Generator	AI prompts for short-form content creators
+Twitter Thread Composer	Write structured, long-form tweets
+TikTok Bio Link Generator	Create bio pages for link-in-bio usage
+Post Scheduler (Prototype)	Schedule and preview posts for social platforms
+AI Content Calendar Generator	Auto-generate post calendars with topics
+Facebook Ad Copy Generator	Create high-conversion ad text
+YouTube Tag Extractor	Analyze top videos and pull tags
+Story Viewer Tracker (Safe)	Track who viewed your public stories
+
+✅ Total Suggested Tools: 10
+
+🔄 Summary (All Tools)
+Category	Tools Count
+File Converters	15
+Media Converters	12
+Downloader Tools	12
+Social Media Tools	10

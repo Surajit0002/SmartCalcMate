@@ -1,0 +1,174 @@
+Design and build a frontend for a Multi-Tool web platform named MultiToolsBox, where clicking a tool card opens a modal popup that dynamically loads the tool’s full UI and features. Each category (e.g., File Converters, Media Converters) uses different interaction patterns optimized for that category.
+
+🔧 Global Modal System (Shared Across Categories)
+Each tool card triggers a modal popup (not a separate page), and dynamically loads:
+
+Component	Behavior
+🔘 ToolModal	Modal wrapper with fade animation and close button
+📦 ToolUI	Tool logic renderer by category and slug
+🧠 ToolMeta	Title, description, icon, format options, category
+💡 AIHelpButton	Opens an AI assistant to explain how the tool works
+💾 SaveToolToggle	User can bookmark tool
+
+🗃️ Category-Wise Modal UI & Features
+📁 1. File Converters
+UX Design: Professional form layout with conversion dropdown
+Flow:
+
+Upload File (.pdf, .docx, etc.)
+
+Choose target format via dropdown (e.g., “Convert to: Word / JPG / Text”)
+
+Convert Button → Output download link
+
+Key Features:
+
+📂 Drag & Drop file upload
+
+⬇️ Format dropdown with file-type auto-detection
+
+📎 File validation (size/type)
+
+🔁 “Swap Source/Target” format
+
+🧠 AI Suggest: “What format do you need?”
+
+Suggested Modal Styles:
+
+Clean grid layout with neutral colors
+
+PDF/Doc icon previews
+
+Progress bar during file handling
+
+🎞 2. Media Converters
+UX Design: Multimedia-friendly with previews and compression settings
+Flow:
+
+Upload media file (audio/video/image)
+
+Format dropdown (MP3, MP4, WebM, PNG, JPG, etc.)
+
+Optional compression toggle (lossy/lossless)
+
+Convert + Preview Output
+
+Key Features:
+
+🎥 Live preview of uploaded media
+
+🎚 Compression level selector (slider)
+
+🧠 AI Suggest: “Best format for WhatsApp / Instagram / Email”
+
+🎧 Audio waveform or thumbnail extraction option
+
+Suggested Modal Styles:
+
+Visual UI (media preview, icons)
+
+Colorful audio/video controls
+
+Waveform animation or thumbnail preview
+
+⬇️ 3. Downloader Tools
+UX Design: Simple input-to-download layout
+Flow:
+
+Paste URL → Detect platform (YouTube, Instagram, etc.)
+
+Auto-show platform icon
+
+Select format (MP3, MP4, HD, SD)
+
+Convert & Download
+
+Key Features:
+
+🔗 Smart link parser & validation
+
+📶 Format/quality dropdown (1080p, 720p, etc.)
+
+🧠 Auto-thumbnail preview of content
+
+📦 Bulk download if playlist detected
+
+❗ Disclaimer box (fair use reminder)
+
+Suggested Modal Styles:
+
+Minimal input UI with smart previews
+
+Platform-color border (red for YouTube, blue for FB)
+
+Format badges and dropdown
+
+📱 4. Social Media Tools
+UX Design: Text-focused or content-generation layout
+Flow (Example - Caption Generator):
+
+Input: Post Topic or Description
+
+Select Platform (Instagram, Twitter, etc.)
+
+Generate → Copy Result
+
+Save to clipboard / Download as file
+
+Key Features:
+
+🧠 AI-generated text in platform tone
+
+🏷 Hashtag recommender (real-time suggestions)
+
+🎯 Target audience toggle (Fun, Professional, Trendy)
+
+📅 Save content to planner/scheduler
+
+Suggested Modal Styles:
+
+Chat-style UI or card stack of variations
+
+Auto-highlight hashtags or emojis
+
+Export as .txt, .csv or auto-save
+
+🧩 Shared Modal Features (All Categories)
+Feature	Description
+🔁 Dynamic Rendering	Load tool content via category & slug
+🌐 Language Support	Modal content auto-translates
+🔍 Modal Search Bar	Search within modal (e.g., PDF → Word vs. PDF → JPG)
+💾 Tool History	Recently used tools appear inside modal footer
+🧠 “Need Help?” AI Button	Explain tool via AI popup (Markdown answers)
+🎨 Light Themed UI	All modals in soft white/gray + category-accent color
+
+🔧 Technical Prompt (Developer Format)
+Prompt for AI Code Gen or Team Brief:
+
+sql
+Copy
+Edit
+Build a dynamic modal system in React using TailwindCSS + ShadCN UI. When a tool card is clicked, trigger a modal popup with the corresponding tool UI loaded via slug/category-based dynamic import.
+
+The modal system supports:
+- Category-specific UI logic
+- AI-assisted actions (suggest formats, explain tool)
+- File/media validation, previews, and smart defaults
+- Light themed layout with subtle animations
+
+Each tool has:
+- Metadata header (icon, title, description)
+- Category tag + conversion options
+- Context-aware dropdowns, toggles, previews
+- Optional output (text, file download, copied result)
+✅ Deliverables You Can Now Generate:
+🎨 Component Wireframes (ToolModal, ToolUI, FileConverterUI, MediaConverterUI, etc.)
+
+📄 JSON Schema for dynamic tool loading
+
+🧱 React + Tailwind UI for popup system
+
+🧠 AI logic (via OpenAI or Gemini) for suggestions & guidance
+
+📁 Export full system as design doc or developer task brief
+
