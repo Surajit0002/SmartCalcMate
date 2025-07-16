@@ -16,7 +16,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Calculator as CalculatorType, categories } from '@/lib/calculatorData';
 import { getCardStyles } from '@/lib/cardColors';
 
-// Import all calculator components
+// Import calculator components
 import BMICalculator from '@/components/calculators/BMICalculator';
 import BMRCalculator from '@/components/calculators/BMRCalculator';
 import AgeCalculator from '@/components/calculators/AgeCalculator';
@@ -29,13 +29,10 @@ import LoanComparison from '@/components/calculators/LoanComparison';
 import TipCalculator from '@/components/calculators/TipCalculator';
 import PercentageCalculator from '@/components/calculators/PercentageCalculator';
 import CurrencyConverter from '@/components/calculators/CurrencyConverter';
-import EnhancedCurrencyConverter from '@/components/calculators/EnhancedCurrencyConverter';
 import UnitConverter from '@/components/calculators/UnitConverter';
-import ComprehensiveUnitConverter from '@/components/calculators/ComprehensiveUnitConverter';
-import AdvancedUnitConverter from '@/components/calculators/AdvancedUnitConverter';
 import ScientificCalculator from '@/components/calculators/ScientificCalculator';
 import AdvancedMathematicalSuite from '@/components/calculators/AdvancedMathematicalSuite';
-import AdvancedTextConverters from '@/components/calculators/AdvancedTextConverters';
+import GenericToolCalculator from '@/components/calculators/GenericToolCalculator';
 import TextCodeConverterHub from '@/components/calculators/TextCodeConverterHub';
 import FileConverterHub from '@/components/calculators/FileConverterHub';
 import MediaConverterHub from '@/components/calculators/MediaConverterHub';
@@ -95,209 +92,36 @@ const getDifficultyColor = (difficulty: string) => {
   }
 };
 
-const getCalculatorComponent = (toolId: string, category?: string) => {
-  const componentMap: { [key: string]: React.ComponentType<any> } = {
-    // Finance & Investment Tools
+const getCalculatorComponent = (tool: CalculatorType) => {
+  // Specialized components for core tools
+  const specializedComponents: { [key: string]: React.ComponentType<any> } = {
+    // Finance & Investment Tools (keep existing specialized components)
     'emi': EMICalculator,
-    'emi-calculator': EMICalculator,
-    'loan-emi-calculator': EMICalculator,
     'sip': SIPCalculator,
-    'sip-calculator': SIPCalculator,
     'compound-interest': CompoundInterestCalculator,
-    'compound-interest-calculator': CompoundInterestCalculator,
     'mortgage': MortgageCalculator,
-    'mortgage-calculator': MortgageCalculator,
     'investment': InvestmentCalculator,
-    'investment-calculator': InvestmentCalculator,
     'loan-comparison': LoanComparison,
-    'retirement-planning': ComprehensiveFinancialSuite,
-    'tax-calculator': AdvancedFinancialDashboard,
     
-    // Health & Fitness Tools
+    // Health & Fitness Tools (keep existing specialized components)
     'bmi': BMICalculator,
-    'bmi-calculator': BMICalculator,
     'bmr': BMRCalculator,
-    'bmr-calculator': BMRCalculator,
     'age': AgeCalculator,
-    'age-calculator': AgeCalculator,
     
-    // Math & Numbers Tools
+    // Math & Numbers Tools (keep some specialized, others use generic)
     'scientific': ScientificCalculator,
-    'scientific-calculator': ScientificCalculator,
     'percentage': PercentageCalculator,
-    'percentage-calculator': PercentageCalculator,
-    'fraction-decimal': AdvancedMathematicalSuite,
-    'binary-decimal-hex': AdvancedMathematicalSuite,
-    'roman-decimal': AdvancedMathematicalSuite,
-    'algebra-solver': AdvancedMathematicalSuite,
-    
-    // Daily Utilities
     'tip': TipCalculator,
-    'tip-calculator': TipCalculator,
-    'password-generator': AdvancedTextConverters,
-    
-    // Unit Converters
-    'unit-converter': UnitConverter,
-    'length-converter': ComprehensiveUnitConverter,
-    'weight-converter': ComprehensiveUnitConverter,
-    'temperature-converter': ComprehensiveUnitConverter,
-    'time-converter': ComprehensiveUnitConverter,
-    'speed-converter': ComprehensiveUnitConverter,
-    'area-converter': ComprehensiveUnitConverter,
-    'volume-converter': ComprehensiveUnitConverter,
-    'data-converter': ComprehensiveUnitConverter,
-    'power-converter': ComprehensiveUnitConverter,
-    'pressure-converter': ComprehensiveUnitConverter,
-    
-    // File Converters
-    'pdf-to-word': FileConverterHub,
-    'word-to-pdf': FileConverterHub,
-    'pdf-to-excel': FileConverterHub,
-    'pdf-to-image': FileConverterHub,
-    'image-to-pdf': FileConverterHub,
-    'text-to-pdf': FileConverterHub,
-    'csv-to-excel': FileConverterHub,
-    'excel-to-csv': FileConverterHub,
-    'csv-to-json': FileConverterHub,
-    'json-to-csv': FileConverterHub,
-    'csv-to-xml': FileConverterHub,
-    'docx-to-odt': FileConverterHub,
-    'merge-pdf': FileConverterHub,
-    'split-pdf': FileConverterHub,
-    'compress-pdf': FileConverterHub,
-    
-    // Media Converters
-    'video-to-mp3': MediaConverterHub,
-    'audio-converter': MediaConverterHub,
-    'video-converter': MediaConverterHub,
-    'audio-compressor': MediaConverterHub,
-    'video-compressor': MediaConverterHub,
-    'mp4-to-gif': MediaConverterHub,
-    'gif-to-mp4': MediaConverterHub,
-    'youtube-to-mp3': MediaConverterHub,
-    'youtube-thumbnail': MediaConverterHub,
-    
-    // Downloader Tools
-    'youtube-downloader': MediaConverterHub,
-    'instagram-downloader': MediaConverterHub,
-    'facebook-downloader': MediaConverterHub,
-    'twitter-downloader': MediaConverterHub,
-    'soundcloud-downloader': MediaConverterHub,
-    'pinterest-downloader': MediaConverterHub,
-    
-    // Social Media Tools
-    'instagram-caption-generator': AdvancedTextConverters,
-    'tweet-thread-composer': AdvancedTextConverters,
-    'hashtag-generator': AdvancedTextConverters,
-    'reels-trend-finder': AdvancedTextConverters,
-    'social-bio-link-generator': AdvancedTextConverters,
-    
-    // Currency & Crypto
-    'currency-converter': CurrencyConverter,
-    'currency': CurrencyConverter,
-    'enhanced-currency-converter': EnhancedCurrencyConverter,
-    'crypto-converter': EnhancedCurrencyConverter,
-    'currency-history': EnhancedCurrencyConverter,
-    'gold-converter': EnhancedCurrencyConverter,
-    
-    // Text & Code Tools
-    'text-case-converter': AdvancedTextConverters,
-    'text-reverser': AdvancedTextConverters,
-    'remove-duplicate-lines': AdvancedTextConverters,
-    'slug-generator': AdvancedTextConverters,
-    'text-capitalizer': AdvancedTextConverters,
-    'binary-text': TextCodeConverterHub,
-    'base64-encoder': TextCodeConverterHub,
-    'rot13-cipher': TextCodeConverterHub,
-    'json-xml': TextCodeConverterHub,
-    'html-markdown': TextCodeConverterHub,
-    'sql-formatter': TextCodeConverterHub,
-    'qr-generator': TextCodeConverterHub,
-    'regex-tester': TextCodeConverterHub,
-    'uuid-generator': TextCodeConverterHub,
-    'hash-generator': TextCodeConverterHub,
-    
-    // AI-Powered Tools
-    'ocr': AIConverterHub,
-    'speech-to-text': AIConverterHub,
-    'text-to-speech': AIConverterHub,
-    'ai-translator': AIConverterHub,
-    'code-explainer': AIConverterHub,
-    'document-summarizer': AIConverterHub,
-    'audio-transcriber': AIConverterHub,
-    
-    // Language & Script
-    'text-translator': AdvancedTextConverters,
-    'script-converter': AdvancedTextConverters,
-    'font-converter': AdvancedTextConverters,
-    'unicode-converter': AdvancedTextConverters,
-    'language-detector': AdvancedTextConverters,
-    
-    // Specialized Tools
-    'ico-to-png': FileConverterHub,
-    'png-to-ico': FileConverterHub,
-    'vcf-to-csv': FileConverterHub,
-    'metadata-extractor': FileConverterHub,
-    'favicon-generator': FileConverterHub,
-    'youtube-timestamp-link': AdvancedTextConverters,
-    'link-shortener': AdvancedTextConverters,
-    'text-diff-checker': AdvancedTextConverters,
   };
 
-  // First try exact match
-  let component = componentMap[toolId];
-  
-  // If no exact match, try category-based fallback
-  if (!component && category) {
-    switch (category) {
-      case 'finance':
-        component = ComprehensiveFinancialSuite;
-        break;
-      case 'health':
-        component = BMICalculator;
-        break;
-      case 'math':
-        component = AdvancedMathematicalSuite;
-        break;
-      case 'daily':
-        component = TipCalculator;
-        break;
-      case 'unit-converters':
-        component = ComprehensiveUnitConverter;
-        break;
-      case 'file-converters':
-        component = FileConverterHub;
-        break;
-      case 'media-converters':
-        component = MediaConverterHub;
-        break;
-      case 'currency-crypto':
-        component = EnhancedCurrencyConverter;
-        break;
-      case 'text-converters':
-        component = AdvancedTextConverters;
-        break;
-      case 'ai-converters':
-        component = AIConverterHub;
-        break;
-      case 'language-converters':
-        component = AdvancedTextConverters;
-        break;
-      case 'downloader-tools':
-        component = MediaConverterHub;
-        break;
-      case 'social-media-tools':
-        component = AdvancedTextConverters;
-        break;
-      case 'misc-converters':
-        component = TextCodeConverterHub;
-        break;
-      default:
-        component = AdvancedMathematicalSuite;
-    }
+  // If there's a specialized component, use it
+  if (specializedComponents[tool.id]) {
+    const Component = specializedComponents[tool.id];
+    return <Component />;
   }
 
-  return component || null;
+  // For all other tools, use the generic component
+  return <GenericToolCalculator tool={tool} />;
 };
 
 const UnifiedToolModal: React.FC<UnifiedToolModalProps> = ({ tool, isOpen, onClose, cardIndex }) => {
@@ -307,7 +131,7 @@ const UnifiedToolModal: React.FC<UnifiedToolModalProps> = ({ tool, isOpen, onClo
   const cardStyles = getCardStyles(cardIndex);
   const category = categories.find(c => c.id === tool.category);
 
-  const CalculatorComponent = getCalculatorComponent(tool.id, tool.category);
+  const CalculatorComponent = getCalculatorComponent(tool);
 
   const usageStats = {
     dailyUsers: Math.floor(Math.random() * 1000) + 500,
@@ -405,7 +229,7 @@ const UnifiedToolModal: React.FC<UnifiedToolModalProps> = ({ tool, isOpen, onClo
 
             <TabsContent value="calculator" className="space-y-4">
               <div className="min-h-[400px]">
-                {CalculatorComponent && <CalculatorComponent />}
+                {CalculatorComponent}
               </div>
             </TabsContent>
 
